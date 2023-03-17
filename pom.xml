@@ -51,6 +51,10 @@
                                     <pattern>me.hsgamer.minigamecore</pattern>
                                     <shadedPattern>me.hsgamer.gamesinthebox.minigamecore</shadedPattern>
                                 </relocation>
+                                <relocation>
+                                    <pattern>me.hsgamer.unihologram</pattern>
+                                    <shadedPattern>me.hsgamer.gamesinthebox.unihologram</shadedPattern>
+                                </relocation>
                             </relocations>
                         </configuration>
                     </execution>
@@ -123,6 +127,12 @@
             <groupId>me.hsgamer</groupId>
             <artifactId>hscore-builder</artifactId>
             <version>${core.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>me.hsgamer</groupId>
+            <artifactId>uni-hologram-spigot-bundle</artifactId>
+            <version>1.5.3</version>
         </dependency>
 
         <dependency>
