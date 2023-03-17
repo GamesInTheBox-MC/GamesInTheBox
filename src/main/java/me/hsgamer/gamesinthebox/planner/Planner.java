@@ -7,6 +7,7 @@ import me.hsgamer.gamesinthebox.planner.feature.PickFeature;
 import me.hsgamer.gamesinthebox.planner.state.IdlingState;
 import me.hsgamer.minigamecore.base.Feature;
 import me.hsgamer.minigamecore.bukkit.SimpleBukkitArena;
+import me.hsgamer.minigamecore.implementation.feature.TimerFeature;
 
 import java.util.Arrays;
 import java.util.List;
@@ -21,7 +22,8 @@ public class Planner extends SimpleBukkitArena {
         return Arrays.asList(
                 new GameFeature(),
                 new PickFeature(this),
-                getFeature(GlobalPlannerConfigFeature.class).createPlannerFeature(this)
+                getFeature(GlobalPlannerConfigFeature.class).createPlannerFeature(this),
+                new TimerFeature()
         );
     }
 

@@ -2,11 +2,11 @@ package me.hsgamer.gamesinthebox.command.sub;
 
 import me.hsgamer.gamesinthebox.GamesInTheBox;
 import me.hsgamer.gamesinthebox.Permissions;
-import me.hsgamer.gamesinthebox.planner.feature.PickFeature;
 import me.hsgamer.gamesinthebox.planner.state.IdlingState;
 import me.hsgamer.hscore.bukkit.command.sub.SubCommand;
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import me.hsgamer.minigamecore.base.Arena;
+import me.hsgamer.minigamecore.implementation.feature.TimerFeature;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
@@ -35,7 +35,7 @@ public class SkipIdleCommand extends SubCommand {
             MessageUtils.sendMessage(sender, plugin.getMessageConfig().getPlannerNotIdle());
             return;
         }
-        planner.getFeature(PickFeature.class).completeTime();
+        planner.getFeature(TimerFeature.class).setDuration(0);
         MessageUtils.sendMessage(sender, plugin.getMessageConfig().getSuccess());
     }
 

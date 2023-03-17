@@ -12,19 +12,11 @@ import java.util.logging.Level;
 public class PickFeature implements Feature {
     private final Planner planner;
     private final Map<String, GameArena> gameArenaMap = new HashMap<>();
-    private long nextGameTime = System.currentTimeMillis(); // TODO
+    private long nextGameTime;
     private GameArena nextGame;
 
     public PickFeature(Planner planner) {
         this.planner = planner;
-    }
-
-    public long getNextGameTime() {
-        return nextGameTime;
-    }
-
-    public void completeTime() {
-        this.nextGameTime = System.currentTimeMillis();
     }
 
     @Override
@@ -49,16 +41,16 @@ public class PickFeature implements Feature {
         });
     }
 
+    public void pickNextGame() {
+        // TODO
+    }
+
+    public long getNextGameTime() {
+        return nextGameTime;
+    }
+
     public GameArena getNextGame() {
-        if (nextGame != null) {
-            GameArena gameArena = nextGame;
-            nextGame = null;
-            return gameArena;
-        }
-        if (gameArenaMap.isEmpty()) {
-            return null;
-        }
-        return null; // TODO
+        return nextGame;
     }
 
     public boolean setNextGame(String name) {
