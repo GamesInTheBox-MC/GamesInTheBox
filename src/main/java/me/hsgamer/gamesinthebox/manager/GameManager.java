@@ -9,15 +9,18 @@ import java.util.Optional;
 public class GameManager {
     private final Map<String, Game> gameMap = new HashMap<>();
 
-    public void addGame(String name, Game game) {
-        gameMap.put(name, game);
+    public void addGame(String type, Game game) {
+        if (gameMap.containsKey(type)) {
+            throw new IllegalArgumentException("Game type " + type + " already exists");
+        }
+        gameMap.put(type, game);
     }
 
-    public Optional<Game> getGame(String name) {
-        return Optional.ofNullable(gameMap.get(name));
+    public Optional<Game> getGame(String type) {
+        return Optional.ofNullable(gameMap.get(type));
     }
 
-    public void removeGame(String name) {
-        gameMap.remove(name);
+    public void removeGame(String type) {
+        gameMap.remove(type);
     }
 }
