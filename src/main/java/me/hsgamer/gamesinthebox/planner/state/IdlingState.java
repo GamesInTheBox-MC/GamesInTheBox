@@ -1,5 +1,6 @@
 package me.hsgamer.gamesinthebox.planner.state;
 
+import me.hsgamer.gamesinthebox.game.GameArena;
 import me.hsgamer.gamesinthebox.planner.feature.GameFeature;
 import me.hsgamer.gamesinthebox.planner.feature.PickFeature;
 import me.hsgamer.minigamecore.base.Arena;
@@ -15,6 +16,7 @@ public class IdlingState implements GameState {
 
     @Override
     public void end(Arena arena) {
-        arena.getFeature(GameFeature.class).setFinished(false);
+        GameArena gameArena = arena.getFeature(PickFeature.class).getNextGame();
+        arena.getFeature(GameFeature.class).setCurrentGameArena(gameArena);
     }
 }

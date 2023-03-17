@@ -2,7 +2,9 @@ package me.hsgamer.gamesinthebox.planner;
 
 import me.hsgamer.gamesinthebox.manager.PlannerManager;
 import me.hsgamer.gamesinthebox.planner.feature.GameFeature;
+import me.hsgamer.gamesinthebox.planner.feature.GlobalPlannerConfigFeature;
 import me.hsgamer.gamesinthebox.planner.feature.PickFeature;
+import me.hsgamer.gamesinthebox.planner.state.IdlingState;
 import me.hsgamer.minigamecore.base.Feature;
 import me.hsgamer.minigamecore.bukkit.SimpleBukkitArena;
 
@@ -18,7 +20,13 @@ public class Planner extends SimpleBukkitArena {
     protected List<Feature> loadFeatures() {
         return Arrays.asList(
                 new GameFeature(),
-                new PickFeature()
+                new PickFeature(),
+                getFeature(GlobalPlannerConfigFeature.class).createPlannerFeature(this)
         );
+    }
+
+    @Override
+    protected void postInitArena() {
+        setNextState(IdlingState.class);
     }
 }

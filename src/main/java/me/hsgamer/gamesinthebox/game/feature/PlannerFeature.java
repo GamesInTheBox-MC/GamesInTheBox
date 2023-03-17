@@ -12,8 +12,12 @@ public class PlannerFeature implements Feature {
         this.planner = planner;
     }
 
+    public Planner getPlanner() {
+        return planner;
+    }
+
     public void notifyFinished() {
-        planner.getFeature(GameFeature.class).setFinished(true);
+        planner.getFeature(GameFeature.class).setFinished();
     }
 
     public boolean isIdle() {

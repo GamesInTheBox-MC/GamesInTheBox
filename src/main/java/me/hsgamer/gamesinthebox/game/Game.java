@@ -1,19 +1,18 @@
 package me.hsgamer.gamesinthebox.game;
 
+import me.hsgamer.gamesinthebox.planner.Planner;
 import me.hsgamer.minigamecore.base.ArenaManager;
-import me.hsgamer.minigamecore.base.Feature;
-import me.hsgamer.minigamecore.base.GameState;
 
-import java.util.List;
+public abstract class Game extends ArenaManager {
+    protected abstract GameArena newArena(String name, Planner planner);
 
-public class Game extends ArenaManager {
-    @Override
-    protected List<GameState> loadGameStates() {
-        return null;
-    }
-
-    @Override
-    protected List<Feature> loadFeatures() {
-        return null;
+    public final GameArena createArena(String name, Planner planner) {
+        GameArena arena = newArena(name, planner);
+        if (!addArena(arena)) {
+            throw new IllegalArgumentException("Arena " + name + " already exists");
+        }
+        arena.init();
+        arena.postInit();
+        return arena;
     }
 }
