@@ -1,17 +1,6 @@
 package me.hsgamer.gamesinthebox;
 
-import org.bukkit.plugin.java.JavaPlugin;
+import me.hsgamer.hscore.bukkit.baseplugin.BasePlugin;
 
-public final class GamesInTheBox extends JavaPlugin {
-
-    @Override
-    public void onEnable() {
-        // Plugin startup logic
-
-    }
-
-    @Override
-    public void onDisable() {
-        // Plugin shutdown logic
-    }
+public final class GamesInTheBox extends BasePlugin {
 }
