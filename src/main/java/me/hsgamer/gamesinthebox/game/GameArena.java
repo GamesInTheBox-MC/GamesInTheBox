@@ -6,7 +6,6 @@ import me.hsgamer.minigamecore.base.Arena;
 import me.hsgamer.minigamecore.base.Feature;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public abstract class GameArena extends Arena {
@@ -27,16 +26,8 @@ public abstract class GameArena extends Arena {
 
     public abstract void forceEnd();
 
-    public List<String> getActions() {
-        return Collections.emptyList();
-    }
-
-    public List<String> getActionArgs(String action, String... args) {
-        return Collections.emptyList();
-    }
-
-    public void performAction(String action, String... args) {
-        // Do nothing
+    public GameAction getGameAction() {
+        return GameAction.EMPTY;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package me.hsgamer.gamesinthebox.planner.feature;
 
+import me.hsgamer.gamesinthebox.game.GameAction;
 import me.hsgamer.gamesinthebox.game.GameArena;
 import me.hsgamer.minigamecore.base.Feature;
 
@@ -30,17 +31,9 @@ public class GameFeature implements Feature {
         isFinished = true;
     }
 
-    public List<String> getActions() {
-        return currentGameArena == null ? Collections.emptyList() : currentGameArena.getActions();
-    }
-
-    public List<String> getActionArgs(String action, String... args) {
-        return currentGameArena == null ? Collections.emptyList() : currentGameArena.getActionArgs(action, args);
-    }
-
-    public void performAction(String action, String... args) {
-        if (currentGameArena == null) return;
-        currentGameArena.performAction(action, args);
+    public GameAction getGameAction() {
+        if (currentGameArena == null || isFinished) return GameAction.EMPTY;
+        return currentGameArena.getGameAction();
     }
 
     public void setFinished() {
