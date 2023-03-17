@@ -20,7 +20,7 @@ public class Planner extends SimpleBukkitArena {
     protected List<Feature> loadFeatures() {
         return Arrays.asList(
                 new GameFeature(),
-                new PickFeature(),
+                new PickFeature(this),
                 getFeature(GlobalPlannerConfigFeature.class).createPlannerFeature(this)
         );
     }

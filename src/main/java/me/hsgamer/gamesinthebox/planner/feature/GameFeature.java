@@ -4,9 +4,6 @@ import me.hsgamer.gamesinthebox.game.GameAction;
 import me.hsgamer.gamesinthebox.game.GameArena;
 import me.hsgamer.minigamecore.base.Feature;
 
-import java.util.Collections;
-import java.util.List;
-
 public class GameFeature implements Feature {
     private GameArena currentGameArena;
     private boolean isFinished = false;
