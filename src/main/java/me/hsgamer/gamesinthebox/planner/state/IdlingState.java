@@ -9,7 +9,7 @@ import me.hsgamer.minigamecore.base.GameState;
 public class IdlingState implements GameState {
     @Override
     public void update(Arena arena) {
-        if (arena.getFeature(PickFeature.class).getGetNextGameTime() <= System.currentTimeMillis()) {
+        if (arena.getFeature(PickFeature.class).getNextGameTime() <= System.currentTimeMillis()) {
             arena.setNextState(ListeningState.class);
         }
     }

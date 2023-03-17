@@ -6,22 +6,25 @@ import me.hsgamer.gamesinthebox.manager.GameManager;
 import me.hsgamer.gamesinthebox.planner.Planner;
 import me.hsgamer.minigamecore.base.Feature;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.logging.Level;
 
 public class PickFeature implements Feature {
     private final Planner planner;
     private final Map<String, GameArena> gameArenaMap = new HashMap<>();
-    private final long getNextGameTime = System.currentTimeMillis(); // TODO
+    private long nextGameTime = System.currentTimeMillis(); // TODO
+    private GameArena nextGame;
 
     public PickFeature(Planner planner) {
         this.planner = planner;
     }
 
-    public long getGetNextGameTime() {
-        return getNextGameTime;
+    public long getNextGameTime() {
+        return nextGameTime;
+    }
+
+    public void completeTime() {
+        this.nextGameTime = System.currentTimeMillis();
     }
 
     @Override
@@ -47,9 +50,26 @@ public class PickFeature implements Feature {
     }
 
     public GameArena getNextGame() {
+        if (nextGame != null) {
+            GameArena gameArena = nextGame;
+            nextGame = null;
+            return gameArena;
+        }
         if (gameArenaMap.isEmpty()) {
             return null;
         }
         return null; // TODO
+    }
+
+    public boolean setNextGame(String name) {
+        if (gameArenaMap.containsKey(name)) {
+            nextGame = gameArenaMap.get(name);
+            return true;
+        }
+        return false;
+    }
+
+    public Collection<String> getGameArenaNames() {
+        return Collections.unmodifiableCollection(gameArenaMap.keySet());
     }
 }

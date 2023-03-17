@@ -15,10 +15,6 @@ public abstract class SingleGameAddon extends PluginAddon {
         // EMPTY
     }
 
-    protected void reload() {
-        // EMPTY
-    }
-
     protected abstract Game getGame();
 
     protected abstract String getGameType();
@@ -40,15 +36,8 @@ public abstract class SingleGameAddon extends PluginAddon {
         game.clear();
 
         disable();
-    }
 
-    @Override
-    public final void onReload() {
-        game.clear();
-
-        reload();
-
-        game.init();
-        game.postInit();
+        GamesInTheBox plugin = (GamesInTheBox) getPlugin();
+        plugin.getGameManager().removeGame(getGameType());
     }
 }

@@ -125,6 +125,11 @@
         </dependency>
         <dependency>
             <groupId>me.hsgamer</groupId>
+            <artifactId>hscore-bukkit-command-sub</artifactId>
+            <version>${core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>me.hsgamer</groupId>
             <artifactId>hscore-config-proxy</artifactId>
             <version>${core.version}</version>
         </dependency>

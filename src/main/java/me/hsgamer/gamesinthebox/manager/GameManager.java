@@ -23,4 +23,15 @@ public class GameManager {
     public void removeGame(String type) {
         gameMap.remove(type);
     }
+
+    public void callClear() {
+        gameMap.values().forEach(Game::clear);
+    }
+
+    public void callInit() {
+        gameMap.values().forEach(game -> {
+            game.init();
+            game.postInit();
+        });
+    }
 }

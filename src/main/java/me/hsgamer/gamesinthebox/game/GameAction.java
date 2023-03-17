@@ -1,5 +1,7 @@
 package me.hsgamer.gamesinthebox.game;
 
+import org.bukkit.command.CommandSender;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -11,19 +13,19 @@ public interface GameAction {
         }
 
         @Override
-        public List<String> getActionArgs(String action, String... args) {
+        public List<String> getActionArgs(CommandSender sender, String action, String... args) {
             return Collections.emptyList();
         }
 
         @Override
-        public void performAction(String action, String... args) {
-            // EMPTY
+        public boolean performAction(CommandSender sender, String action, String... args) {
+            return false;
         }
     };
 
     List<String> getActions();
 
-    List<String> getActionArgs(String action, String... args);
+    List<String> getActionArgs(CommandSender sender, String action, String... args);
 
-    void performAction(String action, String... args);
+    boolean performAction(CommandSender sender, String action, String... args);
 }

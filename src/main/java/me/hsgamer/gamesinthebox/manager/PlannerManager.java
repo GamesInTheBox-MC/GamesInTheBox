@@ -40,6 +40,12 @@ public class PlannerManager extends LoadedArenaManager {
     }
 
     @Override
+    public void reloadArena() {
+        plannerConfig.reload();
+        super.reloadArena();
+    }
+
+    @Override
     protected List<GameState> loadGameStates() {
         return Arrays.asList(
                 new IdlingState(),

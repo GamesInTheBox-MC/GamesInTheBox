@@ -1,5 +1,6 @@
 package me.hsgamer.gamesinthebox;
 
+import me.hsgamer.gamesinthebox.command.MainCommand;
 import me.hsgamer.gamesinthebox.config.MainConfig;
 import me.hsgamer.gamesinthebox.config.MessageConfig;
 import me.hsgamer.gamesinthebox.manager.GameManager;
@@ -7,12 +8,14 @@ import me.hsgamer.gamesinthebox.manager.PlannerManager;
 import me.hsgamer.hscore.bukkit.addon.PluginAddonManager;
 import me.hsgamer.hscore.bukkit.baseplugin.BasePlugin;
 import me.hsgamer.hscore.bukkit.config.BukkitConfig;
+import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import me.hsgamer.hscore.common.CollectionUtils;
 import me.hsgamer.hscore.common.MapUtils;
 import me.hsgamer.hscore.config.proxy.ConfigGenerator;
 import me.hsgamer.hscore.expansion.common.ExpansionClassLoader;
 import me.hsgamer.hscore.expansion.extra.manager.DependableExpansionSortAndFilter;
 
+import java.util.Collections;
 import java.util.List;
 
 public final class GamesInTheBox extends BasePlugin {
@@ -21,6 +24,11 @@ public final class GamesInTheBox extends BasePlugin {
     private final GameManager gameManager = new GameManager();
     private final PlannerManager plannerManager = new PlannerManager(this);
     private final PluginAddonManager addonManager = new PluginAddonManager(this);
+
+    @Override
+    public void preLoad() {
+        MessageUtils.setPrefix(messageConfig::getPrefix);
+    }
 
     @Override
     public void load() {
@@ -41,6 +49,8 @@ public final class GamesInTheBox extends BasePlugin {
     public void enable() {
         plannerManager.init();
         addonManager.loadExpansions();
+
+        registerCommand(new MainCommand(this));
     }
 
     @Override
@@ -53,6 +63,11 @@ public final class GamesInTheBox extends BasePlugin {
     @Override
     public void disable() {
         plannerManager.clear();
+    }
+
+    @Override
+    protected List<Class<?>> getPermissionClasses() {
+        return Collections.singletonList(Permissions.class);
     }
 
     public MainConfig getMainConfig() {
