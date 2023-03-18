@@ -39,6 +39,8 @@ public class PickFeature implements Feature {
                 plugin.getLogger().log(Level.WARNING, e, () -> "Failed to load game " + key + " in arena " + planner.getName());
             }
         });
+
+        pickNextGame();
     }
 
     public void pickNextGame() {
