@@ -1,10 +1,8 @@
-package me.hsgamer.gamesinthebox.addon;
+package me.hsgamer.gamesinthebox.expansion;
 
-import me.hsgamer.gamesinthebox.GamesInTheBox;
 import me.hsgamer.gamesinthebox.game.Game;
-import me.hsgamer.hscore.bukkit.addon.PluginAddon;
 
-public abstract class SingleGameAddon extends PluginAddon {
+public abstract class SingleGameExpansion implements GameExpansion {
     private Game game;
 
     protected void enable() {
@@ -27,8 +25,7 @@ public abstract class SingleGameAddon extends PluginAddon {
         game.init();
         game.postInit();
 
-        GamesInTheBox plugin = (GamesInTheBox) getPlugin();
-        plugin.getGameManager().addGame(getGameType(), game);
+        getPlugin().getGameManager().addGame(getGameType(), game);
     }
 
     @Override
@@ -37,7 +34,6 @@ public abstract class SingleGameAddon extends PluginAddon {
 
         disable();
 
-        GamesInTheBox plugin = (GamesInTheBox) getPlugin();
-        plugin.getGameManager().removeGame(getGameType());
+        getPlugin().getGameManager().removeGame(getGameType());
     }
 }

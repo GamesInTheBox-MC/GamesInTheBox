@@ -13,7 +13,7 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <core.version>4.2.14</core.version>
+        <core.version>4.2.15</core.version>
         <minigamecore.version>2.1.2</minigamecore.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -120,7 +120,7 @@
         </dependency>
         <dependency>
             <groupId>me.hsgamer</groupId>
-            <artifactId>hscore-bukkit-addon</artifactId>
+            <artifactId>hscore-bukkit-expansion</artifactId>
             <version>${core.version}</version>
         </dependency>
         <dependency>
@@ -141,6 +141,11 @@
         <dependency>
             <groupId>me.hsgamer</groupId>
             <artifactId>hscore-builder</artifactId>
+            <version>${core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>me.hsgamer</groupId>
+            <artifactId>hscore-expansion-extra</artifactId>
             <version>${core.version}</version>
         </dependency>
 

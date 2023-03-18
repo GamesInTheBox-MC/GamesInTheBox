@@ -20,7 +20,7 @@ public class ReloadCommand extends SubCommand {
         plugin.getMainConfig().reloadConfig();
         plugin.getMessageConfig().reloadConfig();
         plugin.getGameManager().callClear();
-        plugin.getAddonManager().callReload();
+        plugin.getExpansionManager().callReload();
         plugin.getGameManager().callInit();
         plugin.getPlannerManager().reloadArena();
         MessageUtils.sendMessage(sender, plugin.getMessageConfig().getSuccess());
