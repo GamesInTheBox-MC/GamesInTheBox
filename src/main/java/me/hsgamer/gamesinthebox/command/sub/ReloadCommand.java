@@ -2,6 +2,7 @@ package me.hsgamer.gamesinthebox.command.sub;
 
 import me.hsgamer.gamesinthebox.GamesInTheBox;
 import me.hsgamer.gamesinthebox.Permissions;
+import me.hsgamer.gamesinthebox.expansion.extra.Reloadable;
 import me.hsgamer.hscore.bukkit.command.sub.SubCommand;
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import org.bukkit.command.CommandSender;
@@ -20,7 +21,7 @@ public class ReloadCommand extends SubCommand {
         plugin.getMainConfig().reloadConfig();
         plugin.getMessageConfig().reloadConfig();
         plugin.getGameManager().callClear();
-        plugin.getExpansionManager().callReload();
+        plugin.getExpansionManager().call(Reloadable.class, Reloadable::onReload);
         plugin.getGameManager().callInit();
         plugin.getPlannerManager().reloadArena();
         MessageUtils.sendMessage(sender, plugin.getMessageConfig().getSuccess());

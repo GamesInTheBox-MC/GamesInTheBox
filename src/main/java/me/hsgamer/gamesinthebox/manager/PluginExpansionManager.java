@@ -1,7 +1,6 @@
 package me.hsgamer.gamesinthebox.manager;
 
 import me.hsgamer.gamesinthebox.GamesInTheBox;
-import me.hsgamer.gamesinthebox.expansion.extra.Reloadable;
 import me.hsgamer.hscore.bukkit.expansion.BukkitConfigExpansionDescriptionLoader;
 import me.hsgamer.hscore.common.CollectionUtils;
 import me.hsgamer.hscore.common.MapUtils;
@@ -34,9 +33,5 @@ public class PluginExpansionManager extends ExpansionManager {
 
     public GamesInTheBox getPlugin() {
         return plugin;
-    }
-
-    public void callReload() {
-        call(Reloadable.class, Reloadable::onReload);
     }
 }
