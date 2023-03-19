@@ -3,9 +3,11 @@ package me.hsgamer.gamesinthebox.replacement;
 import org.bukkit.command.CommandSender;
 
 public interface ReplacementHandler {
-    String getReplacement(String name);
+    ReplacementHandler EMPTY = s -> null;
 
-    default String getReplacement(CommandSender sender, String name) {
-        return getReplacement(name);
+    String replace(String input);
+
+    default String replace(CommandSender sender, String input) {
+        return replace(input);
     }
 }

@@ -8,7 +8,7 @@ import java.util.Map;
 public interface GamePicker extends ReplacementHandler {
     GamePicker EMPTY = new GamePicker() {
         @Override
-        public String getReplacement(String name) {
+        public String replace(String input) {
             return null;
         }
 
