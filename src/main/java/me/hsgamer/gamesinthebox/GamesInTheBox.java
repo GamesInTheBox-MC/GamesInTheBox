@@ -4,6 +4,7 @@ import me.hsgamer.gamesinthebox.command.MainCommand;
 import me.hsgamer.gamesinthebox.config.MainConfig;
 import me.hsgamer.gamesinthebox.config.MessageConfig;
 import me.hsgamer.gamesinthebox.manager.GameManager;
+import me.hsgamer.gamesinthebox.manager.GamePickerManager;
 import me.hsgamer.gamesinthebox.manager.PlannerManager;
 import me.hsgamer.gamesinthebox.manager.PluginExpansionManager;
 import me.hsgamer.hscore.bukkit.baseplugin.BasePlugin;
@@ -18,6 +19,7 @@ public final class GamesInTheBox extends BasePlugin {
     private final MainConfig mainConfig = ConfigGenerator.newInstance(MainConfig.class, new BukkitConfig(this, "config.yml"));
     private final MessageConfig messageConfig = ConfigGenerator.newInstance(MessageConfig.class, new BukkitConfig(this, "messages.yml"));
     private final GameManager gameManager = new GameManager();
+    private final GamePickerManager gamePickerManager = new GamePickerManager();
     private final PlannerManager plannerManager = new PlannerManager(this);
     private final PluginExpansionManager expansionManager = new PluginExpansionManager(this);
 
@@ -61,6 +63,10 @@ public final class GamesInTheBox extends BasePlugin {
 
     public GameManager getGameManager() {
         return gameManager;
+    }
+
+    public GamePickerManager getGamePickerManager() {
+        return gamePickerManager;
     }
 
     public PlannerManager getPlannerManager() {
