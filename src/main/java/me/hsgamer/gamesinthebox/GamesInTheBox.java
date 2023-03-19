@@ -24,7 +24,7 @@ public final class GamesInTheBox extends BasePlugin {
     private final PluginExpansionManager expansionManager = new PluginExpansionManager(this);
 
     @Override
-    public void preLoad() {
+    public void load() {
         MessageUtils.setPrefix(messageConfig::getPrefix);
     }
 
