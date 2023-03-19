@@ -18,11 +18,6 @@ public interface MessageConfig {
         return "&cPlanner not found";
     }
 
-    @ConfigPath("planner.not-idle")
-    default String getPlannerNotIdle() {
-        return "&cPlanner is not idle";
-    }
-
     @ConfigPath("game.cannot-set")
     default String getGameCannotSet() {
         return "&cCannot set game for planner";
