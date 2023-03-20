@@ -30,7 +30,10 @@ import me.hsgamer.minigamecore.implementation.feature.TimerFeature;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
 
 public abstract class SimpleGameArena extends GameArena {
     protected SimpleGameArena(String name, Game game, Planner planner) {
@@ -42,8 +45,8 @@ public abstract class SimpleGameArena extends GameArena {
     }
 
     @Override
-    protected List<Feature> loadExtraFeatures() {
-        List<Feature> features = new ArrayList<>();
+    protected List<Feature> loadFeatures() {
+        List<Feature> features = super.loadFeatures();
         features.add(new TimerFeature());
         features.add(new PointFeature(this::onPointChanged));
         features.add(new SimpleRewardFeature(this));

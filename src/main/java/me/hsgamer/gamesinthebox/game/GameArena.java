@@ -23,7 +23,6 @@ import me.hsgamer.minigamecore.base.Arena;
 import me.hsgamer.minigamecore.base.Feature;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public abstract class GameArena extends Arena implements ReplacementHandler {
@@ -50,10 +49,6 @@ public abstract class GameArena extends Arena implements ReplacementHandler {
         return localName;
     }
 
-    protected List<Feature> loadExtraFeatures() {
-        return Collections.emptyList();
-    }
-
     public abstract void start();
 
     public abstract void forceEnd();
@@ -63,11 +58,10 @@ public abstract class GameArena extends Arena implements ReplacementHandler {
     }
 
     @Override
-    protected final List<Feature> loadFeatures() {
+    protected List<Feature> loadFeatures() {
         List<Feature> features = new ArrayList<>();
         features.add(new PlannerFeature(planner));
         features.add(new GameConfigFeature(localName, this));
-        features.addAll(loadExtraFeatures());
         return features;
     }
 }
