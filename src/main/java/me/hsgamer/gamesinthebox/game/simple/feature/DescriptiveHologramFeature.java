@@ -31,19 +31,19 @@ import me.hsgamer.unihologram.common.line.TextHologramLine;
 import org.bukkit.Location;
 
 import java.util.*;
-import java.util.function.Supplier;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class DescriptiveHologramFeature implements Feature {
     private static final UUID DUMMY_UUID = UUID.randomUUID();
     private final InstanceVariableManager instanceVariableManager;
     private final SimpleGameArena arena;
-    private final Supplier<List<String>> defaultLinesSupplier;
+    private final Function<String, List<String>> defaultLinesFunction;
     private final List<HologramUpdater> hologramUpdaters = new ArrayList<>();
 
-    public DescriptiveHologramFeature(SimpleGameArena arena, Supplier<List<String>> defaultLinesSupplier) {
+    public DescriptiveHologramFeature(SimpleGameArena arena, Function<String, List<String>> defaultLinesFunction) {
         this.arena = arena;
-        this.defaultLinesSupplier = defaultLinesSupplier;
+        this.defaultLinesFunction = defaultLinesFunction;
         instanceVariableManager = new InstanceVariableManager();
         instanceVariableManager.register("", (original, uuid) -> Optional.ofNullable(arena.getPlanner().getFeature(ReplacementFeature.class))
                 .map(replacementFeature -> replacementFeature.replace(original))
@@ -73,8 +73,8 @@ public class DescriptiveHologramFeature implements Feature {
 
             List<String> finalLines = new ArrayList<>();
             for (String line : lines) {
-                if (line.equalsIgnoreCase("{default_lines}")) {
-                    finalLines.addAll(defaultLinesSupplier.get());
+                if (line.startsWith("default:")) {
+                    finalLines.addAll(defaultLinesFunction.apply(line.substring(8)));
                 } else {
                     finalLines.add(line);
                 }

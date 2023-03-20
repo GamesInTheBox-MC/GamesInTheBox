@@ -41,7 +41,7 @@ public abstract class SimpleGameArena extends GameArena {
         // EMPTY
     }
 
-    protected List<String> getDefaultHologramLines() {
+    protected List<String> getDefaultHologramLines(String name) {
         return Collections.emptyList();
     }
 
