@@ -48,8 +48,8 @@ public class PlannerManager extends LoadedArenaManager {
     @Override
     protected List<GameState> loadGameStates() {
         return Arrays.asList(
-                new IdlingState(),
-                new ListeningState()
+                new IdlingState(plugin),
+                new ListeningState(plugin)
         );
     }
 

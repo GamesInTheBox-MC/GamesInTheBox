@@ -3,6 +3,7 @@ package me.hsgamer.gamesinthebox;
 import me.hsgamer.gamesinthebox.command.MainCommand;
 import me.hsgamer.gamesinthebox.config.MainConfig;
 import me.hsgamer.gamesinthebox.config.MessageConfig;
+import me.hsgamer.gamesinthebox.hook.PlaceholderHook;
 import me.hsgamer.gamesinthebox.manager.GameManager;
 import me.hsgamer.gamesinthebox.manager.GamePickerManager;
 import me.hsgamer.gamesinthebox.manager.PlannerManager;
@@ -11,6 +12,7 @@ import me.hsgamer.hscore.bukkit.baseplugin.BasePlugin;
 import me.hsgamer.hscore.bukkit.config.BukkitConfig;
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import me.hsgamer.hscore.config.proxy.ConfigGenerator;
+import org.bukkit.Bukkit;
 
 import java.util.Collections;
 import java.util.List;
@@ -34,6 +36,12 @@ public final class GamesInTheBox extends BasePlugin {
         expansionManager.loadExpansions();
 
         registerCommand(new MainCommand(this));
+
+        if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+            PlaceholderHook placeholderHook = new PlaceholderHook(this);
+            placeholderHook.register();
+            addDisableFunction(placeholderHook::unregister);
+        }
     }
 
     @Override

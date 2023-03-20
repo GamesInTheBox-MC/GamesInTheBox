@@ -14,15 +14,25 @@ import java.util.List;
 public abstract class GameArena extends Arena implements ReplacementHandler {
     private final String localName;
     private final Planner planner;
+    private final Game game;
 
     protected GameArena(String name, Game game, Planner planner) {
         super(planner.getName() + "-" + name, game);
         this.localName = name;
+        this.game = game;
         this.planner = planner;
     }
 
     public Planner getPlanner() {
         return planner;
+    }
+
+    public Game getGame() {
+        return game;
+    }
+
+    public String getLocalName() {
+        return localName;
     }
 
     protected List<Feature> loadExtraFeatures() {

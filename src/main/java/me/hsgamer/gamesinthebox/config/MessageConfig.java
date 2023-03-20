@@ -28,5 +28,15 @@ public interface MessageConfig {
         return "&cCannot perform action for planner";
     }
 
+    @ConfigPath("planner.state.idling")
+    default String getPlannerStateIdling() {
+        return "Idling";
+    }
+
+    @ConfigPath("planner.state.listening")
+    default String getPlannerStateListening() {
+        return "Listening";
+    }
+
     void reloadConfig();
 }
