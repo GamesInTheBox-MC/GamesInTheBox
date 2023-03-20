@@ -19,13 +19,13 @@ import me.hsgamer.gamesinthebox.game.feature.GameConfigFeature;
 import me.hsgamer.gamesinthebox.game.feature.PlannerFeature;
 import me.hsgamer.gamesinthebox.planner.Planner;
 import me.hsgamer.gamesinthebox.replacement.ReplacementHandler;
-import me.hsgamer.minigamecore.base.Arena;
 import me.hsgamer.minigamecore.base.Feature;
+import me.hsgamer.minigamecore.bukkit.SimpleBukkitArena;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class GameArena extends Arena implements ReplacementHandler {
+public abstract class GameArena extends SimpleBukkitArena implements ReplacementHandler {
     private final String localName;
     private final Planner planner;
     private final Game game;
