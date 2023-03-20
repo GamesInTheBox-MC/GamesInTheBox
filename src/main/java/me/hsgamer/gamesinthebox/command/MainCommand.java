@@ -36,6 +36,7 @@ public class MainCommand extends Command {
         subCommandManager.registerSubcommand(new ActionCommand(plugin));
         subCommandManager.registerSubcommand(new ForcePickCommand(plugin));
         subCommandManager.registerSubcommand(new EndCommand(plugin));
+        subCommandManager.registerSubcommand(new ExpansionCommand(plugin));
     }
 
     @Override

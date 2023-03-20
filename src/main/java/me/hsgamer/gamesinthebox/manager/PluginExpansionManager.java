@@ -25,6 +25,7 @@ import me.hsgamer.hscore.expansion.extra.manager.DependableExpansionSortAndFilte
 
 import java.io.File;
 import java.util.List;
+import java.util.Objects;
 
 public class PluginExpansionManager extends ExpansionManager {
     private final GamesInTheBox plugin;
@@ -44,6 +45,28 @@ public class PluginExpansionManager extends ExpansionManager {
                 return CollectionUtils.createStringListFromObject(MapUtils.getIfFound(loader.getDescription().getData(), "softdepend", "softdepends", "soft-dependencies"));
             }
         });
+    }
+
+    /**
+     * Get the authors of the loader
+     *
+     * @param loader the loader
+     * @return the authors
+     */
+    public static List<String> getAuthors(ExpansionClassLoader loader) {
+        Object value = MapUtils.getIfFound(loader.getDescription().getData(), "authors", "author");
+        return CollectionUtils.createStringListFromObject(value, true);
+    }
+
+    /**
+     * Get the description of the loader
+     *
+     * @param loader the loader
+     * @return the description
+     */
+    public static String getDescription(ExpansionClassLoader loader) {
+        Object value = loader.getDescription().getData().get("description");
+        return Objects.toString(value, "");
     }
 
     public GamesInTheBox getPlugin() {
