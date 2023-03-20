@@ -20,6 +20,7 @@ import me.hsgamer.gamesinthebox.game.feature.PointFeature;
 import me.hsgamer.gamesinthebox.game.simple.SimpleGameArena;
 import me.hsgamer.hscore.common.Validate;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -28,6 +29,7 @@ public class SimplePointFeature extends PointFeature {
     private final SimpleGameArena arena;
     private int pointPlus = 1;
     private int pointMinus = 0;
+    private int maxPlayersToAdd = -1;
 
     public SimplePointFeature(SimpleGameArena arena, PointConsumer pointConsumer) {
         super(pointConsumer);
@@ -49,6 +51,11 @@ public class SimplePointFeature extends PointFeature {
                 .flatMap(Validate::getNumber)
                 .map(Number::intValue)
                 .orElse(pointMinus);
+        maxPlayersToAdd = Optional.ofNullable(gameConfigFeature.get("point.max-players-to-add"))
+                .map(Objects::toString)
+                .flatMap(Validate::getNumber)
+                .map(Number::intValue)
+                .orElse(maxPlayersToAdd);
     }
 
     public void addPoint(UUID uuid) {
@@ -57,6 +64,13 @@ public class SimplePointFeature extends PointFeature {
 
     public void removePoint(UUID uuid) {
         applyPoint(uuid, -pointMinus);
+    }
+
+    public void tryAddPoint(List<UUID> uuids) {
+        if (maxPlayersToAdd >= 0 && uuids.size() > maxPlayersToAdd) {
+            return;
+        }
+        uuids.forEach(this::addPoint);
     }
 
     public int getPointPlus() {
