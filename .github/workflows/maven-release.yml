@@ -1,10 +1,8 @@
-name: Build
+name: Release
 
 on:
   push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+    tags: [ "*" ]
 
 jobs:
   build:
@@ -16,12 +14,16 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: 11
-      - name: Unshallow
-        run: git fetch --unshallow --quiet
       - name: Build with Maven
-        run: mvn -B package
+        run: mvn -B package --file pom.xml
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
           name: "GamesInTheBox"
           path: "**/target/*.jar"
+      - name: "Release"
+        uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          prerelease: false
+          files: "**/target/*.jar"
