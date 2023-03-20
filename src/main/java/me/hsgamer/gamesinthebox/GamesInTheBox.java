@@ -15,9 +15,13 @@
 */
 package me.hsgamer.gamesinthebox;
 
+import com.google.common.reflect.TypeToken;
 import me.hsgamer.gamesinthebox.command.MainCommand;
 import me.hsgamer.gamesinthebox.config.MainConfig;
 import me.hsgamer.gamesinthebox.config.MessageConfig;
+import me.hsgamer.gamesinthebox.config.converter.StringListConverter;
+import me.hsgamer.gamesinthebox.config.converter.StringObjectMapConverter;
+import me.hsgamer.gamesinthebox.config.converter.StringValueMapConverter;
 import me.hsgamer.gamesinthebox.hook.PlaceholderHook;
 import me.hsgamer.gamesinthebox.manager.GameManager;
 import me.hsgamer.gamesinthebox.manager.GamePickerManager;
@@ -26,13 +30,27 @@ import me.hsgamer.gamesinthebox.manager.PluginExpansionManager;
 import me.hsgamer.hscore.bukkit.baseplugin.BasePlugin;
 import me.hsgamer.hscore.bukkit.config.BukkitConfig;
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
+import me.hsgamer.hscore.config.annotation.converter.manager.DefaultConverterManager;
 import me.hsgamer.hscore.config.proxy.ConfigGenerator;
 import org.bukkit.Bukkit;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 public final class GamesInTheBox extends BasePlugin {
+    static {
+        //noinspection UnstableApiUsage
+        DefaultConverterManager.registerConverter(new TypeToken<Map<String, Object>>() {
+        }.getType(), new StringObjectMapConverter());
+        //noinspection UnstableApiUsage
+        DefaultConverterManager.registerConverter(new TypeToken<Map<String, String>>() {
+        }.getType(), new StringValueMapConverter());
+        //noinspection UnstableApiUsage
+        DefaultConverterManager.registerConverter(new TypeToken<List<String>>() {
+        }.getType(), new StringListConverter());
+    }
+
     private final MainConfig mainConfig = ConfigGenerator.newInstance(MainConfig.class, new BukkitConfig(this, "config.yml"));
     private final MessageConfig messageConfig = ConfigGenerator.newInstance(MessageConfig.class, new BukkitConfig(this, "messages.yml"));
     private final GameManager gameManager = new GameManager();
