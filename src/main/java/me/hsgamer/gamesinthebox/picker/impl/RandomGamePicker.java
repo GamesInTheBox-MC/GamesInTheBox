@@ -23,4 +23,9 @@ public class RandomGamePicker extends DelayedGamePicker {
     protected GameArena pickArena() {
         return CollectionUtils.pickRandom(arenaMap.values());
     }
+
+    @Override
+    public boolean canPick() {
+        return super.canPick() && !arenaMap.isEmpty();
+    }
 }

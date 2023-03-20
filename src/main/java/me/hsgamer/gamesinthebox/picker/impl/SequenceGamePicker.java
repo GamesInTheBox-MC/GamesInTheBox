@@ -37,11 +37,13 @@ public class SequenceGamePicker extends DelayedGamePicker {
 
     @Override
     protected GameArena pickArena() {
-        if (arenaListSequence.isEmpty()) {
-            return null;
-        }
         List<GameArena> arenaList = arenaListSequence.get(index);
         index = (index + 1) % arenaListSequence.size();
         return CollectionUtils.pickRandom(arenaList);
+    }
+
+    @Override
+    public boolean canPick() {
+        return super.canPick() && !arenaListSequence.isEmpty();
     }
 }

@@ -40,7 +40,7 @@ public abstract class DelayedGamePicker implements GamePicker {
     }
 
     @Override
-    public final boolean canPick() {
+    public boolean canPick() {
         long currentTime = System.currentTimeMillis();
         if (isPicked) {
             isPicked = false;
