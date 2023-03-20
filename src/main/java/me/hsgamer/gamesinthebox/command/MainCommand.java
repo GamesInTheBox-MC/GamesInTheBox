@@ -16,9 +16,7 @@
 package me.hsgamer.gamesinthebox.command;
 
 import me.hsgamer.gamesinthebox.GamesInTheBox;
-import me.hsgamer.gamesinthebox.command.sub.ActionCommand;
-import me.hsgamer.gamesinthebox.command.sub.ReloadCommand;
-import me.hsgamer.gamesinthebox.command.sub.SetGameCommand;
+import me.hsgamer.gamesinthebox.command.sub.*;
 import me.hsgamer.hscore.bukkit.command.sub.SubCommandManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -36,6 +34,8 @@ public class MainCommand extends Command {
         subCommandManager.registerSubcommand(new ReloadCommand(plugin));
         subCommandManager.registerSubcommand(new SetGameCommand(plugin));
         subCommandManager.registerSubcommand(new ActionCommand(plugin));
+        subCommandManager.registerSubcommand(new ForcePickCommand(plugin));
+        subCommandManager.registerSubcommand(new EndCommand(plugin));
     }
 
     @Override

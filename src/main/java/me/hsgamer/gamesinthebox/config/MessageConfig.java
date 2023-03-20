@@ -33,6 +33,11 @@ public interface MessageConfig {
         return "&cPlanner not found";
     }
 
+    @ConfigPath("planner.cannot-force-pick")
+    default String getPlannerCannotForcePick() {
+        return "&cCannot make planner pick the next game";
+    }
+
     @ConfigPath("game.cannot-set")
     default String getGameCannotSet() {
         return "&cCannot set game for planner";

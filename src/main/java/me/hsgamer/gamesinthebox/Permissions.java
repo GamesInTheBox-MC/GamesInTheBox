@@ -22,6 +22,8 @@ public class Permissions {
     public static final Permission RELOAD = new Permission("gamesinthebox.reload", PermissionDefault.OP);
     public static final Permission SET_GAME = new Permission("gamesinthebox.setgame", PermissionDefault.OP);
     public static final Permission ACTION = new Permission("gamesinthebox.action", PermissionDefault.OP);
+    public static final Permission FORCE_PICK = new Permission("gamesinthebox.forcepick", PermissionDefault.OP);
+    public static final Permission END = new Permission("gamesinthebox.end", PermissionDefault.OP);
 
     private Permissions() {
         // EMPTY

@@ -48,4 +48,8 @@ public interface GamePicker extends ReplacementHandler {
     GameArena pick();
 
     boolean canPick();
+
+    default boolean forcePick() {
+        return false;
+    }
 }
