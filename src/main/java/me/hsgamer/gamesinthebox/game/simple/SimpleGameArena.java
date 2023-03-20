@@ -20,6 +20,7 @@ import me.hsgamer.gamesinthebox.game.GameArena;
 import me.hsgamer.gamesinthebox.game.feature.PointFeature;
 import me.hsgamer.gamesinthebox.game.feature.TopFeature;
 import me.hsgamer.gamesinthebox.game.simple.feature.DescriptiveHologramFeature;
+import me.hsgamer.gamesinthebox.game.simple.feature.SimplePointFeature;
 import me.hsgamer.gamesinthebox.game.simple.feature.SimpleRewardFeature;
 import me.hsgamer.gamesinthebox.game.simple.feature.SimpleUpdateFeature;
 import me.hsgamer.gamesinthebox.planner.Planner;
@@ -49,7 +50,7 @@ public abstract class SimpleGameArena extends GameArena {
     protected List<Feature> loadFeatures() {
         List<Feature> features = super.loadFeatures();
         features.add(new TimerFeature());
-        features.add(new PointFeature(this::onPointChanged));
+        features.add(new SimplePointFeature(this, this::onPointChanged));
         features.add(new SimpleRewardFeature(this));
         features.add(new TopFeature());
         features.add(new DescriptiveHologramFeature(this, this::getDefaultHologramLines));
@@ -66,6 +67,22 @@ public abstract class SimpleGameArena extends GameArena {
                     .map(TimerFeature::getDuration)
                     .map(TimeUtil::formatStandardTime)
                     .orElse("N/A");
+        } else if (input.equalsIgnoreCase("min_players_to_reward")) {
+            return Optional.ofNullable(getFeature(SimpleRewardFeature.class))
+                    .map(SimpleRewardFeature::getMinPlayersToReward)
+                    .filter(integer -> integer >= 0)
+                    .map(Objects::toString)
+                    .orElse("N/A");
+        } else if (input.equalsIgnoreCase("point_plus")) {
+            return Optional.ofNullable(getFeature(SimplePointFeature.class))
+                    .map(SimplePointFeature::getPointPlus)
+                    .map(Objects::toString)
+                    .orElse("N/A");
+        } else if (input.equalsIgnoreCase("point_minus")) {
+            return Optional.ofNullable(getFeature(SimplePointFeature.class))
+                    .map(SimplePointFeature::getPointMinus)
+                    .map(Objects::toString)
+                    .orElse("N/A");
         } else if (lowerCase.startsWith("top_")) {
             TopFeature topFeature = getFeature(TopFeature.class);
             if (topFeature == null) {
@@ -74,17 +91,11 @@ public abstract class SimpleGameArena extends GameArena {
 
             if (lowerCase.startsWith("top_value_")) {
                 int index = Integer.parseInt(lowerCase.substring(10)) - 1;
-                return topFeature.getTop(index).map(Pair::getValue).map(Objects::toString).orElse("N/A");
+                return topFeature.getTop(index).map(Pair::getValue).map(Objects::toString).orElse("---");
             } else if (lowerCase.startsWith("top_name_")) {
                 int index = Integer.parseInt(lowerCase.substring(9)) - 1;
-                return topFeature.getTop(index).map(Pair::getKey).map(Bukkit::getOfflinePlayer).map(OfflinePlayer::getName).orElse("N/A");
+                return topFeature.getTop(index).map(Pair::getKey).map(Bukkit::getOfflinePlayer).map(OfflinePlayer::getName).orElse("---");
             }
-        } else if (input.equalsIgnoreCase("min_players_to_reward")) {
-            return Optional.ofNullable(getFeature(SimpleRewardFeature.class))
-                    .map(SimpleRewardFeature::getMinPlayersToReward)
-                    .filter(integer -> integer >= 0)
-                    .map(Objects::toString)
-                    .orElse("N/A");
         }
         return null;
     }
