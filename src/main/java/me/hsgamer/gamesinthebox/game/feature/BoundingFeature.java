@@ -16,6 +16,7 @@
 package me.hsgamer.gamesinthebox.game.feature;
 
 import me.hsgamer.hscore.bukkit.block.BukkitBlockAdapter;
+import me.hsgamer.hscore.common.Pair;
 import me.hsgamer.hscore.minecraft.block.box.BlockBox;
 import me.hsgamer.minigamecore.base.Feature;
 import org.bukkit.Bukkit;
@@ -25,14 +26,34 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.Supplier;
 
 public class BoundingFeature implements Feature {
-    public final World world;
-    public final BlockBox blockBox;
+    private final Supplier<Pair<World, BlockBox>> supplier;
+    private World world;
+    private BlockBox blockBox;
+
+    public BoundingFeature(Supplier<Pair<World, BlockBox>> supplier) {
+        this.supplier = supplier;
+    }
 
     public BoundingFeature(World world, BlockBox blockBox) {
-        this.world = world;
-        this.blockBox = blockBox;
+        this(() -> Pair.of(world, blockBox));
+    }
+
+    @Override
+    public void postInit() {
+        Pair<World, BlockBox> pair = supplier.get();
+        this.world = pair.getKey();
+        this.blockBox = pair.getValue();
+    }
+
+    public World getWorld() {
+        return world;
+    }
+
+    public BlockBox getBlockBox() {
+        return blockBox;
     }
 
     public boolean checkBounding(UUID uuid) {
@@ -41,6 +62,10 @@ public class BoundingFeature implements Feature {
     }
 
     public boolean checkBounding(Location location) {
+        if (location == null || blockBox == null) {
+            return false;
+        }
+
         if (location.getWorld() != world) {
             return false;
         }
