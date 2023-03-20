@@ -31,16 +31,19 @@ import me.hsgamer.unihologram.common.line.TextHologramLine;
 import org.bukkit.Location;
 
 import java.util.*;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class DescriptiveHologramFeature implements Feature {
     private static final UUID DUMMY_UUID = UUID.randomUUID();
     private final InstanceVariableManager instanceVariableManager;
     private final SimpleGameArena arena;
+    private final Supplier<List<String>> defaultLinesSupplier;
     private final List<HologramUpdater> hologramUpdaters = new ArrayList<>();
 
-    public DescriptiveHologramFeature(SimpleGameArena arena) {
+    public DescriptiveHologramFeature(SimpleGameArena arena, Supplier<List<String>> defaultLinesSupplier) {
         this.arena = arena;
+        this.defaultLinesSupplier = defaultLinesSupplier;
         instanceVariableManager = new InstanceVariableManager();
         instanceVariableManager.register("", (original, uuid) -> Optional.ofNullable(arena.getPlanner().getFeature(ReplacementFeature.class))
                 .map(replacementFeature -> replacementFeature.replace(original))
@@ -67,8 +70,17 @@ public class DescriptiveHologramFeature implements Feature {
             if (location == null || lines.isEmpty()) {
                 continue;
             }
+
+            List<String> finalLines = new ArrayList<>();
+            for (String line : lines) {
+                if (line.equalsIgnoreCase("{default_lines}")) {
+                    finalLines.addAll(defaultLinesSupplier.get());
+                } else {
+                    finalLines.add(line);
+                }
+            }
             Hologram<Location> hologram = arena.getFeature(HologramFeature.class).createHologram(location);
-            hologramUpdaters.add(new HologramUpdater(hologram, lines));
+            hologramUpdaters.add(new HologramUpdater(hologram, finalLines));
         }
     }
 
