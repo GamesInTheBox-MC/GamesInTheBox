@@ -38,7 +38,7 @@ public class PickFeature implements Feature {
             }
             String type = Objects.toString(map.get("type"));
             try {
-                gameManager.getGame(type).map(game -> game.createArena(key, planner)).ifPresent(gameArena -> gameArenaMap.put(key, gameArena));
+                gameManager.build(type, key, planner).ifPresent(gameArena -> gameArenaMap.put(key, gameArena));
             } catch (Exception e) {
                 plugin.getLogger().log(Level.WARNING, e, () -> "Failed to load game " + key + " in arena " + planner.getName());
             }

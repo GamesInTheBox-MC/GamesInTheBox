@@ -1,9 +1,13 @@
 package me.hsgamer.gamesinthebox.expansion;
 
 import me.hsgamer.gamesinthebox.game.Game;
+import me.hsgamer.gamesinthebox.game.GameArena;
+import me.hsgamer.gamesinthebox.manager.GameManager;
+import me.hsgamer.hscore.builder.Builder;
 
 public abstract class SingleGameExpansion implements GameExpansion {
     private Game game;
+    private Builder.FunctionElement<GameManager.Input, GameArena> element;
 
     protected void enable() {
         // EMPTY
@@ -15,7 +19,7 @@ public abstract class SingleGameExpansion implements GameExpansion {
 
     protected abstract Game getGame();
 
-    protected abstract String getGameType();
+    protected abstract String[] getGameType();
 
     @Override
     public final void onEnable() {
@@ -25,7 +29,7 @@ public abstract class SingleGameExpansion implements GameExpansion {
         game.init();
         game.postInit();
 
-        getPlugin().getGameManager().addGame(getGameType(), game);
+        element = getPlugin().getGameManager().register(game, getGameType());
     }
 
     @Override
@@ -34,6 +38,6 @@ public abstract class SingleGameExpansion implements GameExpansion {
 
         disable();
 
-        getPlugin().getGameManager().removeGame(getGameType());
+        getPlugin().getGameManager().remove(element);
     }
 }
