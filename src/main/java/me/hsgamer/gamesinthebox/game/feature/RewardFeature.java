@@ -1,37 +1,38 @@
 package me.hsgamer.gamesinthebox.game.feature;
 
-import me.hsgamer.hscore.common.CollectionUtils;
+import me.hsgamer.hscore.common.Pair;
 import me.hsgamer.minigamecore.base.Feature;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.*;
+import java.util.function.Supplier;
 
 public class RewardFeature implements Feature {
-    private final Map<Integer, List<String>> topCommands;
-    private final List<String> defaultCommands;
+    private final Supplier<Pair<Map<Integer, List<String>>, List<String>>> topCommandsSupplier;
+    private Map<Integer, List<String>> topCommands = Collections.emptyMap();
+    private List<String> defaultCommands = Collections.emptyList();
 
-    public RewardFeature(Map<Integer, List<String>> topCommands, List<String> defaultCommands) {
-        this.topCommands = topCommands;
-        this.defaultCommands = defaultCommands;
+    public RewardFeature(Supplier<Pair<Map<Integer, List<String>>, List<String>>> topCommandsSupplier) {
+        this.topCommandsSupplier = topCommandsSupplier;
     }
 
-    public RewardFeature(Map<String, Object> value) {
-        this(new HashMap<>(), new ArrayList<>());
-        value.forEach((k, v) -> {
-            if (k.equalsIgnoreCase("default") || k.equalsIgnoreCase("all") || k.equalsIgnoreCase("?")) {
-                defaultCommands.addAll(CollectionUtils.createStringListFromObject(v, true));
-            } else {
-                int i;
-                try {
-                    i = Integer.parseInt(k);
-                } catch (Exception e) {
-                    return;
-                }
-                topCommands.put(i, CollectionUtils.createStringListFromObject(v, true));
-            }
-        });
+    public RewardFeature(Map<Integer, List<String>> topCommands, List<String> defaultCommands) {
+        this(() -> Pair.of(topCommands, defaultCommands));
+    }
+
+    @Override
+    public void postInit() {
+        Pair<Map<Integer, List<String>>, List<String>> pair = topCommandsSupplier.get();
+        topCommands = pair.getKey();
+        defaultCommands = pair.getValue();
+    }
+
+    @Override
+    public void clear() {
+        topCommands = Collections.emptyMap();
+        defaultCommands = Collections.emptyList();
     }
 
     public void reward(int topPosition, UUID uuid) {

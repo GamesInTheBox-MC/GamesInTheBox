@@ -1,48 +1,34 @@
 package me.hsgamer.gamesinthebox.game.feature;
 
-import me.hsgamer.gamesinthebox.util.Util;
 import me.hsgamer.hscore.common.Pair;
 import me.hsgamer.minigamecore.base.Feature;
 import org.bukkit.Bukkit;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 public class PointFeature implements Feature {
     private final Map<UUID, Integer> points = new IdentityHashMap<>();
-    private final AtomicBoolean updateTop = new AtomicBoolean(false);
     private final AtomicReference<List<Pair<UUID, Integer>>> topSnapshot = new AtomicReference<>(Collections.emptyList());
-    private BukkitTask task = null;
-    private PointConsumer pointConsumer = (uuid, point, totalPoint) -> {
-        // EMPTY
-    };
+    private final PointConsumer pointConsumer;
 
-    @Override
-    public void init() {
-        this.task = Bukkit.getScheduler().runTaskTimerAsynchronously(JavaPlugin.getProvidingPlugin(getClass()), this::takeTopSnapshot, 20, 20);
-    }
-
-    private void takeTopSnapshot() {
-        if (updateTop.get()) {
-            List<Pair<UUID, Integer>> updatedTopSnapshot = getTop();
-            topSnapshot.lazySet(updatedTopSnapshot);
-        }
-    }
-
-    public void setPointConsumer(PointConsumer pointConsumer) {
+    public PointFeature(PointConsumer pointConsumer) {
         this.pointConsumer = pointConsumer;
+    }
+
+    public PointFeature() {
+        this((uuid, point, totalPoint) -> {
+        });
+    }
+
+    public void takeTopSnapshot() {
+        List<Pair<UUID, Integer>> updatedTopSnapshot = getTop();
+        topSnapshot.lazySet(updatedTopSnapshot);
     }
 
     public List<Pair<UUID, Integer>> getTopSnapshot() {
         return topSnapshot.get();
-    }
-
-    public void setTopSnapshot(boolean enable) {
-        updateTop.lazySet(enable);
     }
 
     public List<Pair<UUID, String>> getTopSnapshotAsStringPair() {
@@ -97,11 +83,6 @@ public class PointFeature implements Feature {
 
     public void clearPoints() {
         points.clear();
-    }
-
-    @Override
-    public void clear() {
-        Util.cancelSafe(task);
     }
 
     public interface PointConsumer {

@@ -28,17 +28,24 @@ public class HologramFeature implements Feature {
         this(arena.getName());
     }
 
+    public static void clearIfInitialized(Hologram<Location> hologram) {
+        if (hologram.isInitialized()) {
+            hologram.clear();
+        }
+    }
+
+    public static void reInit(Hologram<Location> hologram) {
+        clearIfInitialized(hologram);
+        hologram.init();
+    }
+
     public Hologram<Location> createHologram(Location location) {
         return spigotHologramProvider.createHologram(baseName + "-" + UUID.randomUUID(), location);
     }
 
     @Override
     public void clear() {
-        holograms.forEach(hologram -> {
-            if (hologram.isInitialized()) {
-                hologram.clear();
-            }
-        });
+        holograms.forEach(HologramFeature::clearIfInitialized);
         holograms.clear();
     }
 }
