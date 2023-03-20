@@ -3,10 +3,7 @@ package me.hsgamer.gamesinthebox.planner;
 import me.hsgamer.gamesinthebox.game.Game;
 import me.hsgamer.gamesinthebox.game.GameArena;
 import me.hsgamer.gamesinthebox.manager.PlannerManager;
-import me.hsgamer.gamesinthebox.planner.feature.GameFeature;
-import me.hsgamer.gamesinthebox.planner.feature.GlobalPlannerConfigFeature;
-import me.hsgamer.gamesinthebox.planner.feature.PickFeature;
-import me.hsgamer.gamesinthebox.planner.feature.ReplacementFeature;
+import me.hsgamer.gamesinthebox.planner.feature.*;
 import me.hsgamer.gamesinthebox.planner.state.IdlingState;
 import me.hsgamer.gamesinthebox.replacement.ReplacementHandler;
 import me.hsgamer.gamesinthebox.util.GameUtil;
@@ -65,5 +62,20 @@ public class Planner extends SimpleBukkitArena implements ReplacementHandler {
             default:
                 return null;
         }
+    }
+
+    @Override
+    public long getDelay() {
+        return getFeature(PluginFeature.class).getPlugin().getMainConfig().getPlannerInterval();
+    }
+
+    @Override
+    public long getPeriod() {
+        return getFeature(PluginFeature.class).getPlugin().getMainConfig().getPlannerInterval();
+    }
+
+    @Override
+    public boolean isAsync() {
+        return getFeature(PluginFeature.class).getPlugin().getMainConfig().isPlannerAsync();
     }
 }
