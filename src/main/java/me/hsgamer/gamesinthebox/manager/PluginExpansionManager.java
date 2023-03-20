@@ -17,13 +17,18 @@ package me.hsgamer.gamesinthebox.manager;
 
 import me.hsgamer.gamesinthebox.GamesInTheBox;
 import me.hsgamer.hscore.bukkit.expansion.BukkitConfigExpansionDescriptionLoader;
+import me.hsgamer.hscore.bukkit.utils.BukkitUtils;
 import me.hsgamer.hscore.common.CollectionUtils;
 import me.hsgamer.hscore.common.MapUtils;
+import me.hsgamer.hscore.common.Validate;
 import me.hsgamer.hscore.expansion.common.ExpansionClassLoader;
 import me.hsgamer.hscore.expansion.common.ExpansionManager;
+import me.hsgamer.hscore.expansion.common.ExpansionState;
+import me.hsgamer.hscore.expansion.common.exception.InvalidExpansionDescriptionException;
 import me.hsgamer.hscore.expansion.extra.manager.DependableExpansionSortAndFilter;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -43,6 +48,11 @@ public class PluginExpansionManager extends ExpansionManager {
             @Override
             public List<String> getSoftDependencies(ExpansionClassLoader loader) {
                 return CollectionUtils.createStringListFromObject(MapUtils.getIfFound(loader.getDescription().getData(), "softdepend", "softdepends", "soft-dependencies"));
+            }
+        });
+        addStateListener((loader, state) -> {
+            if (state == ExpansionState.LOADING) {
+                checkPluginDepends(loader);
             }
         });
     }
@@ -67,6 +77,21 @@ public class PluginExpansionManager extends ExpansionManager {
     public static String getDescription(ExpansionClassLoader loader) {
         Object value = loader.getDescription().getData().get("description");
         return Objects.toString(value, "");
+    }
+
+    private static List<String> getPluginDepends(ExpansionClassLoader loader) {
+        Object value = MapUtils.getIfFound(loader.getDescription().getData(), "plugin-depend", "plugin", "plugin-depends", "plugins");
+        return CollectionUtils.createStringListFromObject(value, true);
+    }
+
+    private void checkPluginDepends(ExpansionClassLoader loader) {
+        List<String> requiredPlugins = getPluginDepends(loader);
+        if (Validate.isNullOrEmpty(requiredPlugins)) return;
+
+        List<String> missing = BukkitUtils.getMissingDepends(requiredPlugins);
+        if (!missing.isEmpty()) {
+            throw new InvalidExpansionDescriptionException("Missing plugin dependency for " + loader.getDescription().getName() + ": " + Arrays.toString(missing.toArray()));
+        }
     }
 
     public GamesInTheBox getPlugin() {
