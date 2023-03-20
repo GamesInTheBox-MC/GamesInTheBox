@@ -53,6 +53,7 @@ public abstract class SimpleGameArena extends GameArena {
         features.add(new TopFeature());
         features.add(new DescriptiveHologramFeature(this));
         features.add(new SimpleUpdateFeature(this));
+        features.add(new SimpleRewardFeature(this));
         return features;
     }
 
@@ -77,6 +78,12 @@ public abstract class SimpleGameArena extends GameArena {
                 int index = Integer.parseInt(lowerCase.substring(9)) - 1;
                 return topFeature.getTop(index).map(Pair::getKey).map(Bukkit::getOfflinePlayer).map(OfflinePlayer::getName).orElse("N/A");
             }
+        } else if (input.equalsIgnoreCase("min_players_to_reward")) {
+            return Optional.ofNullable(getFeature(SimpleRewardFeature.class))
+                    .map(SimpleRewardFeature::getMinPlayersToReward)
+                    .filter(integer -> integer >= 0)
+                    .map(Objects::toString)
+                    .orElse("N/A");
         }
         return null;
     }

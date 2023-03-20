@@ -20,13 +20,14 @@ import me.hsgamer.gamesinthebox.game.feature.RewardFeature;
 import me.hsgamer.gamesinthebox.game.simple.SimpleGameArena;
 import me.hsgamer.hscore.common.CollectionUtils;
 import me.hsgamer.hscore.common.Pair;
+import me.hsgamer.hscore.common.Validate;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class SimpleRewardFeature extends RewardFeature {
+    private final SimpleGameArena arena;
+    private int minPlayersToReward = -1;
+
     public SimpleRewardFeature(SimpleGameArena arena) {
         super(() -> {
             Map<Integer, List<String>> parsedTopCommands = new HashMap<>();
@@ -46,5 +47,29 @@ public class SimpleRewardFeature extends RewardFeature {
             });
             return Pair.of(parsedTopCommands, parsedDefaultCommands);
         });
+        this.arena = arena;
+    }
+
+    @Override
+    public void postInit() {
+        super.postInit();
+
+        minPlayersToReward = Optional.ofNullable(arena.getFeature(GameConfigFeature.class).get("min-players-to-reward"))
+                .map(Object::toString)
+                .flatMap(Validate::getNumber)
+                .map(Number::intValue)
+                .orElse(minPlayersToReward);
+    }
+
+    public boolean tryReward(List<UUID> uuids) {
+        if (minPlayersToReward >= 0 && uuids.size() < minPlayersToReward) {
+            return false;
+        }
+        reward(uuids);
+        return true;
+    }
+
+    public int getMinPlayersToReward() {
+        return minPlayersToReward;
     }
 }
