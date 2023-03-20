@@ -142,6 +142,21 @@
         </dependency>
         <dependency>
             <groupId>me.hsgamer</groupId>
+            <artifactId>hscore-bukkit-block</artifactId>
+            <version>${core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>me.hsgamer</groupId>
+            <artifactId>hscore-minecraft-block-impl</artifactId>
+            <version>${core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>me.hsgamer</groupId>
+            <artifactId>hscore-minecraft-block-utils</artifactId>
+            <version>${core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>me.hsgamer</groupId>
             <artifactId>hscore-config-proxy</artifactId>
             <version>${core.version}</version>
         </dependency>
@@ -158,6 +173,11 @@
         <dependency>
             <groupId>me.hsgamer</groupId>
             <artifactId>hscore-expansion-extra</artifactId>
+            <version>${core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>me.hsgamer</groupId>
+            <artifactId>hscore-variable</artifactId>
             <version>${core.version}</version>
         </dependency>
 
