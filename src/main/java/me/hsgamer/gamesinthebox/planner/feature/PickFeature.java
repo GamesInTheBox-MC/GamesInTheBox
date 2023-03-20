@@ -44,7 +44,7 @@ public class PickFeature implements Feature {
             }
         });
 
-        gamePicker.setup(gameArenaMap);
+        gamePicker.setup(Collections.unmodifiableMap(gameArenaMap));
     }
 
     public boolean canPick() {
