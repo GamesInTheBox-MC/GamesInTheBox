@@ -55,7 +55,6 @@ public abstract class SimpleGameArena extends GameArena {
         features.add(new TopFeature());
         features.add(new DescriptiveHologramFeature(this, this::getDefaultHologramLines));
         features.add(new SimpleUpdateFeature(this));
-        features.add(new SimpleRewardFeature(this));
         return features;
     }
 
