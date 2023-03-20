@@ -1,6 +1,7 @@
 package me.hsgamer.gamesinthebox.manager;
 
 import me.hsgamer.gamesinthebox.picker.GamePicker;
+import me.hsgamer.gamesinthebox.picker.impl.ChanceGamePicker;
 import me.hsgamer.gamesinthebox.picker.impl.RandomGamePicker;
 import me.hsgamer.gamesinthebox.picker.impl.SequenceGamePicker;
 import me.hsgamer.gamesinthebox.planner.Planner;
@@ -13,6 +14,7 @@ public class GamePickerManager extends Builder<Planner, GamePicker> {
     public GamePickerManager() {
         register(RandomGamePicker::new, "random");
         register(SequenceGamePicker::new, "sequence");
+        register(ChanceGamePicker::new, "chance");
     }
 
     public GamePicker build(Planner planner) {
