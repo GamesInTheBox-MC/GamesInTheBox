@@ -250,7 +250,7 @@
         <dependency>
             <groupId>com.lewdev</groupId>
             <artifactId>probability-lib</artifactId>
-            <version>0.8</version>
+            <version>0.9</version>
         </dependency>
 
         <dependency>
