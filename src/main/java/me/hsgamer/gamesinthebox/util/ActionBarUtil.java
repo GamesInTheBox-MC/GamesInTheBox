@@ -27,12 +27,15 @@ public final class ActionBarUtil {
         // EMPTY
     }
 
-    public static void sendActionBar(UUID uuid, String message) {
+    public static void sendActionBar(Player player, String message) {
         message = ColorUtils.colorize(message);
-        Player player = Bukkit.getPlayer(uuid);
-        if (player == null) {
-            return;
-        }
         ActionBar.sendActionBar(player, message);
+    }
+
+    public static void sendActionBar(UUID uuid, String message) {
+        Player player = Bukkit.getPlayer(uuid);
+        if (player != null) {
+            sendActionBar(player, message);
+        }
     }
 }
