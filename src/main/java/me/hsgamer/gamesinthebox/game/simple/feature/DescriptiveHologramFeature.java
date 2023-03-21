@@ -16,27 +16,27 @@
 package me.hsgamer.gamesinthebox.game.simple.feature;
 
 import me.hsgamer.gamesinthebox.game.feature.GameConfigFeature;
+import me.hsgamer.gamesinthebox.game.feature.GameVariableFeature;
 import me.hsgamer.gamesinthebox.game.feature.HologramFeature;
 import me.hsgamer.gamesinthebox.game.simple.SimpleGameArena;
-import me.hsgamer.gamesinthebox.planner.feature.ReplacementFeature;
 import me.hsgamer.gamesinthebox.util.LocationUtil;
 import me.hsgamer.hscore.bukkit.utils.ColorUtils;
 import me.hsgamer.hscore.common.CollectionUtils;
 import me.hsgamer.hscore.common.MapUtils;
-import me.hsgamer.hscore.variable.InstanceVariableManager;
 import me.hsgamer.minigamecore.base.Feature;
 import me.hsgamer.unihologram.common.api.Hologram;
 import me.hsgamer.unihologram.common.api.HologramLine;
 import me.hsgamer.unihologram.common.line.TextHologramLine;
 import org.bukkit.Location;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class DescriptiveHologramFeature implements Feature {
-    private static final UUID DUMMY_UUID = UUID.randomUUID();
-    private final InstanceVariableManager instanceVariableManager;
     private final SimpleGameArena arena;
     private final Function<String, List<String>> defaultLinesFunction;
     private final List<HologramUpdater> hologramUpdaters = new ArrayList<>();
@@ -44,11 +44,6 @@ public class DescriptiveHologramFeature implements Feature {
     public DescriptiveHologramFeature(SimpleGameArena arena, Function<String, List<String>> defaultLinesFunction) {
         this.arena = arena;
         this.defaultLinesFunction = defaultLinesFunction;
-        instanceVariableManager = new InstanceVariableManager();
-        instanceVariableManager.register("", (original, uuid) -> Optional.ofNullable(arena.getPlanner().getFeature(ReplacementFeature.class))
-                .map(replacementFeature -> replacementFeature.replace(original))
-                .orElse(null));
-        instanceVariableManager.setReplaceAll(true);
     }
 
     @Override
@@ -116,7 +111,7 @@ public class DescriptiveHologramFeature implements Feature {
                 return;
             }
             List<HologramLine> replacedLines = lines.stream()
-                    .map(line -> instanceVariableManager.setVariables(line, DUMMY_UUID))
+                    .map(line -> arena.getFeature(GameVariableFeature.class).replace(line))
                     .map(ColorUtils::colorize)
                     .map(TextHologramLine::new)
                     .collect(Collectors.toList());
