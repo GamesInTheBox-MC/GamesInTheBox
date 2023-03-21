@@ -29,6 +29,7 @@ public class SimpleUpdateFeature implements Feature {
 
     public void initState() {
         arena.getFeature(DescriptiveHologramFeature.class).initHologram();
+        arena.getFeature(DescriptiveHologramFeature.class).updateHologram();
     }
 
     public void updateState() {
