@@ -241,12 +241,12 @@
         <dependency>
             <groupId>me.hsgamer</groupId>
             <artifactId>uni-hologram-spigot-bundle</artifactId>
-            <version>1.5.3</version>
+            <version>1.5.4</version>
         </dependency>
         <dependency>
             <groupId>com.github.cryptomorin</groupId>
             <artifactId>XSeries</artifactId>
-            <version>9.3.0</version>
+            <version>9.3.1</version>
         </dependency>
         <dependency>
             <groupId>com.lewdev</groupId>
