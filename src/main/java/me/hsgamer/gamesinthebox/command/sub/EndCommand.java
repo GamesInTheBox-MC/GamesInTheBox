@@ -52,7 +52,7 @@ public class EndCommand extends SubCommand {
 
     @Override
     public boolean isProperUsage(@NotNull CommandSender sender, @NotNull String label, @NotNull String... args) {
-        return args.length > 2;
+        return args.length > 0;
     }
 
     @Override
