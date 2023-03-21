@@ -21,7 +21,7 @@ import me.hsgamer.minigamecore.base.Feature;
 
 public class GameFeature implements Feature {
     private GameArena currentGameArena;
-    private boolean isFinished = false;
+    private boolean isFinished = true;
 
     public GameArena getCurrentGameArena() {
         return currentGameArena;
