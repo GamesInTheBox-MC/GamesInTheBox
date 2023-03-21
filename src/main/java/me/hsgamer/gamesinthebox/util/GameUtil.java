@@ -44,7 +44,7 @@ public final class GameUtil {
         } else if (arena instanceof GameArena) {
             return input
                     .replace("{planner}", ((GameArena) arena).getPlanner().getName())
-                    .replace("{arena}", arena.getName());
+                    .replace("{arena}", ((GameArena) arena).getLocalName());
         } else {
             return input.replace("{arena}", arena.getName());
         }
