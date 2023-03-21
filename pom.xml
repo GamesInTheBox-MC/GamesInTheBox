@@ -14,7 +14,7 @@
     <properties>
         <java.version>1.8</java.version>
         <core.version>4.2.15</core.version>
-        <minigamecore.version>2.1.2</minigamecore.version>
+        <minigamecore.version>2.1.3</minigamecore.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 

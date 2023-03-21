@@ -28,7 +28,6 @@ public abstract class Game extends ArenaManager {
         if (!addArena(arena)) {
             throw new IllegalArgumentException("Arena " + name + " already exists");
         }
-        arena.init();
         arena.postInit();
         return arena;
     }

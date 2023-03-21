@@ -58,6 +58,7 @@ public class PlannerManager extends LoadedArenaManager {
     public void reloadArena() {
         plannerConfig.reload();
         super.reloadArena();
+        getAllArenas().forEach(Arena::postInit);
     }
 
     @Override
