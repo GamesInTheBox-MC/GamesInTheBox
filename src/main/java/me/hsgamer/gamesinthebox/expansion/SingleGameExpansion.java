@@ -20,20 +20,40 @@ import me.hsgamer.gamesinthebox.game.GameArena;
 import me.hsgamer.gamesinthebox.manager.GameManager;
 import me.hsgamer.hscore.builder.Builder;
 
+/**
+ * The {@link GameExpansion} that registers a single {@link Game}
+ */
 public abstract class SingleGameExpansion implements GameExpansion {
     private Game game;
     private Builder.FunctionElement<GameManager.Input, GameArena> element;
 
+    /**
+     * Called when the expansion is enabled
+     */
     protected void enable() {
         // EMPTY
     }
 
+    /**
+     * Called when the expansion is disabled
+     */
     protected void disable() {
         // EMPTY
     }
 
+    /**
+     * Get the game
+     *
+     * @return the game
+     */
     protected abstract Game getGame();
 
+    /**
+     * Get the type of the game that will be registered.
+     * Used as an identifier for the game.
+     *
+     * @return the type
+     */
     protected abstract String[] getGameType();
 
     @Override

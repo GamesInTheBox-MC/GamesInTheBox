@@ -15,6 +15,12 @@
 */
 package me.hsgamer.gamesinthebox.expansion.extra;
 
+/**
+ * The marker interface to indicate that the {@link me.hsgamer.hscore.expansion.common.Expansion} can be reloaded
+ */
 public interface Reloadable {
+    /**
+     * Called when the {@link me.hsgamer.hscore.expansion.common.Expansion} is reloaded
+     */
     void onReload();
 }

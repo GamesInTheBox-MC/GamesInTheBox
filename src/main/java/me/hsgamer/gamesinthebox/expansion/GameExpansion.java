@@ -22,7 +22,15 @@ import me.hsgamer.hscore.expansion.common.ExpansionManager;
 import me.hsgamer.hscore.expansion.extra.expansion.DataFolder;
 import me.hsgamer.hscore.expansion.extra.expansion.GetClassLoader;
 
+/**
+ * The {@link Expansion} for {@link GamesInTheBox}
+ */
 public interface GameExpansion extends Expansion, DataFolder, GetClassLoader {
+    /**
+     * Get the plugin
+     *
+     * @return the plugin
+     */
     default GamesInTheBox getPlugin() {
         ExpansionManager expansionManager = getExpansionClassLoader().getManager();
         if (expansionManager instanceof PluginExpansionManager) {
