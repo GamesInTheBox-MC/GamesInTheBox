@@ -15,6 +15,7 @@
 */
 package me.hsgamer.gamesinthebox.game;
 
+import me.hsgamer.gamesinthebox.planner.Planner;
 import org.bukkit.command.CommandSender;
 
 import java.util.Collections;
@@ -29,6 +30,21 @@ public interface GameEditor extends GameAction {
      */
     GameEditor EMPTY = new GameEditor() {
         @Override
+        public void reset(CommandSender sender) {
+            // EMPTY
+        }
+
+        @Override
+        public void sendStatus(CommandSender sender) {
+            // EMPTY
+        }
+
+        @Override
+        public boolean save(CommandSender sender, Planner planner, String arenaName) {
+            return false;
+        }
+
+        @Override
         public List<String> getActions() {
             return Collections.emptyList();
         }
@@ -42,5 +58,34 @@ public interface GameEditor extends GameAction {
         public boolean performAction(CommandSender sender, String action, String... args) {
             return false;
         }
+
+        @Override
+        public void sendUsage(CommandSender sender) {
+            // EMPTY
+        }
     };
+
+    /**
+     * Reset the editor
+     *
+     * @param sender the sender
+     */
+    void reset(CommandSender sender);
+
+    /**
+     * Send the status of the editor
+     *
+     * @param sender the sender
+     */
+    void sendStatus(CommandSender sender);
+
+    /**
+     * Save the settings to the {@link Planner} under the arena name
+     *
+     * @param sender    the sender
+     * @param planner   the planner
+     * @param arenaName the arena name
+     * @return true if the editor is saved
+     */
+    boolean save(CommandSender sender, Planner planner, String arenaName);
 }
