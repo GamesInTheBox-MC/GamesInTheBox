@@ -23,6 +23,13 @@ import me.hsgamer.minigamecore.base.Feature;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The simple {@link Game}.
+ * Provided features:
+ * <ul>
+ *     <li>{@link HologramFeature}</li>
+ * </ul>
+ */
 public abstract class SimpleGame extends Game {
     @Override
     protected abstract SimpleGameArena newArena(String name, Planner planner);

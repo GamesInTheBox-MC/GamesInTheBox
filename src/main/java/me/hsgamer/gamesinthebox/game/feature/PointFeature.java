@@ -144,7 +144,7 @@ public class PointFeature implements Feature {
          * Called when the point of a player is changed
          *
          * @param uuid       the uuid of the player
-         * @param point      the point
+         * @param point      the applied point
          * @param totalPoint the total point
          */
         void onChanged(UUID uuid, int point, int totalPoint);

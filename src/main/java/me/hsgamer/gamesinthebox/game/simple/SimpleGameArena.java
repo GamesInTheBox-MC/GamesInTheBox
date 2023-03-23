@@ -33,17 +33,80 @@ import org.bukkit.OfflinePlayer;
 
 import java.util.*;
 
+/**
+ * The simple {@link GameArena}.
+ * Provided features:
+ * <ul>
+ *     <li>{@link TimerFeature}</li>
+ *     <li>{@link SimplePointFeature} ({@link PointFeature})</li>
+ *     <li>{@link SimpleRewardFeature} ({@link me.hsgamer.gamesinthebox.game.feature.RewardFeature})</li>
+ *     <li>{@link TopFeature}</li>
+ *     <li>{@link DescriptiveHologramFeature}</li>
+ *     <li>{@link SimpleUpdateFeature}</li>
+ * </ul>
+ * <p>
+ * Provided replacement queries:
+ * <ul>
+ *     <li>{@code time_left}: The time left</li>
+ *     <li>{@code min_players_to_reward}: The minimum players to reward</li>
+ *     <li>{@code point_plus}: The point to add</li>
+ *     <li>{@code point_minus}: The point to remove</li>
+ *     <li>{@code point}: The point of the player</li>
+ *     <li>{@code top_value_<index>}: The value part of the top at the index</li>
+ *     <li>{@code top_name_<index>}: The name part of the top at the index</li>
+ *     <li>{@code top}: The top position of the player</li>
+ * </ul>
+ */
 public abstract class SimpleGameArena extends GameArena {
+    private SimpleGameAction gameAction;
+
+    /**
+     * Create a new game arena
+     *
+     * @param name    the name of the arena
+     * @param game    the game that the arena belongs to
+     * @param planner the planner that the arena belongs to
+     */
     protected SimpleGameArena(String name, Game game, Planner planner) {
         super(name, game, planner);
     }
 
+    /**
+     * Called when the point of a player changed
+     *
+     * @param uuid        the uuid of the player
+     * @param point       the applied point
+     * @param totalPoints the total point
+     */
     protected void onPointChanged(UUID uuid, int point, int totalPoints) {
         // EMPTY
     }
 
+    /**
+     * Get the default hologram lines by the name
+     *
+     * @param name the name to get
+     * @return the default hologram lines
+     */
     protected List<String> getDefaultHologramLines(String name) {
         return Collections.emptyList();
+    }
+
+    /**
+     * Create the game action
+     *
+     * @return the game action
+     */
+    protected SimpleGameAction createGameAction() {
+        return new SimpleGameAction(this);
+    }
+
+    @Override
+    public final SimpleGameAction getGameAction() {
+        if (gameAction == null) {
+            gameAction = createGameAction();
+        }
+        return gameAction;
     }
 
     @Override
