@@ -38,6 +38,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The main class of the plugin
+ */
 public final class GamesInTheBox extends BasePlugin {
     static {
         //noinspection UnstableApiUsage
@@ -94,26 +97,56 @@ public final class GamesInTheBox extends BasePlugin {
         return Collections.singletonList(Permissions.class);
     }
 
+    /**
+     * Get the main config
+     *
+     * @return the main config
+     */
     public MainConfig getMainConfig() {
         return mainConfig;
     }
 
+    /**
+     * Get the message config
+     *
+     * @return the message config
+     */
     public MessageConfig getMessageConfig() {
         return messageConfig;
     }
 
+    /**
+     * Get the game manager
+     *
+     * @return the game manager
+     */
     public GameManager getGameManager() {
         return gameManager;
     }
 
+    /**
+     * Get the game picker manager
+     *
+     * @return the game picker manager
+     */
     public GamePickerManager getGamePickerManager() {
         return gamePickerManager;
     }
 
+    /**
+     * Get the planner manager
+     *
+     * @return the planner manager
+     */
     public PlannerManager getPlannerManager() {
         return plannerManager;
     }
 
+    /**
+     * Get the expansion manager
+     *
+     * @return the expansion manager
+     */
     public PluginExpansionManager getExpansionManager() {
         return expansionManager;
     }
