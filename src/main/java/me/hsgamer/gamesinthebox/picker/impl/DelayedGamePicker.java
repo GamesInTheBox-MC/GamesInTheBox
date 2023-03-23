@@ -23,12 +23,22 @@ import me.hsgamer.gamesinthebox.util.TimeUtil;
 
 import java.util.Optional;
 
+/**
+ * The {@link GamePicker} with the delay between picks.
+ * The delay can be configured in the {@link PlannerConfigFeature} with the key "pick-delay".
+ * This also provides the replacement query "time_left" to get the time left before the next pick.
+ */
 public abstract class DelayedGamePicker implements GamePicker {
     protected final Planner planner;
     protected final long delay;
     private boolean isPicked = false;
     private long nextPickTime;
 
+    /**
+     * Create a new game picker
+     *
+     * @param planner the {@link Planner}
+     */
     protected DelayedGamePicker(Planner planner) {
         this.planner = planner;
         this.delay = Optional.ofNullable(planner.getFeature(PlannerConfigFeature.class))
@@ -46,6 +56,11 @@ public abstract class DelayedGamePicker implements GamePicker {
         updateNextPickTime(System.currentTimeMillis());
     }
 
+    /**
+     * Pick an arena
+     *
+     * @return the picked arena
+     */
     protected abstract GameArena pickArena();
 
     @Override
@@ -63,6 +78,16 @@ public abstract class DelayedGamePicker implements GamePicker {
             return false;
         }
         return currentTime >= nextPickTime;
+    }
+
+    @Override
+    public boolean forcePick() {
+        if (isPicked) {
+            return false;
+        } else {
+            nextPickTime = System.currentTimeMillis();
+            return true;
+        }
     }
 
     @Override

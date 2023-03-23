@@ -22,10 +22,29 @@ import me.hsgamer.gamesinthebox.planner.feature.PlannerConfigFeature;
 
 import java.util.*;
 
+/**
+ * The {@link me.hsgamer.gamesinthebox.picker.GamePicker} that picks the arena by chance.
+ * The chance is defined in the {@link PlannerConfigFeature} with the key {@code pick-chance}.
+ * The value of the {@code pick-chance} should be like this:
+ * <pre>
+ *     pick-chance:
+ *       arena1: 10
+ *       arena2: 20
+ *       arena3: 30
+ *       arena4: 40
+ * </pre>
+ * Where the key is the name of the arena and the value is the chance (in numbers).
+ * The chance of the arena is calculated by the formula {@code chance / total chance}.
+ */
 public class ChanceGamePicker extends DelayedGamePicker {
     private final Map<String, Integer> chanceMap;
     private final ProbabilityCollection<GameArena> arenaCollection = new ProbabilityCollection<>();
 
+    /**
+     * Create a new game picker
+     *
+     * @param planner the {@link Planner}
+     */
     public ChanceGamePicker(Planner planner) {
         super(planner);
         this.chanceMap = Optional.ofNullable(planner.getFeature(PlannerConfigFeature.class))

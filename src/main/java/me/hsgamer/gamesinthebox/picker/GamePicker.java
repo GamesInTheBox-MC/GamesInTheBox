@@ -20,7 +20,13 @@ import me.hsgamer.gamesinthebox.replacement.ReplacementHandler;
 
 import java.util.Map;
 
+/**
+ * The game picker that picks a {@link GameArena}
+ */
 public interface GamePicker extends ReplacementHandler {
+    /**
+     * The game picker that does nothing
+     */
     GamePicker EMPTY = new GamePicker() {
         @Override
         public String replace(String input) {
@@ -43,12 +49,32 @@ public interface GamePicker extends ReplacementHandler {
         }
     };
 
+    /**
+     * Set up the game picker
+     *
+     * @param arenaMap the map of arena name and arena
+     */
     void setup(Map<String, GameArena> arenaMap);
 
+    /**
+     * Pick a {@link GameArena}
+     *
+     * @return the picked {@link GameArena}
+     */
     GameArena pick();
 
+    /**
+     * Check if the game picker can pick
+     *
+     * @return true if the game picker can pick
+     */
     boolean canPick();
 
+    /**
+     * Force the game picker to pick
+     *
+     * @return true if the game picker can force pick
+     */
     default boolean forcePick() {
         return false;
     }

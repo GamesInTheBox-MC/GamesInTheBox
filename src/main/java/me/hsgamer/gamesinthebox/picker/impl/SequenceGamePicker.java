@@ -22,6 +22,18 @@ import me.hsgamer.hscore.common.CollectionUtils;
 
 import java.util.*;
 
+/**
+ * The game picker that picks the game in a sequence.
+ * The sequence is defined in {@link PlannerConfigFeature} with the key {@code pick-sequence}.
+ * The value is a list of comma-separated arena names:
+ * <pre>
+ *     pick-sequence:
+ *     - "arena1,arena2,arena3"
+ *     - "arena4,arena5"
+ *     - "arena6"
+ * </pre>
+ * For each line of the list, the game will pick one arena randomly from the list.
+ */
 public class SequenceGamePicker extends DelayedGamePicker {
     private final List<String> sequence;
     private final List<List<GameArena>> arenaListSequence = new ArrayList<>();

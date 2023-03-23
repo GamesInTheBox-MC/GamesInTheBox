@@ -22,10 +22,18 @@ import me.hsgamer.hscore.common.CollectionUtils;
 import java.util.Collections;
 import java.util.Map;
 
+/**
+ * The {@link me.hsgamer.gamesinthebox.picker.GamePicker} that picks the arena randomly.
+ */
 public class RandomGamePicker extends DelayedGamePicker {
     private Map<String, GameArena> arenaMap = Collections.emptyMap();
 
-    public RandomGamePicker(Planner planner) {
+    /**
+     * Create a new game picker
+     *
+     * @param planner the {@link Planner}
+     */
+    protected RandomGamePicker(Planner planner) {
         super(planner);
     }
 
