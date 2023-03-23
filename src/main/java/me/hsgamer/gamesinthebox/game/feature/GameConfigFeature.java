@@ -23,7 +23,12 @@ import java.util.Collections;
 import java.util.Map;
 
 /**
- * The {@link Feature} to access the settings of the {@link GameArena}
+ * The {@link Feature} to access the settings of the {@link GameArena}.
+ * There are 2 types of settings:
+ * <ul>
+ *     <li>Common Path: The settings that are shared between all {@link GameArena}s. The format is "[planner].common.[path]"</li>
+ *     <li>Setting Path: The settings that are specific to the {@link GameArena}. The path format is "[planner].settings.[arena].[path]"</li>
+ * </ul>
  */
 public class GameConfigFeature implements Feature {
     private final String gameConfigName;
@@ -113,8 +118,7 @@ public class GameConfigFeature implements Feature {
     }
 
     /**
-     * Check if the settings contains the path.
-     * That means it will check if the planner config contains the path "&lt;planner&gt;.settings.&lt;arena&gt;.&lt;path&gt;"
+     * Check if the settings contains the path
      *
      * @param path the path
      * @return true if the settings contains the path
@@ -124,8 +128,7 @@ public class GameConfigFeature implements Feature {
     }
 
     /**
-     * Check if the settings contains the common path.
-     * That means it will check if the planner config contains the path "&lt;planner&gt;.common.&lt;path&gt;"
+     * Check if the settings contains the common path
      *
      * @param path the path
      * @return true if the settings contains the common path
@@ -145,8 +148,7 @@ public class GameConfigFeature implements Feature {
     }
 
     /**
-     * Set the value to the settings.
-     * That means it will set the value to the planner config with the path "&lt;planner&gt;.settings.&lt;arena&gt;.&lt;path&gt;"
+     * Set the value to the settings
      *
      * @param path  the path
      * @param value the value
@@ -156,8 +158,7 @@ public class GameConfigFeature implements Feature {
     }
 
     /**
-     * Set the value to the common settings.
-     * That means it will set the value to the planner config with the path "&lt;planner&gt;.common.&lt;path&gt;"
+     * Set the value to the common settings
      *
      * @param path  the path
      * @param value the value

@@ -40,7 +40,7 @@ public class GamePickerManager extends Builder<Planner, GamePicker> {
 
     /**
      * Build a {@link GamePicker} from the planner.
-     * It will get the type from the {@link PlannerConfigFeature} with the key "picker-type".
+     * It will get the type from the {@link PlannerConfigFeature} with the key {@code picker-type}.
      * If the type is not found, it will return {@link GamePicker#EMPTY}.
      *
      * @param planner the planner

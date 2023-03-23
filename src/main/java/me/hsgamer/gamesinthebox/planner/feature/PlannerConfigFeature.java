@@ -23,7 +23,7 @@ import java.util.Objects;
 
 /**
  * The {@link Feature} to access the settings of the {@link Planner}.
- * The settings are stored in the {@link GlobalPlannerConfigFeature} and the path format is {@code <planner>.<path>}
+ * The settings are stored in the {@link GlobalPlannerConfigFeature} and the path format is {@code [planner].[path]}
  */
 public class PlannerConfigFeature implements Feature {
     private final Planner planner;

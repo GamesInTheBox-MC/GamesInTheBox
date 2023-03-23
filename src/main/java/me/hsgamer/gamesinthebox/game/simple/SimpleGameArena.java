@@ -52,8 +52,8 @@ import java.util.*;
  *     <li>{@code point_plus}: The point to add</li>
  *     <li>{@code point_minus}: The point to remove</li>
  *     <li>{@code point}: The point of the player</li>
- *     <li>{@code top_value_<index>}: The value part of the top at the index</li>
- *     <li>{@code top_name_<index>}: The name part of the top at the index</li>
+ *     <li>{@code top_value_[index]}: The value part of the top at the index</li>
+ *     <li>{@code top_name_[index]}: The name part of the top at the index</li>
  *     <li>{@code top}: The top position of the player</li>
  * </ul>
  */

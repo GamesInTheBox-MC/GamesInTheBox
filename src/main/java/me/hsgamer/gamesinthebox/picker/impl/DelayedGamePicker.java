@@ -25,8 +25,8 @@ import java.util.Optional;
 
 /**
  * The {@link GamePicker} with the delay between picks.
- * The delay can be configured in the {@link PlannerConfigFeature} with the key "pick-delay".
- * This also provides the replacement query "time_left" to get the time left before the next pick.
+ * The delay can be configured in the {@link PlannerConfigFeature} with the key {@code pick-delay}.
+ * This also provides the replacement query {@code time_left} to get the time left before the next pick.
  */
 public abstract class DelayedGamePicker implements GamePicker {
     protected final Planner planner;

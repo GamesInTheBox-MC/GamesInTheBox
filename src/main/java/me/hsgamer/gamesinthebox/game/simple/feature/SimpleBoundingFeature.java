@@ -31,7 +31,7 @@ import org.bukkit.World;
  * It will get the bounding box from {@link GameConfigFeature} in the specified path.
  * The value of the path should be like this:
  * <pre>
- *     path:
+ *     [path]:
  *       world: world
  *       pos1: 0,0,0
  *       pos2: 0,0,0

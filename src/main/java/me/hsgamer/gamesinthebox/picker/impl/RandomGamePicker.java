@@ -33,7 +33,7 @@ public class RandomGamePicker extends DelayedGamePicker {
      *
      * @param planner the {@link Planner}
      */
-    protected RandomGamePicker(Planner planner) {
+    public RandomGamePicker(Planner planner) {
         super(planner);
     }
 
