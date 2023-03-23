@@ -16,6 +16,7 @@
 package me.hsgamer.gamesinthebox;
 
 import com.google.common.reflect.TypeToken;
+import me.hsgamer.gamesinthebox.command.EditorCommand;
 import me.hsgamer.gamesinthebox.command.MainCommand;
 import me.hsgamer.gamesinthebox.config.MainConfig;
 import me.hsgamer.gamesinthebox.config.MessageConfig;
@@ -72,6 +73,7 @@ public final class GamesInTheBox extends BasePlugin {
         expansionManager.loadExpansions();
 
         registerCommand(new MainCommand(this));
+        registerCommand(new EditorCommand(this));
 
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             PlaceholderHook placeholderHook = new PlaceholderHook(this);

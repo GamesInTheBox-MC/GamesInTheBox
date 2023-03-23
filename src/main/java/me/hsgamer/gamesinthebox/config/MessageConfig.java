@@ -82,6 +82,46 @@ public interface MessageConfig {
     }
 
     /**
+     * Get the "editor game not found" message
+     *
+     * @return the message
+     */
+    @ConfigPath("editor.game-not-found")
+    default String getEditorGameNotFound() {
+        return "&cGame not found";
+    }
+
+    /**
+     * Get the "editor cannot perform action" message
+     *
+     * @return the message
+     */
+    @ConfigPath("editor.cannot-perform-action")
+    default String getEditorCannotPerformAction() {
+        return "&cCannot perform action";
+    }
+
+    /**
+     * Get the "editor arena already exists" message
+     *
+     * @return the message
+     */
+    @ConfigPath("editor.arena-already-exists")
+    default String getEditorArenaAlreadyExists() {
+        return "&cArena already exists";
+    }
+
+    /**
+     * Get the "editor cannot save" message
+     *
+     * @return the message
+     */
+    @ConfigPath("editor.cannot-save")
+    default String getEditorCannotSave() {
+        return "&cCannot save the settings of the arena";
+    }
+
+    /**
      * Get the display name of the Idling state of the planner
      *
      * @return the display name
