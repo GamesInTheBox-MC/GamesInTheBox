@@ -20,9 +20,12 @@ import org.bukkit.command.CommandSender;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * The {@link GameAction} to edit the {@link Game}
+ */
 public interface GameEditor extends GameAction {
     /**
-     * The action that does nothing
+     * The editor that does nothing
      */
     GameEditor EMPTY = new GameEditor() {
         @Override

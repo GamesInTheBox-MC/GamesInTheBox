@@ -94,10 +94,10 @@ public abstract class GameArena extends SimpleBukkitArena implements Replacement
     public abstract void end();
 
     /**
-     * Get the game action of the arena.
+     * Get the {@link GameArenaAction} of the arena.
      * Override this method to provide the action that the admin can perform.
      *
-     * @return the game action
+     * @return the {@link GameArenaAction}
      */
     public GameArenaAction getAction() {
         return GameArenaAction.EMPTY;

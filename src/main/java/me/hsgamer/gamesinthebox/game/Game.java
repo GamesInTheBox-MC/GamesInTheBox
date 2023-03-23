@@ -42,7 +42,8 @@ public abstract class Game extends ArenaManager {
     public abstract String getDisplayName();
 
     /**
-     * Get the {@link GameEditor} of the game
+     * Get the {@link GameEditor} of the game.
+     * Override this method to provide the {@link GameEditor} for the game that the admin can use to edit the game.
      *
      * @return the {@link GameEditor}
      */
