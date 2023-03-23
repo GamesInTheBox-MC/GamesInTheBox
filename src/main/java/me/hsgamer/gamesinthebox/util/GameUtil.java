@@ -15,8 +15,6 @@
 */
 package me.hsgamer.gamesinthebox.util;
 
-import me.hsgamer.gamesinthebox.game.GameArena;
-import me.hsgamer.gamesinthebox.planner.Planner;
 import me.hsgamer.minigamecore.base.Arena;
 import me.hsgamer.minigamecore.base.extra.DisplayName;
 import me.hsgamer.minigamecore.bukkit.extra.ColoredDisplayName;
@@ -36,17 +34,5 @@ public final class GameUtil {
                 return gameState.getClass().getSimpleName();
             }
         }).orElse("");
-    }
-
-    public static String replaceName(String input, Arena arena) {
-        if (arena instanceof Planner) {
-            return input.replace("{planner}", arena.getName());
-        } else if (arena instanceof GameArena) {
-            return input
-                    .replace("{planner}", ((GameArena) arena).getPlanner().getName())
-                    .replace("{arena}", ((GameArena) arena).getLocalName());
-        } else {
-            return input.replace("{arena}", arena.getName());
-        }
     }
 }

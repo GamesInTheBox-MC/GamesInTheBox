@@ -17,11 +17,30 @@ package me.hsgamer.gamesinthebox.replacement;
 
 import org.bukkit.OfflinePlayer;
 
+/**
+ * The replacement handler
+ */
 public interface ReplacementHandler {
+    /**
+     * The empty replacement handler
+     */
     ReplacementHandler EMPTY = s -> null;
 
+    /**
+     * Replace the string
+     *
+     * @param input the input
+     * @return the replaced string
+     */
     String replace(String input);
 
+    /**
+     * Replace the string
+     *
+     * @param player the player
+     * @param input  the input
+     * @return the replaced string
+     */
     default String replace(OfflinePlayer player, String input) {
         return replace(input);
     }

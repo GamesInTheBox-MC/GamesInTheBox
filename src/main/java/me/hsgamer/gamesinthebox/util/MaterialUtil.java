@@ -23,11 +23,20 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
+/**
+ * The utility for {@link XMaterial}
+ */
 public final class MaterialUtil {
     private MaterialUtil() {
         // EMPTY
     }
 
+    /**
+     * Parse a map of material and number
+     *
+     * @param values the map
+     * @return the parsed map
+     */
     public static Map<XMaterial, Number> parseMaterialNumberMap(Map<String, Object> values) {
         Map<XMaterial, Number> map = new EnumMap<>(XMaterial.class);
         values.forEach((k, v) -> {
@@ -44,6 +53,12 @@ public final class MaterialUtil {
         return map;
     }
 
+    /**
+     * Parse a map of material and number to a {@link ProbabilityCollection}
+     *
+     * @param values the map
+     * @return the parsed {@link ProbabilityCollection}
+     */
     public static ProbabilityCollection<XMaterial> parseMaterialProbability(Map<String, Object> values) {
         ProbabilityCollection<XMaterial> collection = new ProbabilityCollection<>();
         parseMaterialNumberMap(values).forEach((xMaterial, number) -> collection.add(xMaterial, number.intValue()));

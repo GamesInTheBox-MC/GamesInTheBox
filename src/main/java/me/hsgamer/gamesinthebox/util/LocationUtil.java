@@ -22,11 +22,22 @@ import org.bukkit.World;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
+/**
+ * The utility for {@link Location}
+ */
 public final class LocationUtil {
     private LocationUtil() {
         // EMPTY
     }
 
+    /**
+     * Get the location from the string.
+     * The format is {@code x,y,z}
+     *
+     * @param world the world
+     * @param value the string
+     * @return the location or null if the string is invalid
+     */
     public static Location getLocation(World world, String value) {
         String[] split = value.split(Pattern.quote(","), 3);
         if (split.length < 3) {
@@ -42,6 +53,13 @@ public final class LocationUtil {
         }
     }
 
+    /**
+     * Get the location from the string.
+     * The format is {@code world,x,y,z}
+     *
+     * @param value the string
+     * @return the location or null if the world is not found or the string is invalid
+     */
     public static Location getLocation(String value) {
         String[] split = value.split(",", 4);
         if (split.length != 4) {
@@ -62,6 +80,14 @@ public final class LocationUtil {
         }
     }
 
+    /**
+     * Serialize the location
+     *
+     * @param location     the location
+     * @param withWorld    whether to include the world
+     * @param roundNumbers whether to round the numbers
+     * @return the serialized location
+     */
     public static String serializeLocation(Location location, boolean withWorld, boolean roundNumbers) {
         String world = Optional.ofNullable(location.getWorld()).map(World::getName).orElse("world");
         double x = roundNumbers ? location.getBlockX() : location.getX();

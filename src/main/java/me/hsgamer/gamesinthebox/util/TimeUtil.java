@@ -23,6 +23,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * The time utility
+ */
 public class TimeUtil {
     private static final Map<Character, Long> TIME_UNIT_MAP = ImmutableMap.<Character, Long>builder()
             .put('s', TimeUnit.SECONDS.toMillis(1))
@@ -38,6 +41,12 @@ public class TimeUtil {
         // EMPTY
     }
 
+    /**
+     * Parse the time to milliseconds
+     *
+     * @param time the time
+     * @return the milliseconds
+     */
     public static long parseMillis(String time) {
         if (time == null || time.isEmpty()) {
             return 0;
@@ -60,6 +69,12 @@ public class TimeUtil {
         return millis;
     }
 
+    /**
+     * Suggest the time units
+     *
+     * @param time the time
+     * @return the list of time units
+     */
     public static List<String> suggest(String time) {
         if (time == null || time.isEmpty() || Character.isAlphabetic(time.charAt(time.length() - 1))) {
             return ImmutableList.of("1s", "1m", "1h", "1d", "1w", "1M", "1y");
@@ -69,10 +84,23 @@ public class TimeUtil {
         return timeUnits;
     }
 
+    /**
+     * Format the time to standard time (HH:mm:ss)
+     *
+     * @param millis the time in milliseconds
+     * @return the standard time
+     */
     public static String formatStandardTime(long millis) {
         return formatStandardTime(millis, TimeUnit.MILLISECONDS);
     }
 
+    /**
+     * Format the time to standard time (HH:mm:ss)
+     *
+     * @param time the time
+     * @param unit the unit of the time
+     * @return the standard time
+     */
     public static String formatStandardTime(long time, TimeUnit unit) {
         long millis = unit.toMillis(time);
         long hours = TimeUnit.MILLISECONDS.toHours(millis);

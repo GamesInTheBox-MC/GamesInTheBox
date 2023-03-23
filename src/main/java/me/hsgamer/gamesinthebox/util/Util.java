@@ -26,11 +26,20 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * The common utilities
+ */
 public final class Util {
     private Util() {
         // EMPTY
     }
 
+    /**
+     * Create a section from a map
+     *
+     * @param values the map
+     * @return the section
+     */
     public static ConfigurationSection createSection(Map<String, Object> values) {
         Map<String, Object> finalValues = new HashMap<>(values);
         finalValues.replaceAll((key, value) -> {
@@ -46,6 +55,11 @@ public final class Util {
         return section;
     }
 
+    /**
+     * Cancel a task safely
+     *
+     * @param task the task
+     */
     public static void cancelSafe(BukkitTask task) {
         if (task != null) {
             try {
@@ -56,6 +70,13 @@ public final class Util {
         }
     }
 
+    /**
+     * Get a random colorized string from a collection
+     *
+     * @param collection   the collection
+     * @param defaultValue the default value
+     * @return the random colorized string
+     */
     public static String getRandomColorizedString(Collection<String> collection, String defaultValue) {
         String s = Optional.ofNullable(CollectionUtils.pickRandom(collection)).orElse(defaultValue);
         return ColorUtils.colorize(s);

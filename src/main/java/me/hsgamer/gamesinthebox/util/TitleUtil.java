@@ -22,19 +22,49 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
+/**
+ * The utility for titles
+ */
 public class TitleUtil {
     private TitleUtil() {
         // EMPTY
     }
 
+    /**
+     * Send a title to a player
+     *
+     * @param player   the player
+     * @param title    the title
+     * @param subtitle the subtitle
+     * @param fadeIn   the time to fade in
+     * @param stay     the time to stay
+     * @param fadeOut  the time to fade out
+     */
     public static void sendTitle(Player player, String title, String subtitle, int fadeIn, int stay, int fadeOut) {
         Titles.sendTitle(player, fadeIn, stay, fadeOut, ColorUtils.colorize(title), ColorUtils.colorize(subtitle));
     }
 
+    /**
+     * Send a title to a player
+     *
+     * @param player   the player
+     * @param title    the title
+     * @param subtitle the subtitle
+     */
     public static void sendTitle(Player player, String title, String subtitle) {
         Titles.sendTitle(player, ColorUtils.colorize(title), ColorUtils.colorize(subtitle));
     }
 
+    /**
+     * Send a title to a player
+     *
+     * @param uuid     the uuid of the player
+     * @param title    the title
+     * @param subtitle the subtitle
+     * @param fadeIn   the time to fade in
+     * @param stay     the time to stay
+     * @param fadeOut  the time to fade out
+     */
     public static void sendTitle(UUID uuid, String title, String subtitle, int fadeIn, int stay, int fadeOut) {
         Player player = Bukkit.getPlayer(uuid);
         if (player != null) {
@@ -42,6 +72,13 @@ public class TitleUtil {
         }
     }
 
+    /**
+     * Send a title to a player
+     *
+     * @param uuid     the uuid of the player
+     * @param title    the title
+     * @param subtitle the subtitle
+     */
     public static void sendTitle(UUID uuid, String title, String subtitle) {
         Player player = Bukkit.getPlayer(uuid);
         if (player != null) {

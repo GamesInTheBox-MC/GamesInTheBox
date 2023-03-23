@@ -22,11 +22,19 @@ import org.bukkit.entity.TNTPrimed;
 
 import java.util.Locale;
 
+/**
+ * The utility class for Entity
+ */
 public final class EntityUtil {
     private EntityUtil() {
         // EMPTY
     }
 
+    /**
+     * Despawn an entity safely
+     *
+     * @param entity the entity
+     */
     public static void despawnSafe(Entity entity) {
         if (entity != null && entity.isValid()) {
             try {
@@ -37,6 +45,13 @@ public final class EntityUtil {
         }
     }
 
+    /**
+     * Get the living entity type from the string
+     *
+     * @param entityType   the string
+     * @param defaultValue the default value
+     * @return the entity type
+     */
     public static EntityType tryGetLivingEntityType(String entityType, EntityType defaultValue) {
         try {
             EntityType type = EntityType.valueOf(entityType.toUpperCase(Locale.ROOT));
@@ -50,6 +65,12 @@ public final class EntityUtil {
         return defaultValue;
     }
 
+    /**
+     * Get the root source of TNT
+     *
+     * @param entity the entity
+     * @return the source
+     */
     public static Entity getTntSource(Entity entity) {
         Entity source;
         do {

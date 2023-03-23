@@ -22,16 +22,31 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
+/**
+ * The utility class for Action Bar
+ */
 public final class ActionBarUtil {
     private ActionBarUtil() {
         // EMPTY
     }
 
+    /**
+     * Send an action bar to a player
+     *
+     * @param player  the player
+     * @param message the message
+     */
     public static void sendActionBar(Player player, String message) {
         message = ColorUtils.colorize(message);
         ActionBar.sendActionBar(player, message);
     }
 
+    /**
+     * Send an action bar to a player
+     *
+     * @param uuid    the uuid of the player
+     * @param message the message
+     */
     public static void sendActionBar(UUID uuid, String message) {
         Player player = Bukkit.getPlayer(uuid);
         if (player != null) {
