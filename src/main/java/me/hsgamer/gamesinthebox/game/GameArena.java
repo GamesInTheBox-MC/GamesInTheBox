@@ -66,4 +66,13 @@ public abstract class GameArena extends SimpleBukkitArena implements Replacement
         features.add(new GameVariableFeature(planner));
         return features;
     }
+
+    @Override
+    public <T extends Feature> T getFeature(Class<T> featureClass) {
+        T feature = super.getFeature(featureClass);
+        if (feature == null) {
+            feature = planner.getFeature(featureClass);
+        }
+        return feature;
+    }
 }
