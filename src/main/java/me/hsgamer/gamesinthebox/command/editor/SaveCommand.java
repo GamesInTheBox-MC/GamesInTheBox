@@ -41,6 +41,7 @@ public class SaveCommand extends GameEditorCommand {
         }
 
         if (gameEditor.save(sender, planner, arenaName)) {
+            gameEditor.reset(sender);
             MessageUtils.sendMessage(sender, plugin.getMessageConfig().getSuccess());
         } else {
             MessageUtils.sendMessage(sender, plugin.getMessageConfig().getEditorCannotSave());
