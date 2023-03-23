@@ -59,7 +59,7 @@ public interface GamePicker extends ReplacementHandler {
     /**
      * Pick a {@link GameArena}
      *
-     * @return the picked {@link GameArena}
+     * @return the picked {@link GameArena} or null if it cannot pick
      */
     GameArena pick();
 
