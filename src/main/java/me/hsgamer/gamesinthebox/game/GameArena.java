@@ -99,8 +99,8 @@ public abstract class GameArena extends SimpleBukkitArena implements Replacement
      *
      * @return the game action
      */
-    public GameAction getGameAction() {
-        return GameAction.EMPTY;
+    public GameArenaAction getAction() {
+        return GameArenaAction.EMPTY;
     }
 
     @Override

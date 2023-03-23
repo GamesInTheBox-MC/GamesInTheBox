@@ -58,7 +58,7 @@ import java.util.*;
  * </ul>
  */
 public abstract class SimpleGameArena extends GameArena {
-    private SimpleGameAction gameAction;
+    private SimpleGameArenaAction gameAction;
 
     /**
      * Create a new game arena
@@ -93,18 +93,18 @@ public abstract class SimpleGameArena extends GameArena {
     }
 
     /**
-     * Create the game action
+     * Create the {@link SimpleGameArenaAction}
      *
-     * @return the game action
+     * @return the created {@link SimpleGameArenaAction}
      */
-    protected SimpleGameAction createGameAction() {
-        return new SimpleGameAction(this);
+    protected SimpleGameArenaAction createAction() {
+        return new SimpleGameArenaAction(this);
     }
 
     @Override
-    public final SimpleGameAction getGameAction() {
+    public final SimpleGameArenaAction getAction() {
         if (gameAction == null) {
-            gameAction = createGameAction();
+            gameAction = createAction();
         }
         return gameAction;
     }

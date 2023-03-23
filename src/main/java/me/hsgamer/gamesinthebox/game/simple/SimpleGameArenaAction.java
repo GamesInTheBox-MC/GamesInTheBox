@@ -15,7 +15,7 @@
 */
 package me.hsgamer.gamesinthebox.game.simple;
 
-import me.hsgamer.gamesinthebox.game.GameAction;
+import me.hsgamer.gamesinthebox.game.GameArenaAction;
 import me.hsgamer.minigamecore.implementation.feature.TimerFeature;
 import org.bukkit.command.CommandSender;
 
@@ -24,16 +24,16 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * The simple {@link GameAction}.
+ * The simple {@link GameArenaAction}.
  * Provided actions:
  * <ul>
  *     <li>{@code skip-time}: Skip the time</li>
  * </ul>
  */
-public class SimpleGameAction implements GameAction {
+public class SimpleGameArenaAction implements GameArenaAction {
     private final SimpleGameArena arena;
 
-    public SimpleGameAction(SimpleGameArena arena) {
+    public SimpleGameArenaAction(SimpleGameArena arena) {
         this.arena = arena;
     }
 

@@ -17,7 +17,7 @@ package me.hsgamer.gamesinthebox.command.sub;
 
 import me.hsgamer.gamesinthebox.GamesInTheBox;
 import me.hsgamer.gamesinthebox.Permissions;
-import me.hsgamer.gamesinthebox.game.GameAction;
+import me.hsgamer.gamesinthebox.game.GameArenaAction;
 import me.hsgamer.gamesinthebox.planner.feature.GameRunnerFeature;
 import me.hsgamer.hscore.bukkit.command.sub.SubCommand;
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
@@ -51,8 +51,8 @@ public final class ActionCommand extends SubCommand {
         }
         Arena planner = plannerOptional.get();
         GameRunnerFeature gameFeature = planner.getFeature(GameRunnerFeature.class);
-        GameAction gameAction = gameFeature.getGameAction();
-        if (gameAction.performAction(sender, args[1], Arrays.copyOfRange(args, 2, args.length))) {
+        GameArenaAction gameArenaAction = gameFeature.getGameArenaAction();
+        if (gameArenaAction.performAction(sender, args[1], Arrays.copyOfRange(args, 2, args.length))) {
             MessageUtils.sendMessage(sender, plugin.getMessageConfig().getSuccess());
         } else {
             MessageUtils.sendMessage(sender, plugin.getMessageConfig().getGameCannotPerformAction());
@@ -71,13 +71,13 @@ public final class ActionCommand extends SubCommand {
         } else if (args.length == 2) {
             return plugin.getPlannerManager().getArenaByName(args[0])
                     .map(planner -> planner.getFeature(GameRunnerFeature.class))
-                    .map(GameRunnerFeature::getGameAction)
-                    .map(GameAction::getActions)
+                    .map(GameRunnerFeature::getGameArenaAction)
+                    .map(GameArenaAction::getActions)
                     .orElse(Collections.emptyList());
         } else if (args.length >= 3) {
             return plugin.getPlannerManager().getArenaByName(args[0])
                     .map(planner -> planner.getFeature(GameRunnerFeature.class))
-                    .map(GameRunnerFeature::getGameAction)
+                    .map(GameRunnerFeature::getGameArenaAction)
                     .map(gameAction -> gameAction.getActionArgs(sender, args[1], Arrays.copyOfRange(args, 2, args.length)))
                     .orElse(Collections.emptyList());
         }

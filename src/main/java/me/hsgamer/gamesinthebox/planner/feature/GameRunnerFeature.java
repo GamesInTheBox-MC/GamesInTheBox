@@ -15,8 +15,8 @@
 */
 package me.hsgamer.gamesinthebox.planner.feature;
 
-import me.hsgamer.gamesinthebox.game.GameAction;
 import me.hsgamer.gamesinthebox.game.GameArena;
+import me.hsgamer.gamesinthebox.game.GameArenaAction;
 import me.hsgamer.minigamecore.base.Feature;
 
 /**
@@ -63,13 +63,13 @@ public class GameRunnerFeature implements Feature {
     }
 
     /**
-     * Get the {@link GameAction} of the current {@link GameArena}
+     * Get the {@link GameArenaAction} of the current {@link GameArena}
      *
-     * @return the {@link GameAction}
+     * @return the {@link GameArenaAction}
      */
-    public GameAction getGameAction() {
-        if (currentGameArena == null || isFinished) return GameAction.EMPTY;
-        return currentGameArena.getGameAction();
+    public GameArenaAction getGameArenaAction() {
+        if (currentGameArena == null || isFinished) return GameArenaAction.EMPTY;
+        return currentGameArena.getAction();
     }
 
     /**

@@ -74,6 +74,19 @@ public class GameManager extends Builder<GameManager.Input, GameArena> {
         return build(type, new Input(name, planner));
     }
 
+    /**
+     * Get the {@link Game} by its type
+     *
+     * @param type the type of the game
+     * @return the {@link Game}
+     */
+    public Optional<Game> getGame(String type) {
+        return Optional.ofNullable(getRegisteredMap().get(type))
+                .filter(GameFunction.class::isInstance)
+                .map(GameFunction.class::cast)
+                .map(gameFunction -> gameFunction.game);
+    }
+
     private static class GameFunction implements BiFunction<String, Input, GameArena> {
         private final Game game;
 

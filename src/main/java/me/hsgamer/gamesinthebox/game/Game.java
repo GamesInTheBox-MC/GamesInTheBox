@@ -42,6 +42,15 @@ public abstract class Game extends ArenaManager {
     public abstract String getDisplayName();
 
     /**
+     * Get the {@link GameEditor} of the game
+     *
+     * @return the {@link GameEditor}
+     */
+    public GameEditor getEditor() {
+        return GameEditor.EMPTY;
+    }
+
+    /**
      * Create a new arena.
      * This method will be called by the {@link Planner} when creating a new arena.
      *
