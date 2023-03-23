@@ -23,11 +23,24 @@ import me.hsgamer.hscore.builder.Builder;
 import java.util.Optional;
 import java.util.function.BiFunction;
 
+/**
+ * The manager that handles all {@link Game} & {@link GameArena}
+ */
 public class GameManager extends Builder<GameManager.Input, GameArena> {
+    /**
+     * Register a game
+     *
+     * @param game the game
+     * @param type the type of the game
+     * @return the registered element, used for unregistering
+     */
     public FunctionElement<Input, GameArena> register(Game game, String... type) {
         return register(new GameFunction(game), type);
     }
 
+    /**
+     * Call the {@link Game#clear()} method for all games
+     */
     public void callClear() {
         getRegisteredMap().values().forEach(function -> {
             if (function instanceof GameFunction) {
@@ -36,6 +49,9 @@ public class GameManager extends Builder<GameManager.Input, GameArena> {
         });
     }
 
+    /**
+     * Call the {@link Game#init()} & {@link Game#postInit()} methods for all games
+     */
     public void callInit() {
         getRegisteredMap().values().forEach(function -> {
             if (function instanceof GameFunction) {
@@ -46,6 +62,14 @@ public class GameManager extends Builder<GameManager.Input, GameArena> {
         });
     }
 
+    /**
+     * Build the {@link GameArena}
+     *
+     * @param type    the type of the game
+     * @param name    the name of the arena
+     * @param planner the planner that the arena belongs to
+     * @return the {@link GameArena}
+     */
     public Optional<GameArena> build(String type, String name, Planner planner) {
         return build(type, new Input(name, planner));
     }
@@ -63,6 +87,9 @@ public class GameManager extends Builder<GameManager.Input, GameArena> {
         }
     }
 
+    /**
+     * The input for building the {@link GameArena}
+     */
     public static class Input {
         private final String name;
         private final Planner planner;

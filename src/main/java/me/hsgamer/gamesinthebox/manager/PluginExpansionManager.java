@@ -32,6 +32,21 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * The manager that {@link me.hsgamer.hscore.expansion.common.Expansion}.
+ * It will load all expansions in the folder "expansions" in the plugin's data folder.
+ * The expansion jar should have the "expansion.yml" in the root folder that includes:
+ * <ul>
+ *     <li>{@code name}: the name of the expansion</li>
+ *     <li>{@code version}: the version of the expansion</li>
+ *     <li>{@code main}: the main class of the expansion</li>
+ *     <li>{@code depend}: the list of expansions that the expansion depends on (optional)</li>
+ *     <li>{@code softdepend}: the list of expansions that the expansion soft depends on (optional)</li>
+ *     <li>{@code plugin-depend}: the list of plugins that the expansion depends on</li>
+ *     <li>{@code authors}: the list of authors of the expansion (optional)</li>
+ *     <li>{@code description}: the description of the expansion (optional)</li>
+ * </ul>
+ */
 public class PluginExpansionManager extends ExpansionManager {
     private final GamesInTheBox plugin;
 

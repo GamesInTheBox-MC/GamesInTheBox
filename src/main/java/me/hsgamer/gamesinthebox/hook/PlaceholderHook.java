@@ -25,6 +25,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Locale;
 import java.util.Optional;
 
+/**
+ * The hook for PlaceholderAPI
+ */
 public class PlaceholderHook extends PlaceholderExpansion {
     private final GamesInTheBox plugin;
 

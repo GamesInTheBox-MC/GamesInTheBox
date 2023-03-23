@@ -25,13 +25,27 @@ import me.hsgamer.hscore.builder.Builder;
 
 import java.util.Optional;
 
+/**
+ * The manager that handles all {@link GamePicker}
+ */
 public class GamePickerManager extends Builder<Planner, GamePicker> {
+    /**
+     * Create a new manager
+     */
     public GamePickerManager() {
         register(RandomGamePicker::new, "random");
         register(SequenceGamePicker::new, "sequence");
         register(ChanceGamePicker::new, "chance");
     }
 
+    /**
+     * Build a {@link GamePicker} from the planner.
+     * It will get the type from the {@link PlannerConfigFeature} with the key "picker-type".
+     * If the type is not found, it will return {@link GamePicker#EMPTY}.
+     *
+     * @param planner the planner
+     * @return the {@link GamePicker}
+     */
     public GamePicker build(Planner planner) {
         return Optional.ofNullable(planner.getFeature(PlannerConfigFeature.class).getString("picker-type", "")).flatMap(s -> this.build(s, planner)).orElse(GamePicker.EMPTY);
     }

@@ -32,10 +32,18 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * The manager for all {@link Planner}
+ */
 public class PlannerManager extends LoadedArenaManager {
     private final GamesInTheBox plugin;
     private final Config plannerConfig;
 
+    /**
+     * Create a new manager
+     *
+     * @param plugin the plugin
+     */
     public PlannerManager(GamesInTheBox plugin) {
         this.plugin = plugin;
         this.plannerConfig = new BukkitConfig(plugin, "planner.yml");
