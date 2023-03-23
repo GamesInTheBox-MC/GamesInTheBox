@@ -49,7 +49,7 @@ public final class EndCommand extends SubCommand {
         }
         Arena planner = plannerOptional.get();
         GameRunnerFeature gameFeature = planner.getFeature(GameRunnerFeature.class);
-        gameFeature.forceEnd();
+        gameFeature.end();
         MessageUtils.sendMessage(sender, plugin.getMessageConfig().getSuccess());
     }
 

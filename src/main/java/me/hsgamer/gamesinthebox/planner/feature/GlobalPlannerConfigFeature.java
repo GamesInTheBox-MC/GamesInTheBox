@@ -19,17 +19,36 @@ import me.hsgamer.gamesinthebox.planner.Planner;
 import me.hsgamer.hscore.config.Config;
 import me.hsgamer.minigamecore.base.Feature;
 
+/**
+ * The {@link Feature} to get the planner {@link Config}
+ */
 public class GlobalPlannerConfigFeature implements Feature {
     private final Config plannerConfig;
 
+    /**
+     * Create a new {@link GlobalPlannerConfigFeature}
+     *
+     * @param plannerConfig the planner {@link Config}
+     */
     public GlobalPlannerConfigFeature(Config plannerConfig) {
         this.plannerConfig = plannerConfig;
     }
 
+    /**
+     * Get the planner {@link Config}
+     *
+     * @return the planner {@link Config}
+     */
     public Config getPlannerConfig() {
         return plannerConfig;
     }
 
+    /**
+     * Create a new {@link PlannerConfigFeature} for the {@link Planner}
+     *
+     * @param planner the {@link Planner}
+     * @return the {@link PlannerConfigFeature}
+     */
     public PlannerConfigFeature createPlannerFeature(Planner planner) {
         return new PlannerConfigFeature(planner, this);
     }

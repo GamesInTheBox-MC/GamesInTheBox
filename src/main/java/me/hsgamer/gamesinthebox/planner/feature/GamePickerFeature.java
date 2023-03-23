@@ -25,12 +25,31 @@ import me.hsgamer.minigamecore.base.Feature;
 import java.util.*;
 import java.util.logging.Level;
 
+/**
+ * The {@link Feature} to initialize the {@link GameArena} and handle the {@link GamePicker}.
+ * The {@link GameArena} will be initialized from {@link PlannerConfigFeature} with the format:
+ * <pre>
+ *     settings:
+ *       arena1:
+ *         type: gameType
+ *         ...
+ *       arena2:
+ *         type: gameType
+ *         ...
+ *       ...
+ * </pre>
+ */
 public class GamePickerFeature implements Feature {
     private final Planner planner;
     private final Map<String, GameArena> gameArenaMap = new HashMap<>();
     private GamePicker gamePicker = GamePicker.EMPTY;
     private GameArena forceNextGame;
 
+    /**
+     * Create a new {@link GamePickerFeature}
+     *
+     * @param planner the {@link Planner}
+     */
     public GamePickerFeature(Planner planner) {
         this.planner = planner;
     }
@@ -62,6 +81,11 @@ public class GamePickerFeature implements Feature {
         gamePicker.setup(Collections.unmodifiableMap(gameArenaMap));
     }
 
+    /**
+     * Check if the feature can pick the next game.
+     *
+     * @return true if the feature can pick the next game
+     */
     public boolean canPick() {
         if (forceNextGame != null) {
             return true;
@@ -69,6 +93,11 @@ public class GamePickerFeature implements Feature {
         return gamePicker.canPick();
     }
 
+    /**
+     * Get the next game
+     *
+     * @return the next game
+     */
     public GameArena getNextGame() {
         if (forceNextGame != null) {
             GameArena gameArena = forceNextGame;
@@ -78,6 +107,13 @@ public class GamePickerFeature implements Feature {
         return gamePicker.pick();
     }
 
+    /**
+     * Set the next game.
+     * It will be used in the next time {@link #getNextGame()} is called.
+     *
+     * @param name the name of the game
+     * @return true if the game is found
+     */
     public boolean setNextGame(String name) {
         if (gameArenaMap.containsKey(name)) {
             forceNextGame = gameArenaMap.get(name);
@@ -86,10 +122,20 @@ public class GamePickerFeature implements Feature {
         return false;
     }
 
+    /**
+     * Get the names of the game arenas
+     *
+     * @return the names of the game arenas
+     */
     public Collection<String> getGameArenaNames() {
         return Collections.unmodifiableCollection(gameArenaMap.keySet());
     }
 
+    /**
+     * Get the {@link GamePicker}
+     *
+     * @return the {@link GamePicker}
+     */
     public GamePicker getGamePicker() {
         return gamePicker;
     }

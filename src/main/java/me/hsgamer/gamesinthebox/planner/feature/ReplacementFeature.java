@@ -22,9 +22,19 @@ import org.bukkit.OfflinePlayer;
 
 import java.util.function.BiFunction;
 
+/**
+ * The {@link Feature} that handles the replacement.
+ * The replacement query will be in the format of {@code [prefix]_[name]}.
+ * The prefix can be {@code game}, {@code picker} or {@code planner}.
+ */
 public class ReplacementFeature implements Feature, ReplacementHandler {
     private final Planner planner;
 
+    /**
+     * Create a new instance
+     *
+     * @param planner the planner
+     */
     public ReplacementFeature(Planner planner) {
         this.planner = planner;
     }

@@ -18,13 +18,26 @@ package me.hsgamer.gamesinthebox.planner.feature;
 import me.hsgamer.gamesinthebox.GamesInTheBox;
 import me.hsgamer.minigamecore.base.Feature;
 
+/**
+ * The {@link Feature} to access the plugin
+ */
 public class PluginFeature implements Feature {
     private final GamesInTheBox plugin;
 
+    /**
+     * Create a new {@link PluginFeature}
+     *
+     * @param plugin the plugin
+     */
     public PluginFeature(GamesInTheBox plugin) {
         this.plugin = plugin;
     }
 
+    /**
+     * Get the plugin
+     *
+     * @return the plugin
+     */
     public GamesInTheBox getPlugin() {
         return plugin;
     }

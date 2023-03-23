@@ -30,6 +30,17 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * The planner. It will pick a game and run it.
+ * Provided replacement queries:
+ * <ul>
+ *     <li>{@code name}: the name of the planner</li>
+ *     <li>{@code state}: the state of the planner</li>
+ *     <li>{@code game_name}: the display name of the current game</li>
+ *     <li>{@code game_local_name}: the local name of the current game</li>
+ *     <li>{@code game_state}: the state of the planner</li>
+ * </ul>
+ */
 public class Planner extends SimpleBukkitArena implements ReplacementHandler {
     public Planner(String name, PlannerManager arenaManager) {
         super(name, arenaManager);

@@ -23,9 +23,17 @@ import me.hsgamer.minigamecore.base.Arena;
 import me.hsgamer.minigamecore.base.GameState;
 import me.hsgamer.minigamecore.bukkit.extra.ColoredDisplayName;
 
+/**
+ * The {@link GameState} when the planner is idling
+ */
 public class IdlingState implements GameState, ColoredDisplayName {
     private final GamesInTheBox plugin;
 
+    /**
+     * Create a new {@link GameState}
+     *
+     * @param plugin the plugin
+     */
     public IdlingState(GamesInTheBox plugin) {
         this.plugin = plugin;
     }
