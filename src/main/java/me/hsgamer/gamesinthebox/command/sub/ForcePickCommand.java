@@ -29,7 +29,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class ForcePickCommand extends SubCommand {
+/**
+ * The command to force the planner to pick the next game
+ */
+public final class ForcePickCommand extends SubCommand {
     private final GamesInTheBox plugin;
 
     public ForcePickCommand(GamesInTheBox plugin) {

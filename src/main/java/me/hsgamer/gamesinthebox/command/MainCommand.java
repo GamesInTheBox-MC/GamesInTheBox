@@ -25,7 +25,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collections;
 import java.util.List;
 
-public class MainCommand extends Command {
+/**
+ * The main command class
+ */
+public final class MainCommand extends Command {
     private final SubCommandManager subCommandManager;
 
     public MainCommand(GamesInTheBox plugin) {

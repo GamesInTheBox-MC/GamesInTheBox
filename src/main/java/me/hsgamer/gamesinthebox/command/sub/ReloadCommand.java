@@ -23,7 +23,10 @@ import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
-public class ReloadCommand extends SubCommand {
+/**
+ * The command to reload the plugin
+ */
+public final class ReloadCommand extends SubCommand {
     private final GamesInTheBox plugin;
 
     public ReloadCommand(GamesInTheBox plugin) {

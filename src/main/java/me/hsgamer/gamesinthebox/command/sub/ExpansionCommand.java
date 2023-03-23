@@ -24,7 +24,10 @@ import org.jetbrains.annotations.NotNull;
 
 import static me.hsgamer.hscore.bukkit.utils.MessageUtils.sendMessage;
 
-public class ExpansionCommand extends SubCommand {
+/**
+ * The command to get the running expansions
+ */
+public final class ExpansionCommand extends SubCommand {
     private final GamesInTheBox plugin;
 
     public ExpansionCommand(GamesInTheBox plugin) {

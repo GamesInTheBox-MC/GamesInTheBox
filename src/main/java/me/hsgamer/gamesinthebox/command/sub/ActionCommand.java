@@ -31,7 +31,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class ActionCommand extends SubCommand {
+/**
+ * The command to perform actions in the game
+ */
+public final class ActionCommand extends SubCommand {
     private final GamesInTheBox plugin;
 
     public ActionCommand(GamesInTheBox plugin) {

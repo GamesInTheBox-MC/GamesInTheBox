@@ -29,7 +29,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class EndCommand extends SubCommand {
+/**
+ * The command to end the game
+ */
+public final class EndCommand extends SubCommand {
     private final GamesInTheBox plugin;
 
     public EndCommand(GamesInTheBox plugin) {

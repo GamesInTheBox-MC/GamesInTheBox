@@ -30,7 +30,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class SetGameCommand extends SubCommand {
+/**
+ * The command to set the next game
+ */
+public final class SetGameCommand extends SubCommand {
     private final GamesInTheBox plugin;
 
     public SetGameCommand(GamesInTheBox plugin) {
