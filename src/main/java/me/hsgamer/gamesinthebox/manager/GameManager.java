@@ -24,7 +24,7 @@ import java.util.Optional;
 import java.util.function.BiFunction;
 
 /**
- * The manager that handles all {@link Game} & {@link GameArena}
+ * The manager that handles all {@link Game} and {@link GameArena}
  */
 public class GameManager extends Builder<GameManager.Input, GameArena> {
     /**
