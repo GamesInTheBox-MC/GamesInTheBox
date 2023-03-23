@@ -50,7 +50,7 @@ public class GameManager extends Builder<GameManager.Input, GameArena> {
     }
 
     /**
-     * Call the {@link Game#init()} & {@link Game#postInit()} methods for all games
+     * Call the {@link Game#init()} and {@link Game#postInit()} methods for all games
      */
     public void callInit() {
         getRegisteredMap().values().forEach(function -> {
