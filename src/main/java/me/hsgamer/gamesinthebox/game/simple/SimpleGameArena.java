@@ -88,7 +88,7 @@ public abstract class SimpleGameArena extends GameArena {
      * @param name the name to get
      * @return the default hologram lines
      */
-    protected List<String> getDefaultHologramLines(String name) {
+    public List<String> getDefaultHologramLines(String name) {
         return Collections.emptyList();
     }
 
@@ -116,7 +116,7 @@ public abstract class SimpleGameArena extends GameArena {
         features.add(new SimplePointFeature(this, this::onPointChanged));
         features.add(new SimpleRewardFeature(this));
         features.add(new TopFeature());
-        features.add(new DescriptiveHologramFeature(this, this::getDefaultHologramLines));
+        features.add(new DescriptiveHologramFeature(this));
         features.add(new SimpleUpdateFeature(this));
         return features;
     }

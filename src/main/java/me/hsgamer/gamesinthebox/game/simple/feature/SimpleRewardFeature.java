@@ -24,10 +24,25 @@ import me.hsgamer.hscore.common.Validate;
 
 import java.util.*;
 
+/**
+ * The simple {@link RewardFeature}.
+ * It will get the settings from {@link GameConfigFeature}.
+ * The settings are:
+ * <ul>
+ *     <li>{@code min-players-to-reward}: the minimum players to reward. Default: -1 (no limit)</li>
+ *     <li>{@code reward.default}, {@code reward.all}, {@code reward.?}: the commands to execute when the player is not in the top list</li>
+ *     <li>{@code reward.<number>}: the commands to execute when the player is in the top list</li>
+ * </ul>
+ */
 public class SimpleRewardFeature extends RewardFeature {
     private final SimpleGameArena arena;
     private int minPlayersToReward = -1;
 
+    /**
+     * Create a new {@link SimpleRewardFeature}
+     *
+     * @param arena the arena
+     */
     public SimpleRewardFeature(SimpleGameArena arena) {
         this.arena = arena;
     }
@@ -60,6 +75,13 @@ public class SimpleRewardFeature extends RewardFeature {
         return Pair.of(parsedTopCommands, parsedDefaultCommands);
     }
 
+    /**
+     * Try to reward the players.
+     * If the number of players is less than {@link #getMinPlayersToReward()}, it will return false.
+     *
+     * @param uuids the players
+     * @return true if the players are rewarded
+     */
     public boolean tryReward(List<UUID> uuids) {
         if (minPlayersToReward >= 0 && uuids.size() < minPlayersToReward) {
             return false;
@@ -68,6 +90,11 @@ public class SimpleRewardFeature extends RewardFeature {
         return true;
     }
 
+    /**
+     * Get the minimum players to reward
+     *
+     * @return the minimum players to reward
+     */
     public int getMinPlayersToReward() {
         return minPlayersToReward;
     }

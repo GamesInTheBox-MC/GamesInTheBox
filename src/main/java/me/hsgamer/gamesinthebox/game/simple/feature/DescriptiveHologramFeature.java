@@ -33,17 +33,53 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
+/**
+ * The {@link Feature} to create and handle the holograms that show the information of the arena.
+ * It will get the hologram from {@link GameConfigFeature} with the path {@code hologram}.
+ * The value of the path {@code hologram} can be either a {@link Map}.
+ * <pre>
+ *     hologram:
+ *       location: world,0,0,0
+ *       lines:
+ *       - "Line 1"
+ *       - "Line 2"
+ *       - "Line 3"
+ *       - "Line 4"
+ * </pre>
+ * Or a {@link List} of {@link Map}.
+ * <pre>
+ *     hologram:
+ *     - location: world,0,0,0
+ *       lines:
+ *       - "Line 1"
+ *       - "Line 2"
+ *       - "Line 3"
+ *       - "Line 4"
+ *       - "Line 5"
+ *     - location: world,0,0,0
+ *       lines:
+ *       - "Line 1"
+ *       - "Line 2"
+ *       - "Line 3"
+ *       - "Line 4"
+ *       - "Line 5"
+ * </pre>
+ * <p>
+ * A line with the format {@code default:<name>} will be replaced with the default lines from {@link SimpleGameArena#getDefaultHologramLines(String)}
+ */
 public class DescriptiveHologramFeature implements Feature {
     private final SimpleGameArena arena;
-    private final Function<String, List<String>> defaultLinesFunction;
     private final List<HologramUpdater> hologramUpdaters = new ArrayList<>();
 
-    public DescriptiveHologramFeature(SimpleGameArena arena, Function<String, List<String>> defaultLinesFunction) {
+    /**
+     * Create a new feature
+     *
+     * @param arena the arena
+     */
+    public DescriptiveHologramFeature(SimpleGameArena arena) {
         this.arena = arena;
-        this.defaultLinesFunction = defaultLinesFunction;
     }
 
     @Override
@@ -69,7 +105,7 @@ public class DescriptiveHologramFeature implements Feature {
             List<String> finalLines = new ArrayList<>();
             for (String line : lines) {
                 if (line.startsWith("default:")) {
-                    finalLines.addAll(defaultLinesFunction.apply(line.substring(8)));
+                    finalLines.addAll(arena.getDefaultHologramLines(line.substring(8)));
                 } else {
                     finalLines.add(line);
                 }
@@ -85,14 +121,23 @@ public class DescriptiveHologramFeature implements Feature {
         hologramUpdaters.clear();
     }
 
+    /**
+     * Initialize the holograms
+     */
     public void initHologram() {
         hologramUpdaters.forEach(hologramUpdater -> HologramFeature.reInit(hologramUpdater.hologram));
     }
 
+    /**
+     * Update the holograms
+     */
     public void updateHologram() {
         hologramUpdaters.forEach(HologramUpdater::update);
     }
 
+    /**
+     * Clear the holograms
+     */
     public void clearHologram() {
         hologramUpdaters.forEach(hologramUpdater -> HologramFeature.clearIfInitialized(hologramUpdater.hologram));
     }

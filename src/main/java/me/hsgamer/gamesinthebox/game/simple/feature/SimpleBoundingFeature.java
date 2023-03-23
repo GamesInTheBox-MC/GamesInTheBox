@@ -26,17 +26,41 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 
+/**
+ * The simple {@link BoundingFeature}.
+ * It will get the bounding box from {@link GameConfigFeature} in the specified path.
+ * The value of the path should be like this:
+ * <pre>
+ *     path:
+ *       world: world
+ *       pos1: 0,0,0
+ *       pos2: 0,0,0
+ * </pre>
+ */
 public class SimpleBoundingFeature extends BoundingFeature {
     private final SimpleGameArena arena;
     private final String path;
     private final boolean maxInclusive;
 
+    /**
+     * Create a new {@link SimpleBoundingFeature}
+     *
+     * @param arena        the arena
+     * @param path         the path
+     * @param maxInclusive whether the box should include the maximum position
+     */
     public SimpleBoundingFeature(SimpleGameArena arena, String path, boolean maxInclusive) {
         this.arena = arena;
         this.path = path;
         this.maxInclusive = maxInclusive;
     }
 
+    /**
+     * Create a new {@link SimpleBoundingFeature} that will get the bounding box from the config in the path "box"
+     *
+     * @param arena        the arena
+     * @param maxInclusive whether the box should include the maximum position
+     */
     public SimpleBoundingFeature(SimpleGameArena arena, boolean maxInclusive) {
         this(arena, "box", maxInclusive);
     }

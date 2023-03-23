@@ -24,32 +24,51 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.util.Collections;
+
+/**
+ * The {@link Feature} that updates the arena
+ */
 public class SimpleUpdateFeature implements Feature {
     private final Plugin plugin;
     private final SimpleGameArena arena;
     private BukkitTask task;
 
+    /**
+     * Create a new {@link SimpleUpdateFeature}
+     *
+     * @param arena the arena
+     */
     public SimpleUpdateFeature(SimpleGameArena arena) {
-        this.plugin = arena.getPlanner().getFeature(PluginFeature.class).getPlugin();
+        this.plugin = arena.getFeature(PluginFeature.class).getPlugin();
         this.arena = arena;
     }
 
+    /**
+     * Initialize the state
+     */
     public void initState() {
         arena.getFeature(DescriptiveHologramFeature.class).initHologram();
         task = Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, this::updateState, 0L, 20L);
     }
 
+    /**
+     * Update the state
+     */
     private void updateState() {
-        arena.getFeature(PointFeature.class).takeTopSnapshot();
         arena.getFeature(TopFeature.class).setTop(arena.getFeature(PointFeature.class).getTopAsStringPair());
         arena.getFeature(DescriptiveHologramFeature.class).updateHologram();
     }
 
+    /**
+     * Clear the state
+     */
     public void clearState() {
         if (task != null) {
             task.cancel();
         }
         arena.getFeature(PointFeature.class).clearPoints();
+        arena.getFeature(TopFeature.class).setTop(Collections.emptyList());
         arena.getFeature(DescriptiveHologramFeature.class).clearHologram();
     }
 
