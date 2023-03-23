@@ -20,58 +20,71 @@ import me.hsgamer.minigamecore.base.Feature;
 import org.bukkit.Bukkit;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
+/**
+ * The {@link Feature} that handles points of the players
+ */
 public class PointFeature implements Feature {
     private final Map<UUID, Integer> points = new IdentityHashMap<>();
-    private final AtomicReference<List<Pair<UUID, Integer>>> topSnapshot = new AtomicReference<>(Collections.emptyList());
     private final PointConsumer pointConsumer;
 
+    /**
+     * Create a new instance
+     *
+     * @param pointConsumer the consumer when the point of a player is changed
+     */
     public PointFeature(PointConsumer pointConsumer) {
         this.pointConsumer = pointConsumer;
     }
 
+    /**
+     * Create a new instance
+     */
     public PointFeature() {
         this((uuid, point, totalPoint) -> {
         });
     }
 
-    public void takeTopSnapshot() {
-        List<Pair<UUID, Integer>> updatedTopSnapshot = getTop();
-        topSnapshot.lazySet(updatedTopSnapshot);
-    }
-
-    public List<Pair<UUID, Integer>> getTopSnapshot() {
-        return topSnapshot.get();
-    }
-
-    public List<Pair<UUID, String>> getTopSnapshotAsStringPair() {
-        return getTopSnapshot()
-                .stream()
-                .map(point -> Pair.of(point.getKey(), Integer.toString(point.getValue())))
-                .collect(Collectors.toList());
-    }
-
+    /**
+     * Apply the point to the player.
+     * If the point is positive, it will be added to the player's point.
+     * If the point is negative, it will be subtracted from the player's point.
+     * If the point is zero, it will do nothing.
+     *
+     * @param uuid  the uuid of the player
+     * @param point the point to apply
+     */
     public void applyPoint(UUID uuid, int point) {
         if (point > 0) {
             points.merge(uuid, point, Integer::sum);
-            pointConsumer.accept(uuid, point, getPoint(uuid));
+            pointConsumer.onChanged(uuid, point, getPoint(uuid));
         } else if (point < 0) {
             int currentPoint = getPoint(uuid);
             if (currentPoint > 0) {
                 points.put(uuid, Math.max(0, currentPoint + point));
-                pointConsumer.accept(uuid, Math.max(point, -currentPoint), getPoint(uuid));
+                pointConsumer.onChanged(uuid, Math.max(point, -currentPoint), getPoint(uuid));
             }
         } else {
-            pointConsumer.accept(uuid, 0, getPoint(uuid));
+            pointConsumer.onChanged(uuid, 0, getPoint(uuid));
         }
     }
 
+    /**
+     * Get the point of the player
+     *
+     * @param uuid the uuid of the player
+     * @return the point of the player
+     */
     public int getPoint(UUID uuid) {
         return points.getOrDefault(uuid, 0);
     }
 
+    /**
+     * Get the top, sorted by the point
+     *
+     * @return the top
+     */
     public List<Pair<UUID, Integer>> getTop() {
         List<Pair<UUID, Integer>> list;
         if (points.isEmpty()) {
@@ -88,19 +101,52 @@ public class PointFeature implements Feature {
         return list;
     }
 
+    /**
+     * Get the uuid part of the top
+     *
+     * @return the uuid part of the top
+     */
     public List<UUID> getTopUUID() {
         return getTop().stream().map(Pair::getKey).collect(Collectors.toList());
     }
 
+    /**
+     * Get the top as string pair
+     *
+     * @return the top as string pair
+     */
+    public List<Pair<UUID, String>> getTopAsStringPair() {
+        return getTop()
+                .stream()
+                .map(point -> Pair.of(point.getKey(), Integer.toString(point.getValue())))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Reset the point of the player if he/she is offline
+     */
     public void resetPointIfNotOnline() {
         points.replaceAll((uuid, point) -> Bukkit.getPlayer(uuid) == null ? 0 : point);
     }
 
+    /**
+     * Clear all points
+     */
     public void clearPoints() {
         points.clear();
     }
 
+    /**
+     * The consumer when the point of a player is changed
+     */
     public interface PointConsumer {
-        void accept(UUID uuid, int point, int totalPoint);
+        /**
+         * Called when the point of a player is changed
+         *
+         * @param uuid       the uuid of the player
+         * @param point      the point
+         * @param totalPoint the total point
+         */
+        void onChanged(UUID uuid, int point, int totalPoint);
     }
 }

@@ -22,12 +22,20 @@ import me.hsgamer.minigamecore.base.Feature;
 import java.util.Collections;
 import java.util.Map;
 
+/**
+ * The {@link Feature} to access the settings of the {@link GameArena}
+ */
 public class GameConfigFeature implements Feature {
     private final String gameConfigName;
     private final PlannerConfigFeature plannerConfigFeature;
 
-    public GameConfigFeature(String gameConfigName, GameArena gameArena) {
-        this.gameConfigName = gameConfigName;
+    /**
+     * Create a new {@link GameConfigFeature}
+     *
+     * @param gameArena the {@link GameArena}
+     */
+    public GameConfigFeature(GameArena gameArena) {
+        this.gameConfigName = gameArena.getLocalName();
         this.plannerConfigFeature = gameArena.getFeature(PlannerConfigFeature.class);
     }
 
@@ -39,14 +47,46 @@ public class GameConfigFeature implements Feature {
         return "common." + path;
     }
 
+    /**
+     * Get the string value from the settings
+     *
+     * @param path the path
+     * @param def  the default value
+     * @return the string value
+     */
     public String getString(String path, String def) {
         return plannerConfigFeature.getString(getSettingPath(path), plannerConfigFeature.getString(getCommonPath(path), def));
     }
 
+    /**
+     * Get the string value from the settings
+     *
+     * @param path the path
+     * @return the string value
+     */
+    public String getString(String path) {
+        return getString(path, "");
+    }
+
+    /**
+     * Get the value from the settings
+     *
+     * @param path  the path
+     * @param def   the default value
+     * @param clazz the type class of the value
+     * @param <T>   the type of the value
+     * @return the value
+     */
     public <T> T getInstance(String path, T def, Class<T> clazz) {
         return plannerConfigFeature.getInstance(getSettingPath(path), plannerConfigFeature.getInstance(getCommonPath(path), def, clazz), clazz);
     }
 
+    /**
+     * Get the value from the settings
+     *
+     * @param path the path
+     * @return the value
+     */
     public Object get(String path) {
         Object value = plannerConfigFeature.get(getSettingPath(path));
         if (value == null) {
@@ -55,6 +95,13 @@ public class GameConfigFeature implements Feature {
         return value;
     }
 
+    /**
+     * Get all values from the settings
+     *
+     * @param path the path
+     * @param deep whether to get the deep values
+     * @return the values
+     */
     public Map<String, Object> getValues(String path, boolean deep) {
         if (containsSetting(path)) {
             return plannerConfigFeature.getValues(getSettingPath(path), deep);
@@ -65,22 +112,56 @@ public class GameConfigFeature implements Feature {
         }
     }
 
+    /**
+     * Check if the settings contains the path.
+     * That means it will check if the planner config contains the path "&lt;planner&gt;.settings.&lt;arena&gt;.&lt;path&gt;"
+     *
+     * @param path the path
+     * @return true if the settings contains the path
+     */
     public boolean containsSetting(String path) {
         return plannerConfigFeature.contains(getSettingPath(path));
     }
 
+    /**
+     * Check if the settings contains the common path.
+     * That means it will check if the planner config contains the path "&lt;planner&gt;.common.&lt;path&gt;"
+     *
+     * @param path the path
+     * @return true if the settings contains the common path
+     */
     public boolean containsCommon(String path) {
         return plannerConfigFeature.contains(getCommonPath(path));
     }
 
+    /**
+     * Check if the settings contains the path or the common path
+     *
+     * @param path the path
+     * @return true if the settings contains the path or the common path
+     */
     public boolean containsPath(String path) {
         return containsSetting(path) || containsCommon(path);
     }
 
+    /**
+     * Set the value to the settings.
+     * That means it will set the value to the planner config with the path "&lt;planner&gt;.settings.&lt;arena&gt;.&lt;path&gt;"
+     *
+     * @param path  the path
+     * @param value the value
+     */
     public void setSetting(String path, Object value) {
         plannerConfigFeature.set(getSettingPath(path), value);
     }
 
+    /**
+     * Set the value to the common settings.
+     * That means it will set the value to the planner config with the path "&lt;planner&gt;.common.&lt;path&gt;"
+     *
+     * @param path  the path
+     * @param value the value
+     */
     public void setCommon(String path, Object value) {
         plannerConfigFeature.set(getCommonPath(path), value);
     }

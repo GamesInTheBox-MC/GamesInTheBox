@@ -22,24 +22,24 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.*;
-import java.util.function.Supplier;
 
-public class RewardFeature implements Feature {
-    private final Supplier<Pair<Map<Integer, List<String>>, List<String>>> topCommandsSupplier;
+/**
+ * The {@link Feature} that rewards the players
+ */
+public abstract class RewardFeature implements Feature {
     private Map<Integer, List<String>> topCommands = Collections.emptyMap();
     private List<String> defaultCommands = Collections.emptyList();
 
-    public RewardFeature(Supplier<Pair<Map<Integer, List<String>>, List<String>>> topCommandsSupplier) {
-        this.topCommandsSupplier = topCommandsSupplier;
-    }
-
-    public RewardFeature(Map<Integer, List<String>> topCommands, List<String> defaultCommands) {
-        this(() -> Pair.of(topCommands, defaultCommands));
-    }
+    /**
+     * Get the top commands and the default commands
+     *
+     * @return the {@link Pair} of the top commands and the default commands
+     */
+    protected abstract Pair<Map<Integer, List<String>>, List<String>> getTopAndDefaultCommands();
 
     @Override
     public void postInit() {
-        Pair<Map<Integer, List<String>>, List<String>> pair = topCommandsSupplier.get();
+        Pair<Map<Integer, List<String>>, List<String>> pair = getTopAndDefaultCommands();
         topCommands = pair.getKey();
         defaultCommands = pair.getValue();
     }
@@ -50,6 +50,12 @@ public class RewardFeature implements Feature {
         defaultCommands = Collections.emptyList();
     }
 
+    /**
+     * Reward the player
+     *
+     * @param topPosition the top position, starting from 1
+     * @param uuid        the uuid of the player
+     */
     public void reward(int topPosition, UUID uuid) {
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
         String name = offlinePlayer.getName();
@@ -59,6 +65,11 @@ public class RewardFeature implements Feature {
         Bukkit.getScheduler().runTask(JavaPlugin.getProvidingPlugin(getClass()), () -> commands.forEach(c -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), c)));
     }
 
+    /**
+     * Reward the players
+     *
+     * @param topMap the map of the top position and the list of uuids
+     */
     public void reward(Map<Integer, List<UUID>> topMap) {
         topMap.forEach((topPosition, uuidList) -> {
             for (UUID uuid : uuidList) {
@@ -67,6 +78,11 @@ public class RewardFeature implements Feature {
         });
     }
 
+    /**
+     * Reward the players
+     *
+     * @param topList the list of uuids, sorted by the top position
+     */
     public void reward(List<UUID> topList) {
         for (int i = 0; i < topList.size(); i++) {
             int top = i + 1;

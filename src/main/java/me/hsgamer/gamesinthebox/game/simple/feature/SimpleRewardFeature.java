@@ -29,36 +29,35 @@ public class SimpleRewardFeature extends RewardFeature {
     private int minPlayersToReward = -1;
 
     public SimpleRewardFeature(SimpleGameArena arena) {
-        super(() -> {
-            Map<Integer, List<String>> parsedTopCommands = new HashMap<>();
-            List<String> parsedDefaultCommands = new ArrayList<>();
-            arena.getFeature(GameConfigFeature.class).getValues("reward", false).forEach((k, v) -> {
-                if (k.equalsIgnoreCase("default") || k.equalsIgnoreCase("all") || k.equalsIgnoreCase("?")) {
-                    parsedDefaultCommands.addAll(CollectionUtils.createStringListFromObject(v, true));
-                } else {
-                    int i;
-                    try {
-                        i = Integer.parseInt(k);
-                    } catch (Exception e) {
-                        return;
-                    }
-                    parsedTopCommands.put(i, CollectionUtils.createStringListFromObject(v, true));
-                }
-            });
-            return Pair.of(parsedTopCommands, parsedDefaultCommands);
-        });
         this.arena = arena;
     }
 
     @Override
-    public void postInit() {
-        super.postInit();
+    protected Pair<Map<Integer, List<String>>, List<String>> getTopAndDefaultCommands() {
+        GameConfigFeature gameConfigFeature = arena.getFeature(GameConfigFeature.class);
 
-        minPlayersToReward = Optional.ofNullable(arena.getFeature(GameConfigFeature.class).get("min-players-to-reward"))
+        minPlayersToReward = Optional.ofNullable(gameConfigFeature.get("min-players-to-reward"))
                 .map(Object::toString)
                 .flatMap(Validate::getNumber)
                 .map(Number::intValue)
                 .orElse(minPlayersToReward);
+
+        Map<Integer, List<String>> parsedTopCommands = new HashMap<>();
+        List<String> parsedDefaultCommands = new ArrayList<>();
+        arena.getFeature(GameConfigFeature.class).getValues("reward", false).forEach((k, v) -> {
+            if (k.equalsIgnoreCase("default") || k.equalsIgnoreCase("all") || k.equalsIgnoreCase("?")) {
+                parsedDefaultCommands.addAll(CollectionUtils.createStringListFromObject(v, true));
+            } else {
+                int i;
+                try {
+                    i = Integer.parseInt(k);
+                } catch (Exception e) {
+                    return;
+                }
+                parsedTopCommands.put(i, CollectionUtils.createStringListFromObject(v, true));
+            }
+        });
+        return Pair.of(parsedTopCommands, parsedDefaultCommands);
     }
 
     public boolean tryReward(List<UUID> uuids) {

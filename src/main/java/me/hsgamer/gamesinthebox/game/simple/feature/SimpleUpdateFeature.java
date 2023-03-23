@@ -41,7 +41,7 @@ public class SimpleUpdateFeature implements Feature {
 
     private void updateState() {
         arena.getFeature(PointFeature.class).takeTopSnapshot();
-        arena.getFeature(TopFeature.class).setTop(arena.getFeature(PointFeature.class).getTopSnapshotAsStringPair());
+        arena.getFeature(TopFeature.class).setTop(arena.getFeature(PointFeature.class).getTopAsStringPair());
         arena.getFeature(DescriptiveHologramFeature.class).updateHologram();
     }
 

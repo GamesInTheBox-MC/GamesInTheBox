@@ -28,7 +28,7 @@ import java.util.List;
  * The {@link me.hsgamer.minigamecore.base.Arena} of a {@link Game}.
  * Note:
  * <ul>
- *     <li>{@link #getName()} will return the name of the arena with the planner name (e.g. "<planner>-<arena>")</li>
+ *     <li>{@link #getName()} will return the name of the arena with the planner name (e.g. "&lt;planner&gt;-&lt;arena&gt;")</li>
  *     <li>To get the name of the arena without the planner name, use {@link #getLocalName()}</li>
  *     <li>The arena provides {@link GameConfigFeature} to access the game settings</li>
  *     <li>{@link #getFeature(Class)} will get the {@link Feature} from both the {@link GameArena} and the {@link Planner} that the arena belongs to</li>
@@ -106,7 +106,7 @@ public abstract class GameArena extends SimpleBukkitArena implements Replacement
     @Override
     protected List<Feature> loadFeatures() {
         List<Feature> features = new ArrayList<>();
-        features.add(new GameConfigFeature(localName, this));
+        features.add(new GameConfigFeature(this));
         return features;
     }
 
