@@ -75,7 +75,6 @@ public abstract class DelayedGamePicker implements GamePicker {
         if (isPicked) {
             isPicked = false;
             updateNextPickTime(currentTime);
-            return false;
         }
         return currentTime >= nextPickTime;
     }
