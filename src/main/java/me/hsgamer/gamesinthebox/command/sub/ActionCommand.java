@@ -52,6 +52,12 @@ public final class ActionCommand extends SubCommand {
         Arena planner = plannerOptional.get();
         GameRunnerFeature gameFeature = planner.getFeature(GameRunnerFeature.class);
         GameArenaAction gameArenaAction = gameFeature.getGameArenaAction();
+
+        if (args.length == 1) {
+            gameArenaAction.sendUsage(sender);
+            return;
+        }
+
         if (gameArenaAction.performAction(sender, args[1], Arrays.copyOfRange(args, 2, args.length))) {
             MessageUtils.sendMessage(sender, plugin.getMessageConfig().getSuccess());
         } else {
@@ -61,7 +67,7 @@ public final class ActionCommand extends SubCommand {
 
     @Override
     public boolean isProperUsage(@NotNull CommandSender sender, @NotNull String label, @NotNull String... args) {
-        return args.length >= 2;
+        return args.length >= 1;
     }
 
     @Override

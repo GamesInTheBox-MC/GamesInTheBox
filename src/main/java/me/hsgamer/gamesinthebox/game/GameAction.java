@@ -49,4 +49,11 @@ public interface GameAction {
      * @return true if the action is performed successfully
      */
     boolean performAction(CommandSender sender, String action, String... args);
+
+    /**
+     * Send the usage of all the actions
+     *
+     * @param sender the sender to send the usage
+     */
+    void sendUsage(CommandSender sender);
 }

@@ -42,5 +42,10 @@ public interface GameArenaAction extends GameAction {
         public boolean performAction(CommandSender sender, String action, String... args) {
             return false;
         }
+
+        @Override
+        public void sendUsage(CommandSender sender) {
+            // EMPTY
+        }
     };
 }

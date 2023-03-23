@@ -16,12 +16,11 @@
 package me.hsgamer.gamesinthebox.game.simple;
 
 import me.hsgamer.gamesinthebox.game.GameArenaAction;
+import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import me.hsgamer.minigamecore.implementation.feature.TimerFeature;
 import org.bukkit.command.CommandSender;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * The simple {@link GameArenaAction}.
@@ -56,5 +55,22 @@ public class SimpleGameArenaAction implements GameArenaAction {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Get the usage map
+     *
+     * @return the usage map
+     */
+    protected Map<String, String> getUsageMap() {
+        Map<String, String> map = new LinkedHashMap<>();
+        map.put("skip-time", "Skip the time");
+        return map;
+    }
+
+    @Override
+    public void sendUsage(CommandSender sender) {
+        MessageUtils.sendMessage(sender, "&6Usage:");
+        getUsageMap().forEach((key, value) -> MessageUtils.sendMessage(sender, "&6- &e" + key + " &7- &f" + value));
     }
 }
