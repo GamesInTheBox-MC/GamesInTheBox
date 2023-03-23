@@ -17,16 +17,32 @@ package me.hsgamer.gamesinthebox.config;
 
 import me.hsgamer.hscore.config.annotation.ConfigPath;
 
+/**
+ * The main config
+ */
 public interface MainConfig {
+    /**
+     * Get the interval of the planner in ticks
+     *
+     * @return the interval
+     */
     @ConfigPath("planner.interval")
     default long getPlannerInterval() {
         return 20L;
     }
 
+    /**
+     * Check if the planner should be run asynchronously
+     *
+     * @return true if it should
+     */
     @ConfigPath("planner.async")
     default boolean isPlannerAsync() {
         return true;
     }
 
+    /**
+     * Reload the config
+     */
     void reloadConfig();
 }

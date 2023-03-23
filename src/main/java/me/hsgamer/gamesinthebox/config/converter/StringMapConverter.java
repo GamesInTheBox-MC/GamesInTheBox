@@ -21,6 +21,11 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * The converter for {@link java.util.Map} of {@link java.lang.String} and {@link T}
+ *
+ * @param <T> the type of value
+ */
 public abstract class StringMapConverter<T> implements Converter {
     protected abstract T toValue(Object value);
 

@@ -18,6 +18,9 @@ package me.hsgamer.gamesinthebox.config.converter;
 import me.hsgamer.hscore.common.CollectionUtils;
 import me.hsgamer.hscore.config.annotation.converter.Converter;
 
+/**
+ * The converter for {@link java.util.List} of {@link java.lang.String}
+ */
 public class StringListConverter implements Converter {
     @Override
     public Object convert(Object raw) {

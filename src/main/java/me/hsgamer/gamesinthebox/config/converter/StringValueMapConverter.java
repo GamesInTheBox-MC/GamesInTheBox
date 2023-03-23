@@ -17,6 +17,9 @@ package me.hsgamer.gamesinthebox.config.converter;
 
 import java.util.Objects;
 
+/**
+ * The converter for {@link java.util.Map} with {@link String} as key and {@link String} as value
+ */
 public class StringValueMapConverter extends StringMapConverter<String> {
     @Override
     protected String toValue(Object value) {
