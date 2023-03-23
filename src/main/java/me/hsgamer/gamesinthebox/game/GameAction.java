@@ -20,7 +20,13 @@ import org.bukkit.command.CommandSender;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * The interface for game actions in {@link GameArena}
+ */
 public interface GameAction {
+    /**
+     * The game action that does nothing
+     */
     GameAction EMPTY = new GameAction() {
         @Override
         public List<String> getActions() {
@@ -38,9 +44,30 @@ public interface GameAction {
         }
     };
 
+    /**
+     * Get the available actions
+     *
+     * @return the available actions
+     */
     List<String> getActions();
 
+    /**
+     * Get the available arguments for the action
+     *
+     * @param sender the sender
+     * @param action the action
+     * @param args   the current arguments
+     * @return the available arguments
+     */
     List<String> getActionArgs(CommandSender sender, String action, String... args);
 
+    /**
+     * Perform the action
+     *
+     * @param sender the sender
+     * @param action the action
+     * @param args   the arguments
+     * @return true if the action is performed successfully
+     */
     boolean performAction(CommandSender sender, String action, String... args);
 }

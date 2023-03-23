@@ -39,7 +39,7 @@ public class GameRunnerFeature implements Feature {
 
     public void forceEnd() {
         if (currentGameArena == null || isFinished) return;
-        currentGameArena.forceEnd();
+        currentGameArena.end();
         isFinished = true;
     }
 

@@ -24,11 +24,28 @@ import me.hsgamer.minigamecore.bukkit.SimpleBukkitArena;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The {@link me.hsgamer.minigamecore.base.Arena} of a {@link Game}.
+ * Note:
+ * <ul>
+ *     <li>{@link #getName()} will return the name of the arena with the planner name (e.g. "<planner>-<arena>")</li>
+ *     <li>To get the name of the arena without the planner name, use {@link #getLocalName()}</li>
+ *     <li>The arena provides {@link GameConfigFeature} to access the game settings</li>
+ *     <li>{@link #getFeature(Class)} will get the {@link Feature} from both the {@link GameArena} and the {@link Planner} that the arena belongs to</li>
+ * </ul>
+ */
 public abstract class GameArena extends SimpleBukkitArena implements ReplacementHandler {
     private final String localName;
     private final Planner planner;
     private final Game game;
 
+    /**
+     * Create a new game arena
+     *
+     * @param name    the name of the arena
+     * @param game    the game that the arena belongs to
+     * @param planner the planner that the arena belongs to
+     */
     protected GameArena(String name, Game game, Planner planner) {
         super(planner.getName() + "-" + name, game);
         this.localName = name;
@@ -36,22 +53,52 @@ public abstract class GameArena extends SimpleBukkitArena implements Replacement
         this.planner = planner;
     }
 
+    /**
+     * Get the planner that the arena belongs to
+     *
+     * @return the planner
+     */
     public Planner getPlanner() {
         return planner;
     }
 
+    /**
+     * Get the game that the arena belongs to
+     *
+     * @return the game
+     */
     public Game getGame() {
         return game;
     }
 
+    /**
+     * Get the local name of the arena.
+     * This is the name of the arena without the planner name.
+     *
+     * @return the local name
+     */
     public String getLocalName() {
         return localName;
     }
 
+    /**
+     * Start the game.
+     * This is mainly called by the {@link Planner}.
+     */
     public abstract void start();
 
-    public abstract void forceEnd();
+    /**
+     * End the game.
+     * This is mainly called by the {@link Planner} when the admin force the game to end.
+     */
+    public abstract void end();
 
+    /**
+     * Get the game action of the arena.
+     * Override this method to provide the action that the admin can perform.
+     *
+     * @return the game action
+     */
     public GameAction getGameAction() {
         return GameAction.EMPTY;
     }
@@ -63,6 +110,14 @@ public abstract class GameArena extends SimpleBukkitArena implements Replacement
         return features;
     }
 
+    /**
+     * {@inheritDoc}
+     * If the feature is not found in the {@link GameArena}, it will get from the {@link Planner} that the arena belongs to.
+     *
+     * @param featureClass the class of the feature
+     * @param <T>          the type of the feature
+     * @return the feature
+     */
     @Override
     public <T extends Feature> T getFeature(Class<T> featureClass) {
         T feature = super.getFeature(featureClass);

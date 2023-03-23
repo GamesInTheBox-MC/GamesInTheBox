@@ -17,12 +17,39 @@ package me.hsgamer.gamesinthebox.game;
 
 import me.hsgamer.gamesinthebox.planner.Planner;
 import me.hsgamer.minigamecore.base.ArenaManager;
+import org.jetbrains.annotations.ApiStatus;
 
+/**
+ * The game.
+ * This class is used to create new arenas for {@link Planner}.
+ * This is also an {@link ArenaManager} to handle the registration of arenas, and include the {@link me.hsgamer.minigamecore.base.Feature} and {@link me.hsgamer.minigamecore.base.GameState} specialized in the game.
+ */
 public abstract class Game extends ArenaManager {
+    /**
+     * Create a new arena
+     *
+     * @param name    the name of the arena
+     * @param planner the planner that the arena belongs to
+     * @return the new arena
+     */
     protected abstract GameArena newArena(String name, Planner planner);
 
+    /**
+     * Get the display name of the game
+     *
+     * @return the display name
+     */
     public abstract String getDisplayName();
 
+    /**
+     * Create a new arena.
+     * This method will be called by the {@link Planner} when creating a new arena.
+     *
+     * @param name    the name of the arena
+     * @param planner the planner that the arena belongs to
+     * @return the new arena
+     */
+    @ApiStatus.Internal
     public final GameArena createArena(String name, Planner planner) {
         GameArena arena = newArena(name, planner);
         if (!addArena(arena)) {
