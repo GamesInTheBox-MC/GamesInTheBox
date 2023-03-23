@@ -19,7 +19,7 @@ import me.hsgamer.gamesinthebox.game.GameAction;
 import me.hsgamer.gamesinthebox.game.GameArena;
 import me.hsgamer.minigamecore.base.Feature;
 
-public class GameFeature implements Feature {
+public class GameRunnerFeature implements Feature {
     private GameArena currentGameArena;
     private boolean isFinished = true;
 

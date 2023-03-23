@@ -25,13 +25,13 @@ import me.hsgamer.minigamecore.base.Feature;
 import java.util.*;
 import java.util.logging.Level;
 
-public class PickFeature implements Feature {
+public class GamePickerFeature implements Feature {
     private final Planner planner;
     private final Map<String, GameArena> gameArenaMap = new HashMap<>();
     private GamePicker gamePicker = GamePicker.EMPTY;
     private GameArena forceNextGame;
 
-    public PickFeature(Planner planner) {
+    public GamePickerFeature(Planner planner) {
         this.planner = planner;
     }
 

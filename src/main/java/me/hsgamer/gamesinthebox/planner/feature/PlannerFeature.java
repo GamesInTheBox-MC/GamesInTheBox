@@ -13,10 +13,9 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-package me.hsgamer.gamesinthebox.game.feature;
+package me.hsgamer.gamesinthebox.planner.feature;
 
 import me.hsgamer.gamesinthebox.planner.Planner;
-import me.hsgamer.gamesinthebox.planner.feature.GameFeature;
 import me.hsgamer.gamesinthebox.planner.state.IdlingState;
 import me.hsgamer.minigamecore.base.Feature;
 
@@ -32,7 +31,7 @@ public class PlannerFeature implements Feature {
     }
 
     public void notifyFinished() {
-        planner.getFeature(GameFeature.class).setFinished();
+        planner.getFeature(GameRunnerFeature.class).setFinished();
     }
 
     public boolean isIdle() {

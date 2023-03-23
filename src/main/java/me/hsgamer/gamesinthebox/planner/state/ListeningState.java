@@ -16,7 +16,7 @@
 package me.hsgamer.gamesinthebox.planner.state;
 
 import me.hsgamer.gamesinthebox.GamesInTheBox;
-import me.hsgamer.gamesinthebox.planner.feature.GameFeature;
+import me.hsgamer.gamesinthebox.planner.feature.GameRunnerFeature;
 import me.hsgamer.minigamecore.base.Arena;
 import me.hsgamer.minigamecore.base.GameState;
 import me.hsgamer.minigamecore.bukkit.extra.ColoredDisplayName;
@@ -30,12 +30,12 @@ public class ListeningState implements GameState, ColoredDisplayName {
 
     @Override
     public void start(Arena arena) {
-        arena.getFeature(GameFeature.class).start();
+        arena.getFeature(GameRunnerFeature.class).start();
     }
 
     @Override
     public void update(Arena arena) {
-        if (arena.getFeature(GameFeature.class).isFinished()) {
+        if (arena.getFeature(GameRunnerFeature.class).isFinished()) {
             arena.setNextState(IdlingState.class);
         }
     }

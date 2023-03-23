@@ -16,8 +16,6 @@
 package me.hsgamer.gamesinthebox.game;
 
 import me.hsgamer.gamesinthebox.game.feature.GameConfigFeature;
-import me.hsgamer.gamesinthebox.game.feature.GameVariableFeature;
-import me.hsgamer.gamesinthebox.game.feature.PlannerFeature;
 import me.hsgamer.gamesinthebox.planner.Planner;
 import me.hsgamer.gamesinthebox.replacement.ReplacementHandler;
 import me.hsgamer.minigamecore.base.Feature;
@@ -61,9 +59,7 @@ public abstract class GameArena extends SimpleBukkitArena implements Replacement
     @Override
     protected List<Feature> loadFeatures() {
         List<Feature> features = new ArrayList<>();
-        features.add(new PlannerFeature(planner));
         features.add(new GameConfigFeature(localName, this));
-        features.add(new GameVariableFeature(planner));
         return features;
     }
 

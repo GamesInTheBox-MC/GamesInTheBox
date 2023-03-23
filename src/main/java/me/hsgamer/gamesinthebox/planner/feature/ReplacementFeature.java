@@ -36,10 +36,10 @@ public class ReplacementFeature implements Feature, ReplacementHandler {
         String lowerCaseQuery = query.toLowerCase();
         if (lowerCaseQuery.startsWith("game_")) {
             name = query.substring(5);
-            replacementHandler = planner.getFeature(GameFeature.class).getCurrentGameArena();
+            replacementHandler = planner.getFeature(GameRunnerFeature.class).getCurrentGameArena();
         } else if (lowerCaseQuery.startsWith("picker_")) {
             name = query.substring(7);
-            replacementHandler = planner.getFeature(PickFeature.class).getGamePicker();
+            replacementHandler = planner.getFeature(GamePickerFeature.class).getGamePicker();
         } else if (lowerCaseQuery.startsWith("planner_")) {
             name = query.substring(8);
             replacementHandler = planner;

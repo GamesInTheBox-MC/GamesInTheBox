@@ -38,9 +38,11 @@ public class Planner extends SimpleBukkitArena implements ReplacementHandler {
     @Override
     protected List<Feature> loadFeatures() {
         return Arrays.asList(
-                new GameFeature(),
-                new PickFeature(this),
+                new GameRunnerFeature(),
+                new GamePickerFeature(this),
                 new ReplacementFeature(this),
+                new VariableFeature(this),
+                new PlannerFeature(this),
                 getFeature(GlobalPlannerConfigFeature.class).createPlannerFeature(this)
         );
     }
@@ -56,22 +58,22 @@ public class Planner extends SimpleBukkitArena implements ReplacementHandler {
             case "name":
                 return getName();
             case "game_name":
-                return Optional.ofNullable(getFeature(GameFeature.class))
-                        .map(GameFeature::getCurrentGameArena)
+                return Optional.ofNullable(getFeature(GameRunnerFeature.class))
+                        .map(GameRunnerFeature::getCurrentGameArena)
                         .map(GameArena::getGame)
                         .map(Game::getDisplayName)
                         .map(ColorUtils::colorize)
                         .orElse("");
             case "game_local_name":
-                return Optional.ofNullable(getFeature(GameFeature.class))
-                        .map(GameFeature::getCurrentGameArena)
+                return Optional.ofNullable(getFeature(GameRunnerFeature.class))
+                        .map(GameRunnerFeature::getCurrentGameArena)
                         .map(GameArena::getLocalName)
                         .orElse("");
             case "state":
                 return GameUtil.getState(this);
             case "game_state":
-                return Optional.ofNullable(getFeature(GameFeature.class))
-                        .map(GameFeature::getCurrentGameArena)
+                return Optional.ofNullable(getFeature(GameRunnerFeature.class))
+                        .map(GameRunnerFeature::getCurrentGameArena)
                         .map(GameUtil::getState)
                         .orElse("");
             default:

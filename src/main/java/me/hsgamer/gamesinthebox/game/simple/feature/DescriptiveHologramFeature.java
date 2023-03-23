@@ -16,9 +16,9 @@
 package me.hsgamer.gamesinthebox.game.simple.feature;
 
 import me.hsgamer.gamesinthebox.game.feature.GameConfigFeature;
-import me.hsgamer.gamesinthebox.game.feature.GameVariableFeature;
 import me.hsgamer.gamesinthebox.game.feature.HologramFeature;
 import me.hsgamer.gamesinthebox.game.simple.SimpleGameArena;
+import me.hsgamer.gamesinthebox.planner.feature.VariableFeature;
 import me.hsgamer.gamesinthebox.util.LocationUtil;
 import me.hsgamer.hscore.bukkit.utils.ColorUtils;
 import me.hsgamer.hscore.common.CollectionUtils;
@@ -111,7 +111,7 @@ public class DescriptiveHologramFeature implements Feature {
                 return;
             }
             List<HologramLine> replacedLines = lines.stream()
-                    .map(line -> arena.getFeature(GameVariableFeature.class).replace(line))
+                    .map(line -> arena.getFeature(VariableFeature.class).replace(line))
                     .map(ColorUtils::colorize)
                     .map(TextHologramLine::new)
                     .collect(Collectors.toList());

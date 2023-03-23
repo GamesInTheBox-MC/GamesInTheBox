@@ -17,7 +17,7 @@ package me.hsgamer.gamesinthebox.command.sub;
 
 import me.hsgamer.gamesinthebox.GamesInTheBox;
 import me.hsgamer.gamesinthebox.Permissions;
-import me.hsgamer.gamesinthebox.planner.feature.GameFeature;
+import me.hsgamer.gamesinthebox.planner.feature.GameRunnerFeature;
 import me.hsgamer.hscore.bukkit.command.sub.SubCommand;
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import me.hsgamer.minigamecore.base.Arena;
@@ -45,7 +45,7 @@ public class EndCommand extends SubCommand {
             return;
         }
         Arena planner = plannerOptional.get();
-        GameFeature gameFeature = planner.getFeature(GameFeature.class);
+        GameRunnerFeature gameFeature = planner.getFeature(GameRunnerFeature.class);
         gameFeature.forceEnd();
         MessageUtils.sendMessage(sender, plugin.getMessageConfig().getSuccess());
     }

@@ -13,21 +13,20 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-package me.hsgamer.gamesinthebox.game.feature;
+package me.hsgamer.gamesinthebox.planner.feature;
 
 import me.hsgamer.gamesinthebox.planner.Planner;
-import me.hsgamer.gamesinthebox.planner.feature.ReplacementFeature;
 import me.hsgamer.hscore.variable.InstanceVariableManager;
 import me.hsgamer.minigamecore.base.Feature;
 
 import java.util.Optional;
 import java.util.UUID;
 
-public class GameVariableFeature implements Feature {
+public class VariableFeature implements Feature {
     private static final UUID DUMMY_UUID = UUID.randomUUID();
     private final InstanceVariableManager variableManager;
 
-    public GameVariableFeature(Planner planner) {
+    public VariableFeature(Planner planner) {
         this.variableManager = new InstanceVariableManager();
         variableManager.register("", (original, uuid) -> Optional.ofNullable(planner.getFeature(ReplacementFeature.class))
                 .map(replacementFeature -> replacementFeature.replace(original))

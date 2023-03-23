@@ -28,7 +28,7 @@ public class GameConfigFeature implements Feature {
 
     public GameConfigFeature(String gameConfigName, GameArena gameArena) {
         this.gameConfigName = gameConfigName;
-        this.plannerConfigFeature = gameArena.getPlanner().getFeature(PlannerConfigFeature.class);
+        this.plannerConfigFeature = gameArena.getFeature(PlannerConfigFeature.class);
     }
 
     private String getSettingPath(String path) {

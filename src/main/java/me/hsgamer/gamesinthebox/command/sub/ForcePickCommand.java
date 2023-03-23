@@ -17,7 +17,7 @@ package me.hsgamer.gamesinthebox.command.sub;
 
 import me.hsgamer.gamesinthebox.GamesInTheBox;
 import me.hsgamer.gamesinthebox.Permissions;
-import me.hsgamer.gamesinthebox.planner.feature.PickFeature;
+import me.hsgamer.gamesinthebox.planner.feature.GamePickerFeature;
 import me.hsgamer.hscore.bukkit.command.sub.SubCommand;
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import me.hsgamer.minigamecore.base.Arena;
@@ -45,7 +45,7 @@ public class ForcePickCommand extends SubCommand {
             return;
         }
         Arena planner = plannerOptional.get();
-        PickFeature pickFeature = planner.getFeature(PickFeature.class);
+        GamePickerFeature pickFeature = planner.getFeature(GamePickerFeature.class);
         if (pickFeature.getGamePicker().forcePick()) {
             MessageUtils.sendMessage(sender, plugin.getMessageConfig().getSuccess());
         } else {
