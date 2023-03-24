@@ -40,7 +40,7 @@ public interface GameEditor extends GameAction {
         }
 
         @Override
-        public boolean save(CommandSender sender, Planner planner, String arenaName) {
+        public boolean save(CommandSender sender, String plannerName, String arenaName) {
             return false;
         }
 
@@ -82,10 +82,10 @@ public interface GameEditor extends GameAction {
     /**
      * Save the settings to the {@link Planner} under the arena name
      *
-     * @param sender    the sender
-     * @param planner   the planner
-     * @param arenaName the arena name
+     * @param sender      the sender
+     * @param plannerName the planner name
+     * @param arenaName   the arena name
      * @return true if the editor is saved
      */
-    boolean save(CommandSender sender, Planner planner, String arenaName);
+    boolean save(CommandSender sender, String plannerName, String arenaName);
 }

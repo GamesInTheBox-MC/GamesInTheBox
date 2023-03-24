@@ -17,16 +17,15 @@ package me.hsgamer.gamesinthebox.command.editor;
 
 import me.hsgamer.gamesinthebox.GamesInTheBox;
 import me.hsgamer.gamesinthebox.game.GameEditor;
-import me.hsgamer.gamesinthebox.planner.Planner;
-import me.hsgamer.gamesinthebox.planner.feature.PlannerConfigFeature;
+import me.hsgamer.gamesinthebox.planner.feature.GlobalPlannerConfigFeature;
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
+import me.hsgamer.hscore.config.Config;
 import me.hsgamer.minigamecore.base.Arena;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -39,25 +38,21 @@ public class SaveCommand extends GameEditorCommand {
 
     @Override
     protected void onEditorSubCommand(GameEditor gameEditor, @NotNull CommandSender sender, @NotNull String label, @NotNull String... args) {
-        Optional<Arena> plannerOptional = plugin.getPlannerManager().getArenaByName(args[0]);
-        if (!plannerOptional.isPresent()) {
-            MessageUtils.sendMessage(sender, plugin.getMessageConfig().getPlannerNotFound());
-            return;
-        }
-        Planner planner = (Planner) plannerOptional.get();
-        PlannerConfigFeature plannerConfigFeature = planner.getFeature(PlannerConfigFeature.class);
+        Config plannerConfig = plugin.getPlannerManager().getFeature(GlobalPlannerConfigFeature.class).getPlannerConfig();
 
+        String plannerName = args[0];
         String arenaName = args[1];
-        String path = "settings." + arenaName;
+        String path = plannerName + ".settings." + arenaName;
         boolean override = args.length >= 3 && Boolean.parseBoolean(args[2]);
-        if (plannerConfigFeature.contains(path) && !override) {
+        if (plannerConfig.contains(path) && !override) {
             MessageUtils.sendMessage(sender, plugin.getMessageConfig().getEditorArenaAlreadyExists());
             return;
         }
 
-        plannerConfigFeature.set(path, null);
+        plannerConfig.set(path, null);
+        plannerConfig.save();
 
-        if (gameEditor.save(sender, planner, arenaName)) {
+        if (gameEditor.save(sender, plannerName, arenaName)) {
             gameEditor.reset(sender);
             MessageUtils.sendMessage(sender, plugin.getMessageConfig().getSuccess());
         } else {
