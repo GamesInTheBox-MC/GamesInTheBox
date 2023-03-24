@@ -70,7 +70,7 @@ public class GameConfigFeature implements Feature {
      * @return the string value
      */
     public String getString(String path) {
-        return getString(path, "");
+        return getString(path, null);
     }
 
     /**

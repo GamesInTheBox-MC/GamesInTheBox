@@ -61,7 +61,7 @@ public class PlannerConfigFeature implements Feature {
      * @return the value
      */
     public String getString(String path, String def) {
-        return Objects.toString(globalPlannerConfigFeature.getPlannerConfig().getNormalized(planner.getName() + "." + path, def));
+        return Objects.toString(globalPlannerConfigFeature.getPlannerConfig().getNormalized(planner.getName() + "." + path), def);
     }
 
     /**
