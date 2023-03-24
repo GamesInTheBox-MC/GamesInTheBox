@@ -19,10 +19,14 @@ import me.hsgamer.gamesinthebox.game.GameEditor;
 import me.hsgamer.gamesinthebox.util.LocationUtil;
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import me.hsgamer.hscore.common.Pair;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * The simple {@link GameEditor} for {@link SimpleGame}
@@ -77,6 +81,425 @@ public class SimpleGameEditor extends SimpleGameAction implements GameEditor {
     @Override
     protected Map<String, SimpleAction> getActionMap() {
         Map<String, SimpleAction> map = new LinkedHashMap<>();
+
+        // POINTS
+        map.put("set-point-plus", new SimpleAction() {
+            @Override
+            public String getDescription() {
+                return "Set the point to add to the player";
+            }
+
+            @Override
+            public String getArgsUsage() {
+                return "<point>";
+            }
+
+            @Override
+            public List<String> getActionArgs(CommandSender sender, String... args) {
+                if (args.length == 1) {
+                    return Arrays.asList("1", "2", "3", "4", "5");
+                }
+                return SimpleAction.super.getActionArgs(sender, args);
+            }
+
+            @Override
+            public boolean performAction(CommandSender sender, String... args) {
+                if (args.length < 1) {
+                    return false;
+                }
+                try {
+                    int point = Integer.parseInt(args[0]);
+                    if (point > 0) {
+                        pointPlus = point;
+                    } else {
+                        pointPlus = -point;
+                    }
+                    return true;
+                } catch (NumberFormatException e) {
+                    MessageUtils.sendMessage(sender, "&cInvalid number");
+                    return false;
+                }
+            }
+        });
+        map.put("set-point-minus", new SimpleAction() {
+            @Override
+            public String getDescription() {
+                return "Set the point to remove from the player";
+            }
+
+            @Override
+            public String getArgsUsage() {
+                return "<point>";
+            }
+
+            @Override
+            public List<String> getActionArgs(CommandSender sender, String... args) {
+                if (args.length == 1) {
+                    return Arrays.asList("1", "2", "3", "4", "5");
+                }
+                return SimpleAction.super.getActionArgs(sender, args);
+            }
+
+            @Override
+            public boolean performAction(CommandSender sender, String... args) {
+                if (args.length < 1) {
+                    return false;
+                }
+                try {
+                    int point = Integer.parseInt(args[0]);
+                    if (point > 0) {
+                        pointMinus = point;
+                    } else {
+                        pointMinus = -point;
+                    }
+                    return true;
+                } catch (NumberFormatException e) {
+                    MessageUtils.sendMessage(sender, "&cInvalid number");
+                    return false;
+                }
+            }
+        });
+        map.put("set-max-players-to-add-point", new SimpleAction() {
+            @Override
+            public String getDescription() {
+                return "Set the maximum players to add point";
+            }
+
+            @Override
+            public String getArgsUsage() {
+                return "<max players>";
+            }
+
+            @Override
+            public List<String> getActionArgs(CommandSender sender, String... args) {
+                if (args.length == 1) {
+                    return Arrays.asList("1", "2", "3", "4", "5");
+                }
+                return SimpleAction.super.getActionArgs(sender, args);
+            }
+
+            @Override
+            public boolean performAction(CommandSender sender, String... args) {
+                if (args.length < 1) {
+                    return false;
+                }
+                try {
+                    int players = Integer.parseInt(args[0]);
+                    if (players >= 0) {
+                        maxPlayersToAddPoint = players;
+                    } else {
+                        maxPlayersToAddPoint = null;
+                    }
+                    return true;
+                } catch (NumberFormatException e) {
+                    MessageUtils.sendMessage(sender, "&cInvalid number");
+                    return false;
+                }
+            }
+        });
+
+        // REWARD
+        map.put("add-reward", new SimpleAction() {
+            @Override
+            public String getDescription() {
+                return "Add a reward command";
+            }
+
+            @Override
+            public String getArgsUsage() {
+                return "<top> <command>";
+            }
+
+            @Override
+            public List<String> getActionArgs(CommandSender sender, String... args) {
+                if (args.length == 1) {
+                    return Arrays.asList("all", "1", "2", "3", "4", "5");
+                }
+                return SimpleAction.super.getActionArgs(sender, args);
+            }
+
+            @Override
+            public boolean performAction(CommandSender sender, String... args) {
+                if (args.length < 2) {
+                    return false;
+                }
+                String top = args[0];
+                String command = StringUtils.join(args, " ", 1, args.length);
+
+                if (rewardCommands == null) {
+                    rewardCommands = new LinkedHashMap<>();
+                }
+
+                rewardCommands.computeIfAbsent(top, k -> new ArrayList<>()).add(command);
+                return true;
+            }
+        });
+        map.put("clear-reward", new SimpleAction() {
+            @Override
+            public String getDescription() {
+                return "Clear all reward commands of a top position";
+            }
+
+            @Override
+            public String getArgsUsage() {
+                return "<top>";
+            }
+
+            @Override
+            public List<String> getActionArgs(CommandSender sender, String... args) {
+                if (args.length == 1) {
+                    return Arrays.asList("all", "1", "2", "3", "4", "5");
+                }
+                return SimpleAction.super.getActionArgs(sender, args);
+            }
+
+            @Override
+            public boolean performAction(CommandSender sender, String... args) {
+                if (args.length < 1) {
+                    return false;
+                }
+                String top = args[0];
+
+                if (rewardCommands != null) {
+                    rewardCommands.remove(top);
+                }
+                return true;
+            }
+        });
+        map.put("clear-all-reward", new SimpleAction() {
+            @Override
+            public String getDescription() {
+                return "Clear all reward commands";
+            }
+
+            @Override
+            public boolean performAction(CommandSender sender, String... args) {
+                rewardCommands = null;
+                return true;
+            }
+        });
+        map.put("set-min-players-to-reward", new SimpleAction() {
+            @Override
+            public String getDescription() {
+                return "Set the minimum players to reward";
+            }
+
+            @Override
+            public String getArgsUsage() {
+                return "<min players>";
+            }
+
+            @Override
+            public List<String> getActionArgs(CommandSender sender, String... args) {
+                if (args.length == 1) {
+                    return Arrays.asList("1", "2", "3", "4", "5");
+                }
+                return SimpleAction.super.getActionArgs(sender, args);
+            }
+
+            @Override
+            public boolean performAction(CommandSender sender, String... args) {
+                if (args.length < 1) {
+                    return false;
+                }
+                try {
+                    int players = Integer.parseInt(args[0]);
+                    if (players >= 0) {
+                        minPlayersToReward = players;
+                    } else {
+                        minPlayersToReward = null;
+                    }
+                    return true;
+                } catch (NumberFormatException e) {
+                    MessageUtils.sendMessage(sender, "&cInvalid number");
+                    return false;
+                }
+            }
+        });
+
+        // HOLOGRAM
+        map.put("new-hologram", new SimpleAction() {
+            @Override
+            public String getDescription() {
+                return "Create a new hologram at your location";
+            }
+
+            @Override
+            public boolean performAction(CommandSender sender, String... args) {
+                if (!(sender instanceof Player)) {
+                    MessageUtils.sendMessage(sender, "&cOnly players can use this command");
+                    return false;
+                }
+
+                if (hologramList == null) {
+                    hologramList = new ArrayList<>();
+                }
+
+                Player player = (Player) sender;
+                Location location = player.getLocation();
+
+                hologramList.add(Pair.of(location, new ArrayList<>()));
+                MessageUtils.sendMessage(sender, "&aThe hologram has been created. The index is " + (hologramList.size() - 1));
+                return true;
+            }
+        });
+        map.put("add-hologram-line", new SimpleAction() {
+            @Override
+            public String getDescription() {
+                return "Add a line to a hologram";
+            }
+
+            @Override
+            public String getArgsUsage() {
+                return "<index> <line>";
+            }
+
+            @Override
+            public List<String> getActionArgs(CommandSender sender, String... args) {
+                if (args.length == 1) {
+                    if (hologramList == null) {
+                        return Collections.emptyList();
+                    }
+                    return IntStream.range(0, hologramList.size()).mapToObj(Integer::toString).collect(Collectors.toList());
+                }
+                return SimpleAction.super.getActionArgs(sender, args);
+            }
+
+            @Override
+            public boolean performAction(CommandSender sender, String... args) {
+                if (args.length < 2) {
+                    return false;
+                }
+                try {
+                    int index = Integer.parseInt(args[0]);
+                    String line = StringUtils.join(args, " ", 1, args.length);
+
+                    if (hologramList == null) {
+                        hologramList = new ArrayList<>();
+                    }
+
+                    if (index < 0 || index >= hologramList.size()) {
+                        MessageUtils.sendMessage(sender, "&cInvalid index");
+                        return false;
+                    }
+
+                    hologramList.get(index).getValue().add(line);
+                    return true;
+                } catch (NumberFormatException e) {
+                    MessageUtils.sendMessage(sender, "&cInvalid number");
+                    return false;
+                }
+            }
+        });
+        map.put("clear-hologram-line", new SimpleAction() {
+            @Override
+            public String getDescription() {
+                return "Clear all lines of a hologram";
+            }
+
+            @Override
+            public String getArgsUsage() {
+                return "<index>";
+            }
+
+            @Override
+            public List<String> getActionArgs(CommandSender sender, String... args) {
+                if (args.length == 1) {
+                    if (hologramList == null) {
+                        return Collections.emptyList();
+                    }
+                    return IntStream.range(0, hologramList.size()).mapToObj(Integer::toString).collect(Collectors.toList());
+                }
+                return SimpleAction.super.getActionArgs(sender, args);
+            }
+
+            @Override
+            public boolean performAction(CommandSender sender, String... args) {
+                if (args.length < 1) {
+                    return false;
+                }
+                try {
+                    int index = Integer.parseInt(args[0]);
+
+                    if (hologramList == null) {
+                        hologramList = new ArrayList<>();
+                    }
+
+                    if (index < 0 || index >= hologramList.size()) {
+                        MessageUtils.sendMessage(sender, "&cInvalid index");
+                        return false;
+                    }
+
+                    hologramList.get(index).getValue().clear();
+                    return true;
+                } catch (NumberFormatException e) {
+                    MessageUtils.sendMessage(sender, "&cInvalid number");
+                    return false;
+                }
+            }
+        });
+        map.put("remove-hologram", new SimpleAction() {
+            @Override
+            public String getDescription() {
+                return "Remove a hologram";
+            }
+
+            @Override
+            public String getArgsUsage() {
+                return "<index>";
+            }
+
+            @Override
+            public List<String> getActionArgs(CommandSender sender, String... args) {
+                if (args.length == 1) {
+                    if (hologramList == null) {
+                        return Collections.emptyList();
+                    }
+                    return IntStream.range(0, hologramList.size()).mapToObj(Integer::toString).collect(Collectors.toList());
+                }
+                return SimpleAction.super.getActionArgs(sender, args);
+            }
+
+            @Override
+            public boolean performAction(CommandSender sender, String... args) {
+                if (args.length < 1) {
+                    return false;
+                }
+                try {
+                    int index = Integer.parseInt(args[0]);
+
+                    if (hologramList == null) {
+                        hologramList = new ArrayList<>();
+                    }
+
+                    if (index < 0 || index >= hologramList.size()) {
+                        MessageUtils.sendMessage(sender, "&cInvalid index");
+                        return false;
+                    }
+
+                    hologramList.remove(index);
+                    return true;
+                } catch (NumberFormatException e) {
+                    MessageUtils.sendMessage(sender, "&cInvalid number");
+                    return false;
+                }
+            }
+        });
+        map.put("clear-all-hologram", new SimpleAction() {
+            @Override
+            public String getDescription() {
+                return "Clear all holograms";
+            }
+
+            @Override
+            public boolean performAction(CommandSender sender, String... args) {
+                if (hologramList != null) {
+                    hologramList.clear();
+                }
+                return true;
+            }
+        });
+
         return map;
     }
 
