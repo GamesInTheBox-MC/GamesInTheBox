@@ -109,11 +109,7 @@ public class SimpleGameEditor extends SimpleGameAction implements GameEditor {
                 }
                 try {
                     int point = Integer.parseInt(args[0]);
-                    if (point > 0) {
-                        pointPlus = point;
-                    } else {
-                        pointPlus = -point;
-                    }
+                    pointPlus = Math.abs(point);
                     return true;
                 } catch (NumberFormatException e) {
                     MessageUtils.sendMessage(sender, "&cInvalid number");
@@ -147,11 +143,7 @@ public class SimpleGameEditor extends SimpleGameAction implements GameEditor {
                 }
                 try {
                     int point = Integer.parseInt(args[0]);
-                    if (point > 0) {
-                        pointMinus = point;
-                    } else {
-                        pointMinus = -point;
-                    }
+                    pointMinus = Math.abs(point);
                     return true;
                 } catch (NumberFormatException e) {
                     MessageUtils.sendMessage(sender, "&cInvalid number");
