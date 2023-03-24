@@ -63,8 +63,6 @@ public class SaveCommand extends GameEditorCommand {
         }
         plannerConfig.save();
 
-        gameEditor.reset(sender);
-
         MessageUtils.sendMessage(sender, plugin.getMessageConfig().getSuccess());
     }
 
