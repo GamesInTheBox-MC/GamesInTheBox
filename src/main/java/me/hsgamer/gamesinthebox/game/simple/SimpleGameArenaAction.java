@@ -45,7 +45,7 @@ public class SimpleGameArenaAction extends SimpleGameAction implements GameArena
 
     /**
      * {@inheritDoc}
-     * This can be overridden to add more actions
+     * This can be overridden to add more actions.
      *
      * @return the action map
      */
