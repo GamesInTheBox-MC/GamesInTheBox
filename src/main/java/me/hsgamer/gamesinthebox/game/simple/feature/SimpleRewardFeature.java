@@ -51,8 +51,7 @@ public class SimpleRewardFeature extends RewardFeature {
     protected Pair<Map<Integer, List<String>>, List<String>> getTopAndDefaultCommands() {
         GameConfigFeature gameConfigFeature = arena.getFeature(GameConfigFeature.class);
 
-        minPlayersToReward = Optional.ofNullable(gameConfigFeature.get("min-players-to-reward"))
-                .map(Object::toString)
+        minPlayersToReward = Optional.ofNullable(gameConfigFeature.getString("min-players-to-reward"))
                 .flatMap(Validate::getNumber)
                 .map(Number::intValue)
                 .orElse(minPlayersToReward);

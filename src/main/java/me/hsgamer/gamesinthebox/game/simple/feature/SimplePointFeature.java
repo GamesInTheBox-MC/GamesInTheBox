@@ -21,7 +21,6 @@ import me.hsgamer.gamesinthebox.game.simple.SimpleGameArena;
 import me.hsgamer.hscore.common.Validate;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -61,18 +60,15 @@ public class SimplePointFeature extends PointFeature {
         super.postInit();
 
         GameConfigFeature gameConfigFeature = arena.getFeature(GameConfigFeature.class);
-        pointPlus = Optional.ofNullable(gameConfigFeature.get("point.plus"))
-                .map(Objects::toString)
+        pointPlus = Optional.ofNullable(gameConfigFeature.getString("point.plus"))
                 .flatMap(Validate::getNumber)
                 .map(Number::intValue)
                 .orElse(pointPlus);
-        pointMinus = Optional.ofNullable(gameConfigFeature.get("point.minus"))
-                .map(Objects::toString)
+        pointMinus = Optional.ofNullable(gameConfigFeature.getString("point.minus"))
                 .flatMap(Validate::getNumber)
                 .map(Number::intValue)
                 .orElse(pointMinus);
-        maxPlayersToAdd = Optional.ofNullable(gameConfigFeature.get("point.max-players-to-add"))
-                .map(Objects::toString)
+        maxPlayersToAdd = Optional.ofNullable(gameConfigFeature.getString("point.max-players-to-add"))
                 .flatMap(Validate::getNumber)
                 .map(Number::intValue)
                 .orElse(maxPlayersToAdd);
