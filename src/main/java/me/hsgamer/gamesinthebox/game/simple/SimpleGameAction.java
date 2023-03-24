@@ -63,8 +63,7 @@ public abstract class SimpleGameAction implements GameAction {
     public boolean performAction(CommandSender sender, String action, String... args) {
         SimpleAction simpleAction = actionMap.get(action);
         if (simpleAction != null) {
-            simpleAction.performAction(sender, args);
-            return true;
+            return simpleAction.performAction(sender, args);
         }
         return false;
     }
@@ -72,7 +71,11 @@ public abstract class SimpleGameAction implements GameAction {
     @Override
     public void sendUsage(CommandSender sender) {
         MessageUtils.sendMessage(sender, "&6Usage:");
-        actionMap.forEach((key, value) -> MessageUtils.sendMessage(sender, "&6- &e" + key + " &7- &f" + value.getUsage()));
+        actionMap.forEach((key, value) -> {
+            MessageUtils.sendMessage(sender, "&6- &e" + key);
+            MessageUtils.sendMessage(sender, "&6   &bArguments: &f" + value.getArgsUsage());
+            MessageUtils.sendMessage(sender, "&6   &bDescription: &f" + value.getDescription());
+        });
     }
 
     /**
@@ -80,11 +83,20 @@ public abstract class SimpleGameAction implements GameAction {
      */
     public interface SimpleAction {
         /**
-         * Get the usage of the action
+         * Get the description of the action
          *
-         * @return the usage
+         * @return the description
          */
-        String getUsage();
+        String getDescription();
+
+        /**
+         * Get the arguments usage of the action
+         *
+         * @return the arguments usage
+         */
+        default String getArgsUsage() {
+            return "";
+        }
 
         /**
          * Get the action arguments
@@ -93,7 +105,9 @@ public abstract class SimpleGameAction implements GameAction {
          * @param args   the current arguments
          * @return the action arguments
          */
-        List<String> getActionArgs(CommandSender sender, String... args);
+        default List<String> getActionArgs(CommandSender sender, String... args) {
+            return Collections.emptyList();
+        }
 
         /**
          * Perform the action
@@ -101,6 +115,6 @@ public abstract class SimpleGameAction implements GameAction {
          * @param sender the sender
          * @param args   the arguments
          */
-        void performAction(CommandSender sender, String... args);
+        boolean performAction(CommandSender sender, String... args);
     }
 }
