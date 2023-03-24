@@ -31,6 +31,25 @@ import java.util.List;
  * </ul>
  */
 public abstract class SimpleGame extends Game {
+    private SimpleGameEditor editor;
+
+    /**
+     * Create the {@link SimpleGameEditor}
+     *
+     * @return the {@link SimpleGameEditor}
+     */
+    protected SimpleGameEditor createEditor() {
+        return new SimpleGameEditor(this);
+    }
+
+    @Override
+    public SimpleGameEditor getEditor() {
+        if (editor == null) {
+            editor = createEditor();
+        }
+        return editor;
+    }
+
     @Override
     protected abstract SimpleGameArena newArena(String name, Planner planner);
 

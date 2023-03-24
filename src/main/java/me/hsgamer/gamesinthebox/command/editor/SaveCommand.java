@@ -26,6 +26,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -49,15 +51,21 @@ public class SaveCommand extends GameEditorCommand {
             return;
         }
 
+        Optional<Map<String, Object>> optionalMap = gameEditor.exportPathValueMap(sender);
+        if (!optionalMap.isPresent()) {
+            MessageUtils.sendMessage(sender, plugin.getMessageConfig().getEditorCannotSave());
+            return;
+        }
+
         plannerConfig.set(path, null);
+        for (Map.Entry<String, Object> entry : optionalMap.get().entrySet()) {
+            plannerConfig.set(path + "." + entry.getKey(), entry.getValue());
+        }
         plannerConfig.save();
 
-        if (gameEditor.save(sender, plannerName, arenaName)) {
-            gameEditor.reset(sender);
-            MessageUtils.sendMessage(sender, plugin.getMessageConfig().getSuccess());
-        } else {
-            MessageUtils.sendMessage(sender, plugin.getMessageConfig().getEditorCannotSave());
-        }
+        gameEditor.reset(sender);
+
+        MessageUtils.sendMessage(sender, plugin.getMessageConfig().getSuccess());
     }
 
     @Override

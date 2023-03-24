@@ -20,6 +20,8 @@ import org.bukkit.command.CommandSender;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * The {@link GameAction} to edit the {@link Game}
@@ -40,8 +42,8 @@ public interface GameEditor extends GameAction {
         }
 
         @Override
-        public boolean save(CommandSender sender, String plannerName, String arenaName) {
-            return false;
+        public Optional<Map<String, Object>> exportPathValueMap(CommandSender sender) {
+            return Optional.empty();
         }
 
         @Override
@@ -80,12 +82,10 @@ public interface GameEditor extends GameAction {
     void sendStatus(CommandSender sender);
 
     /**
-     * Save the settings to the {@link Planner} under the arena name
+     * Export the config path-value map used to save the settings to the {@link Planner}
      *
-     * @param sender      the sender
-     * @param plannerName the planner name
-     * @param arenaName   the arena name
-     * @return true if the editor is saved
+     * @param sender the sender
+     * @return the path-value map
      */
-    boolean save(CommandSender sender, String plannerName, String arenaName);
+    Optional<Map<String, Object>> exportPathValueMap(CommandSender sender);
 }
