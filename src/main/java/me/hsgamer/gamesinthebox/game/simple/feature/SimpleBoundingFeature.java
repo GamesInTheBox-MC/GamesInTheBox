@@ -17,14 +17,23 @@ package me.hsgamer.gamesinthebox.game.simple.feature;
 
 import me.hsgamer.gamesinthebox.game.feature.BoundingFeature;
 import me.hsgamer.gamesinthebox.game.feature.GameConfigFeature;
+import me.hsgamer.gamesinthebox.game.simple.SimpleGameAction;
 import me.hsgamer.gamesinthebox.game.simple.SimpleGameArena;
+import me.hsgamer.gamesinthebox.game.simple.SimpleGameEditor;
 import me.hsgamer.gamesinthebox.util.LocationUtil;
 import me.hsgamer.hscore.bukkit.block.BukkitBlockAdapter;
+import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import me.hsgamer.hscore.common.Pair;
 import me.hsgamer.hscore.minecraft.block.box.BlockBox;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * The simple {@link BoundingFeature}.
@@ -65,6 +74,27 @@ public class SimpleBoundingFeature extends BoundingFeature {
         this(arena, "box", maxInclusive);
     }
 
+    /**
+     * Create a new {@link SimpleBoundingFeature.Editor} to edit the bounding box
+     *
+     * @param path       the path
+     * @param editorName the name of the editor
+     * @param actionName the name of the action
+     * @return the editor
+     */
+    public static Editor editor(String path, String editorName, String actionName) {
+        return new Editor(path, editorName, actionName);
+    }
+
+    /**
+     * Create a new {@link SimpleBoundingFeature.Editor} to edit the bounding box in the path "box"
+     *
+     * @return the editor
+     */
+    public static Editor editor() {
+        return new Editor("box", "Bounding Box", "");
+    }
+
     @Override
     protected Pair<World, BlockBox> getWorldBox() {
         GameConfigFeature configFeature = arena.getFeature(GameConfigFeature.class);
@@ -82,5 +112,112 @@ public class SimpleBoundingFeature extends BoundingFeature {
             throw new IllegalStateException(arena.getName() + " has invalid position 2");
         }
         return Pair.of(world, new BlockBox(BukkitBlockAdapter.adapt(pos1), BukkitBlockAdapter.adapt(pos2), maxInclusive));
+    }
+
+    /**
+     * The editor for {@link SimpleBoundingFeature}
+     */
+    public static class Editor {
+        private final String path;
+        private final String editorName;
+        private final String actionName;
+        private Location pos1;
+        private Location pos2;
+
+        private Editor(String path, String editorName, String actionName) {
+            this.path = path;
+            this.editorName = editorName;
+            this.actionName = actionName;
+        }
+
+        /**
+         * Get the status of the editor to be added to {@link SimpleGameEditor}
+         *
+         * @return the status
+         */
+        public SimpleGameEditor.SimpleEditorStatus getStatus() {
+            return new SimpleGameEditor.SimpleEditorStatus() {
+                @Override
+                public void sendStatus(CommandSender sender) {
+                    MessageUtils.sendMessage(sender, "&6&l" + editorName);
+                    MessageUtils.sendMessage(sender, "&6Pos 1: &f" + (pos1 == null ? "Not set" : LocationUtil.serializeLocation(pos1, true, true)));
+                    MessageUtils.sendMessage(sender, "&6Pos 2: &f" + (pos2 == null ? "Not set" : LocationUtil.serializeLocation(pos2, true, true)));
+                    if (pos1 != null && pos2 != null && pos1.getWorld() != pos2.getWorld()) {
+                        MessageUtils.sendMessage(sender, "&cThe world of pos 1 and pos 2 are different");
+                    }
+                }
+
+                @Override
+                public void reset(CommandSender sender) {
+                    pos1 = null;
+                    pos2 = null;
+                }
+
+                @Override
+                public boolean canSave(CommandSender sender) {
+                    if (pos1 == null || pos2 == null) return false;
+                    World world1 = pos1.getWorld();
+                    World world2 = pos2.getWorld();
+                    return world1 != null && world1.equals(world2);
+                }
+
+                @Override
+                public Map<String, Object> toPathValueMap(CommandSender sender) {
+                    Map<String, Object> map = new HashMap<>();
+                    World world = pos1.getWorld();
+                    assert world != null;
+                    map.put(path + ".world", world.getName());
+                    map.put(path + ".pos1", LocationUtil.serializeLocation(pos1, false, true));
+                    map.put(path + ".pos2", LocationUtil.serializeLocation(pos2, false, true));
+                    return map;
+                }
+            };
+        }
+
+        /**
+         * Get the actions of the editor to be added to {@link SimpleGameEditor}
+         *
+         * @return the actions
+         */
+        public Map<String, SimpleGameAction.SimpleAction> getActions() {
+            Map<String, SimpleGameAction.SimpleAction> map = new LinkedHashMap<>();
+            String pos1Name = actionName.isEmpty() ? "set-pos1" : actionName + "-set-pos1";
+            String pos2Name = actionName.isEmpty() ? "set-pos2" : actionName + "-set-pos2";
+
+            map.put(pos1Name, new SimpleGameAction.SimpleAction() {
+                @Override
+                public String getDescription() {
+                    return "Set the position 1 of the " + editorName + " at your current location";
+                }
+
+                @Override
+                public boolean performAction(CommandSender sender, String... args) {
+                    if (!(sender instanceof Player)) {
+                        MessageUtils.sendMessage(sender, "&cOnly players can perform this action");
+                        return false;
+                    }
+                    pos1 = ((Player) sender).getLocation();
+                    return true;
+                }
+            });
+            map.put(pos2Name, new SimpleGameAction.SimpleAction() {
+                @Override
+                public String getDescription() {
+                    return "Set the position 2 of the " + editorName + " at your current location";
+                }
+
+                @Override
+                public boolean performAction(CommandSender sender, String... args) {
+                    if (!(sender instanceof Player)) {
+                        MessageUtils.sendMessage(sender, "&cOnly players can perform this action");
+                        return false;
+                    }
+                    pos2 = ((Player) sender).getLocation();
+                    return true;
+                }
+            });
+
+            return map;
+        }
     }
 }
