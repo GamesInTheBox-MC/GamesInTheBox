@@ -76,9 +76,7 @@ public final class GamesInTheBox extends BasePlugin {
         registerCommand(new EditorCommand(this));
 
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
-            PlaceholderHook placeholderHook = new PlaceholderHook(this);
-            placeholderHook.register();
-            addDisableFunction(placeholderHook::unregister);
+            new PlaceholderHook(this).register();
         }
     }
 
