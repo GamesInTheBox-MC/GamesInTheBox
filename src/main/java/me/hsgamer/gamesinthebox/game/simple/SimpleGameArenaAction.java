@@ -16,11 +16,13 @@
 package me.hsgamer.gamesinthebox.game.simple;
 
 import me.hsgamer.gamesinthebox.game.GameArenaAction;
-import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import me.hsgamer.minigamecore.implementation.feature.TimerFeature;
 import org.bukkit.command.CommandSender;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * The simple {@link GameArenaAction}.
@@ -29,48 +31,43 @@ import java.util.*;
  *     <li>{@code skip-time}: Skip the time</li>
  * </ul>
  */
-public class SimpleGameArenaAction implements GameArenaAction {
-    private final SimpleGameArena arena;
+public class SimpleGameArenaAction extends SimpleGameAction implements GameArenaAction {
+    protected final SimpleGameArena arena;
 
+    /**
+     * Create a new {@link SimpleGameArenaAction}
+     *
+     * @param arena the arena
+     */
     public SimpleGameArenaAction(SimpleGameArena arena) {
         this.arena = arena;
     }
 
-    @Override
-    public List<String> getActions() {
-        List<String> actions = new ArrayList<>();
-        actions.add("skip-time");
-        return actions;
-    }
-
-    @Override
-    public List<String> getActionArgs(CommandSender sender, String action, String... args) {
-        return Collections.emptyList();
-    }
-
-    @Override
-    public boolean performAction(CommandSender sender, String action, String... args) {
-        if (action.equalsIgnoreCase("skip-time")) {
-            arena.getFeature(TimerFeature.class).setDuration(0);
-            return true;
-        }
-        return false;
-    }
-
     /**
-     * Get the usage map
+     * {@inheritDoc}
+     * This can be overridden to add more actions
      *
-     * @return the usage map
+     * @return the action map
      */
-    protected Map<String, String> getUsageMap() {
-        Map<String, String> map = new LinkedHashMap<>();
-        map.put("skip-time", "Skip the time");
-        return map;
-    }
-
     @Override
-    public void sendUsage(CommandSender sender) {
-        MessageUtils.sendMessage(sender, "&6Usage:");
-        getUsageMap().forEach((key, value) -> MessageUtils.sendMessage(sender, "&6- &e" + key + " &7- &f" + value));
+    protected Map<String, SimpleAction> getActionMap() {
+        Map<String, SimpleAction> map = new LinkedHashMap<>();
+        map.put("skip-time", new SimpleAction() {
+            @Override
+            public String getUsage() {
+                return "Skip the time";
+            }
+
+            @Override
+            public List<String> getActionArgs(CommandSender sender, String... args) {
+                return Collections.emptyList();
+            }
+
+            @Override
+            public void performAction(CommandSender sender, String... args) {
+                arena.getFeature(TimerFeature.class).setDuration(0);
+            }
+        });
+        return map;
     }
 }
