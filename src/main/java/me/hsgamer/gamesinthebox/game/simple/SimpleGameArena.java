@@ -45,6 +45,8 @@ import java.util.*;
  *     <li>{@link SimpleUpdateFeature}</li>
  * </ul>
  * <p>
+ * Can use features from {@link SimpleGame}
+ * <p>
  * Provided replacement queries:
  * <ul>
  *     <li>{@code time_left}: The time left</li>
