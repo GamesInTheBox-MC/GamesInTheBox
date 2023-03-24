@@ -28,31 +28,31 @@ import java.util.Map;
  * The simple {@link GameAction} that contains a map of actions
  */
 public abstract class SimpleGameAction implements GameAction {
-    private final Map<String, SimpleAction> actionMap;
+    private Map<String, SimpleAction> actionMap;
 
     /**
-     * Create a new {@link SimpleGameAction}
-     */
-    protected SimpleGameAction() {
-        this.actionMap = getActionMap();
-    }
-
-    /**
-     * Get the action map.
+     * Create the action map.
      * This can be overridden to add more actions.
      *
      * @return the action map
      */
-    protected abstract Map<String, SimpleAction> getActionMap();
+    protected abstract Map<String, SimpleAction> createActionMap();
+
+    private Map<String, SimpleAction> getActionMap() {
+        if (actionMap == null) {
+            actionMap = createActionMap();
+        }
+        return actionMap;
+    }
 
     @Override
     public List<String> getActions() {
-        return new ArrayList<>(actionMap.keySet());
+        return new ArrayList<>(getActionMap().keySet());
     }
 
     @Override
     public List<String> getActionArgs(CommandSender sender, String action, String... args) {
-        SimpleAction simpleAction = actionMap.get(action);
+        SimpleAction simpleAction = getActionMap().get(action);
         if (simpleAction != null) {
             return simpleAction.getActionArgs(sender, args);
         }
@@ -61,7 +61,7 @@ public abstract class SimpleGameAction implements GameAction {
 
     @Override
     public boolean performAction(CommandSender sender, String action, String... args) {
-        SimpleAction simpleAction = actionMap.get(action);
+        SimpleAction simpleAction = getActionMap().get(action);
         if (simpleAction != null) {
             return simpleAction.performAction(sender, args);
         }
@@ -71,7 +71,7 @@ public abstract class SimpleGameAction implements GameAction {
     @Override
     public void sendUsage(CommandSender sender) {
         MessageUtils.sendMessage(sender, "&6Usage:");
-        actionMap.forEach((key, value) -> {
+        getActionMap().forEach((key, value) -> {
             MessageUtils.sendMessage(sender, "&6- &e" + key);
             MessageUtils.sendMessage(sender, "&6   &bArguments: &f" + value.getArgsUsage());
             MessageUtils.sendMessage(sender, "&6   &bDescription: &f" + value.getDescription());

@@ -42,7 +42,7 @@ public class SimpleGameArenaAction extends SimpleGameAction implements GameArena
     }
 
     @Override
-    protected Map<String, SimpleAction> getActionMap() {
+    protected Map<String, SimpleAction> createActionMap() {
         Map<String, SimpleAction> map = new LinkedHashMap<>();
         map.put("skip-time", new SimpleAction() {
             @Override

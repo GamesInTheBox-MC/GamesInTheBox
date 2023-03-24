@@ -32,7 +32,6 @@ import java.util.stream.IntStream;
  * The simple {@link GameEditor} for {@link SimpleGame}
  */
 public class SimpleGameEditor extends SimpleGameAction implements GameEditor {
-    protected final List<SimpleEditorStatus> editorStatusList;
     protected final SimpleGame game;
 
     protected Integer pointPlus;
@@ -42,6 +41,8 @@ public class SimpleGameEditor extends SimpleGameAction implements GameEditor {
     protected Integer minPlayersToReward;
     protected List<Pair<Location, List<String>>> hologramList;
 
+    private List<SimpleEditorStatus> editorStatusList;
+
     /**
      * Create a new {@link SimpleGameEditor}
      *
@@ -49,19 +50,18 @@ public class SimpleGameEditor extends SimpleGameAction implements GameEditor {
      */
     public SimpleGameEditor(SimpleGame game) {
         this.game = game;
-        this.editorStatusList = getEditorStatusList();
     }
 
     @Override
     public void reset(CommandSender sender) {
-        for (SimpleEditorStatus editorStatus : editorStatusList) {
+        for (SimpleEditorStatus editorStatus : getEditorStatusList()) {
             editorStatus.reset(sender);
         }
     }
 
     @Override
     public void sendStatus(CommandSender sender) {
-        for (SimpleEditorStatus editorStatus : editorStatusList) {
+        for (SimpleEditorStatus editorStatus : getEditorStatusList()) {
             editorStatus.sendStatus(sender);
         }
     }
@@ -69,7 +69,7 @@ public class SimpleGameEditor extends SimpleGameAction implements GameEditor {
     @Override
     public Optional<Map<String, Object>> exportPathValueMap(CommandSender sender) {
         Map<String, Object> pathValueMap = new LinkedHashMap<>();
-        for (SimpleEditorStatus editorStatus : editorStatusList) {
+        for (SimpleEditorStatus editorStatus : getEditorStatusList()) {
             if (!editorStatus.canSave(sender)) {
                 return Optional.empty();
             }
@@ -79,7 +79,7 @@ public class SimpleGameEditor extends SimpleGameAction implements GameEditor {
     }
 
     @Override
-    protected Map<String, SimpleAction> getActionMap() {
+    protected Map<String, SimpleAction> createActionMap() {
         Map<String, SimpleAction> map = new LinkedHashMap<>();
 
         // POINTS
@@ -504,12 +504,12 @@ public class SimpleGameEditor extends SimpleGameAction implements GameEditor {
     }
 
     /**
-     * Get the list of {@link SimpleEditorStatus}.
+     * Create the list of {@link SimpleEditorStatus}.
      * Override this method to add more {@link SimpleEditorStatus}.
      *
      * @return the list of {@link SimpleEditorStatus}
      */
-    protected List<SimpleEditorStatus> getEditorStatusList() {
+    protected List<SimpleEditorStatus> createEditorStatusList() {
         List<SimpleEditorStatus> list = new ArrayList<>();
 
         // POINTS
@@ -639,6 +639,13 @@ public class SimpleGameEditor extends SimpleGameAction implements GameEditor {
         });
 
         return list;
+    }
+
+    private List<SimpleEditorStatus> getEditorStatusList() {
+        if (editorStatusList == null) {
+            editorStatusList = createEditorStatusList();
+        }
+        return editorStatusList;
     }
 
     /**
