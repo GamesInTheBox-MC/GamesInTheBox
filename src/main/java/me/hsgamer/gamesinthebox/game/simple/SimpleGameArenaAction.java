@@ -43,12 +43,6 @@ public class SimpleGameArenaAction extends SimpleGameAction implements GameArena
         this.arena = arena;
     }
 
-    /**
-     * {@inheritDoc}
-     * This can be overridden to add more actions.
-     *
-     * @return the action map
-     */
     @Override
     protected Map<String, SimpleAction> getActionMap() {
         Map<String, SimpleAction> map = new LinkedHashMap<>();

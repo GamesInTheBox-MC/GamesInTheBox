@@ -38,7 +38,8 @@ public abstract class SimpleGameAction implements GameAction {
     }
 
     /**
-     * Get the action map
+     * Get the action map.
+     * This can be overridden to add more actions.
      *
      * @return the action map
      */
