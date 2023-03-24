@@ -34,7 +34,7 @@ public class SaveCommand extends GameEditorCommand {
     }
 
     @Override
-    protected void onEditorSubCommand(GameEditor gameEditor, @NotNull CommandSender sender, @NotNull String label, @NotNull String... args) {
+    protected void onEditorSubCommand(String gameType, GameEditor gameEditor, @NotNull CommandSender sender, @NotNull String label, @NotNull String... args) {
         Config plannerConfig = plugin.getPlannerManager().getFeature(GlobalPlannerConfigFeature.class).getPlannerConfig();
 
         String plannerName = args[0];
@@ -53,6 +53,7 @@ public class SaveCommand extends GameEditorCommand {
         }
 
         plannerConfig.set(path, null);
+        plannerConfig.set(path + ".type", gameType);
         for (Map.Entry<String, Object> entry : optionalMap.get().entrySet()) {
             plannerConfig.set(path + "." + entry.getKey(), entry.getValue());
         }

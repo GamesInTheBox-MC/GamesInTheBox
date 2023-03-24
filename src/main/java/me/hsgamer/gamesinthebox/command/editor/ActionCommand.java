@@ -33,7 +33,7 @@ public class ActionCommand extends GameEditorCommand {
     }
 
     @Override
-    protected void onEditorSubCommand(GameEditor gameEditor, @NotNull CommandSender sender, @NotNull String label, @NotNull String... args) {
+    protected void onEditorSubCommand(String gameType, GameEditor gameEditor, @NotNull CommandSender sender, @NotNull String label, @NotNull String... args) {
         if (gameEditor.performAction(sender, args[0], Arrays.copyOfRange(args, 1, args.length))) {
             MessageUtils.sendMessage(sender, plugin.getMessageConfig().getSuccess());
         } else {

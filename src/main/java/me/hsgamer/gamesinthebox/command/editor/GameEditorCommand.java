@@ -41,7 +41,7 @@ public abstract class GameEditorCommand extends SubCommand {
         this(plugin, name, description, "", consoleAllowed);
     }
 
-    protected abstract void onEditorSubCommand(GameEditor gameEditor, @NotNull CommandSender sender, @NotNull String label, @NotNull String... args);
+    protected abstract void onEditorSubCommand(String gameType, GameEditor gameEditor, @NotNull CommandSender sender, @NotNull String label, @NotNull String... args);
 
     protected boolean isEditorProperUsage(GameEditor gameEditor, @NotNull CommandSender sender, @NotNull String label, @NotNull String... args) {
         return true;
@@ -53,9 +53,10 @@ public abstract class GameEditorCommand extends SubCommand {
 
     @Override
     public void onSubCommand(@NotNull CommandSender sender, @NotNull String label, @NotNull String... args) {
-        Optional<GameEditor> optional = plugin.getGameManager().getGame(args[0]).map(Game::getEditor);
+        String gameType = args[0];
+        Optional<GameEditor> optional = plugin.getGameManager().getGame(gameType).map(Game::getEditor);
         if (optional.isPresent()) {
-            onEditorSubCommand(optional.get(), sender, label, Arrays.copyOfRange(args, 1, args.length));
+            onEditorSubCommand(gameType, optional.get(), sender, label, Arrays.copyOfRange(args, 1, args.length));
         } else {
             MessageUtils.sendMessage(sender, plugin.getMessageConfig().getEditorGameNotFound());
         }

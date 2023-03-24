@@ -30,7 +30,7 @@ public class ResetCommand extends GameEditorCommand {
     }
 
     @Override
-    protected void onEditorSubCommand(GameEditor gameEditor, @NotNull CommandSender sender, @NotNull String label, @NotNull String... args) {
+    protected void onEditorSubCommand(String gameType, GameEditor gameEditor, @NotNull CommandSender sender, @NotNull String label, @NotNull String... args) {
         gameEditor.reset(sender);
         MessageUtils.sendMessage(sender, plugin.getMessageConfig().getSuccess());
     }
