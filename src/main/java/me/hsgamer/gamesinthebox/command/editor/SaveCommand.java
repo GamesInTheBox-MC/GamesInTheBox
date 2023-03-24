@@ -20,15 +20,10 @@ import me.hsgamer.gamesinthebox.game.GameEditor;
 import me.hsgamer.gamesinthebox.planner.feature.GlobalPlannerConfigFeature;
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import me.hsgamer.hscore.config.Config;
-import me.hsgamer.minigamecore.base.Arena;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.*;
 
 /**
  * The command to save the settings of the editor to the planner
@@ -74,7 +69,9 @@ public class SaveCommand extends GameEditorCommand {
     @Override
     protected @NotNull List<String> onEditorTabComplete(GameEditor gameEditor, @NotNull CommandSender sender, @NotNull String label, @NotNull String... args) {
         if (args.length == 1) {
-            return plugin.getPlannerManager().getAllArenas().stream().map(Arena::getName).collect(Collectors.toList());
+            return new ArrayList<>(plugin.getPlannerManager().getFeature(GlobalPlannerConfigFeature.class).getPlannerConfig().getKeys(false));
+        } else if (args.length == 2) {
+            return new ArrayList<>(plugin.getPlannerManager().getFeature(GlobalPlannerConfigFeature.class).getPlannerConfig().getKeys(args[0] + ".settings", false));
         } else if (args.length == 3) {
             return Arrays.asList("true", "false");
         }

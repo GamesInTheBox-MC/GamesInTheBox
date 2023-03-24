@@ -71,7 +71,7 @@ public class SimpleGameEditor extends SimpleGameAction implements GameEditor {
 
     /**
      * Get the list of {@link SimpleEditorStatus}.
-     * Override this method to add more {@link SimpleEditorStatus}
+     * Override this method to add more {@link SimpleEditorStatus}.
      *
      * @return the list of {@link SimpleEditorStatus}
      */
