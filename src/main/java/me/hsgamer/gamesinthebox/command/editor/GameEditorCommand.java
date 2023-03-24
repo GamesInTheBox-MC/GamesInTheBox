@@ -33,7 +33,7 @@ public abstract class GameEditorCommand extends SubCommand {
     protected final GamesInTheBox plugin;
 
     protected GameEditorCommand(GamesInTheBox plugin, @NotNull String name, @NotNull String description, @NotNull String argsUsage, boolean consoleAllowed) {
-        super(name, description, "/<label> " + name + " editor" + (argsUsage.isEmpty() ? "" : " " + argsUsage), Permissions.EDITOR.getName(), consoleAllowed);
+        super(name, description, "/<label> " + name + " <game>" + (argsUsage.isEmpty() ? "" : " " + argsUsage), Permissions.EDITOR.getName(), consoleAllowed);
         this.plugin = plugin;
     }
 
