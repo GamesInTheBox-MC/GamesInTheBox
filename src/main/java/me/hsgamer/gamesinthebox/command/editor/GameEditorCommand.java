@@ -78,11 +78,13 @@ public abstract class GameEditorCommand extends SubCommand {
     public @NotNull List<String> onTabComplete(@NotNull CommandSender sender, @NotNull String label, @NotNull String... args) {
         if (args.length == 1) {
             return new ArrayList<>(plugin.getGameManager().getRegisteredMap().keySet());
+        } else if (args.length >= 2) {
+            return plugin.getGameManager()
+                    .getGame(args[0])
+                    .map(Game::getEditor)
+                    .map(gameEditor -> onEditorTabComplete(gameEditor, sender, label, Arrays.copyOfRange(args, 1, args.length)))
+                    .orElse(Collections.emptyList());
         }
-        return plugin.getGameManager()
-                .getGame(args[0])
-                .map(Game::getEditor)
-                .map(gameEditor -> onEditorTabComplete(gameEditor, sender, label, Arrays.copyOfRange(args, 1, args.length)))
-                .orElse(Collections.emptyList());
+        return Collections.emptyList();
     }
 }
