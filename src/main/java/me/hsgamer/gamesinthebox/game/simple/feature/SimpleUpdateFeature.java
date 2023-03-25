@@ -15,7 +15,6 @@
 */
 package me.hsgamer.gamesinthebox.game.simple.feature;
 
-import me.hsgamer.gamesinthebox.game.feature.PointFeature;
 import me.hsgamer.gamesinthebox.game.feature.TopFeature;
 import me.hsgamer.gamesinthebox.game.simple.SimpleGameArena;
 import me.hsgamer.gamesinthebox.planner.feature.PluginFeature;
@@ -56,7 +55,7 @@ public class SimpleUpdateFeature implements Feature {
      * Update the state
      */
     private void updateState() {
-        arena.getFeature(TopFeature.class).setTop(arena.getFeature(PointFeature.class).getTopAsStringPair());
+        arena.getFeature(TopFeature.class).setTop(arena.getFeature(SimplePointFeature.class).getTopAsStringPair());
         arena.getFeature(DescriptiveHologramFeature.class).updateHologram();
     }
 
@@ -67,7 +66,7 @@ public class SimpleUpdateFeature implements Feature {
         if (task != null) {
             task.cancel();
         }
-        arena.getFeature(PointFeature.class).clearPoints();
+        arena.getFeature(SimplePointFeature.class).clearPoints();
         arena.getFeature(TopFeature.class).setTop(Collections.emptyList());
         arena.getFeature(DescriptiveHologramFeature.class).clearHologram();
     }
