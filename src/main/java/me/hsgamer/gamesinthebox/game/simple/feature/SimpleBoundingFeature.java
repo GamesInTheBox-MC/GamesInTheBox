@@ -25,6 +25,7 @@ import me.hsgamer.hscore.bukkit.block.BukkitBlockAdapter;
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import me.hsgamer.hscore.common.Pair;
 import me.hsgamer.hscore.minecraft.block.box.BlockBox;
+import me.hsgamer.hscore.minecraft.block.box.Position;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -218,6 +219,22 @@ public class SimpleBoundingFeature extends BoundingFeature {
             });
 
             return map;
+        }
+
+        /**
+         * Migrate the editor from a {@link BoundingFeature}
+         *
+         * @param feature the feature
+         */
+        public void migrate(BoundingFeature feature) {
+            World world = feature.getWorld();
+            BlockBox box = feature.getBlockBox();
+            pos1 = BukkitBlockAdapter.adapt(world, new Position(box.minX, box.minY, box.minZ));
+            if (box.maxInclusive) {
+                pos2 = BukkitBlockAdapter.adapt(world, new Position(box.maxX - 1D, box.maxY - 1D, box.maxZ - 1D));
+            } else {
+                pos2 = BukkitBlockAdapter.adapt(world, new Position(box.maxX, box.maxY, box.maxZ));
+            }
         }
     }
 }
