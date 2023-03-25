@@ -339,6 +339,57 @@ public class SimpleGameEditor extends SimpleGameAction implements GameEditor {
                 return true;
             }
         });
+        map.put("set-hologram-location", new SimpleAction() {
+            @Override
+            public String getDescription() {
+                return "Set the location of a hologram";
+            }
+
+            @Override
+            public String getArgsUsage() {
+                return "<index>";
+            }
+
+            @Override
+            public List<String> getActionArgs(CommandSender sender, String... args) {
+                if (args.length == 1) {
+                    if (hologramList == null) {
+                        return Collections.emptyList();
+                    }
+                    return IntStream.range(0, hologramList.size()).mapToObj(Integer::toString).collect(Collectors.toList());
+                }
+                return SimpleAction.super.getActionArgs(sender, args);
+            }
+
+            @Override
+            public boolean performAction(CommandSender sender, String... args) {
+                if (args.length < 1) {
+                    return false;
+                }
+                try {
+                    int index = Integer.parseInt(args[0]);
+                    if (index < 0 || index >= hologramList.size()) {
+                        MessageUtils.sendMessage(sender, "&cInvalid index");
+                        return false;
+                    }
+
+                    if (!(sender instanceof Player)) {
+                        MessageUtils.sendMessage(sender, "&cOnly players can use this command");
+                        return false;
+                    }
+
+                    Player player = (Player) sender;
+                    Location location = player.getLocation();
+
+                    hologramList.set(index, Pair.of(location, hologramList.get(index).getValue()));
+                    MessageUtils.sendMessage(sender, "&aThe hologram has been updated");
+                    return true;
+                } catch (NumberFormatException e) {
+                    MessageUtils.sendMessage(sender, "&cInvalid number");
+                    return false;
+                }
+            }
+        });
         map.put("add-hologram-line", new SimpleAction() {
             @Override
             public String getDescription() {
