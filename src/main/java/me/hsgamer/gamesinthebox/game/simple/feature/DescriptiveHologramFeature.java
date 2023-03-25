@@ -108,7 +108,7 @@ public class DescriptiveHologramFeature implements Feature {
                 }
             }
             Hologram<Location> hologram = arena.getFeature(HologramFeature.class).createHologram(location);
-            hologramUpdaters.add(new HologramUpdater(hologram, finalLines));
+            hologramUpdaters.add(new HologramUpdater(hologram, finalLines, lines));
         }
     }
 
@@ -154,10 +154,12 @@ public class DescriptiveHologramFeature implements Feature {
     public class HologramUpdater {
         public final Hologram<Location> hologram;
         public final List<String> lines;
+        public final List<String> rawLines;
 
-        private HologramUpdater(Hologram<Location> hologram, List<String> lines) {
+        private HologramUpdater(Hologram<Location> hologram, List<String> lines, List<String> rawLines) {
             this.hologram = hologram;
             this.lines = lines;
+            this.rawLines = rawLines;
         }
 
         private void update() {

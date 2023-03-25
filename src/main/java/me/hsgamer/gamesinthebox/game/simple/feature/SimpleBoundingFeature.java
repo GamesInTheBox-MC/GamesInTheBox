@@ -34,6 +34,7 @@ import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -140,7 +141,7 @@ public class SimpleBoundingFeature extends BoundingFeature {
             return new SimpleGameEditor.SimpleEditorStatus() {
                 @Override
                 public void sendStatus(CommandSender sender) {
-                    MessageUtils.sendMessage(sender, "&6&l" + editorName);
+                    MessageUtils.sendMessage(sender, "&6&l" + editorName.toUpperCase(Locale.ROOT));
                     MessageUtils.sendMessage(sender, "&6Pos 1: &f" + (pos1 == null ? "Not set" : LocationUtil.serializeLocation(pos1, true, true)));
                     MessageUtils.sendMessage(sender, "&6Pos 2: &f" + (pos2 == null ? "Not set" : LocationUtil.serializeLocation(pos2, true, true)));
                     if (pos1 != null && pos2 != null && pos1.getWorld() != pos2.getWorld()) {

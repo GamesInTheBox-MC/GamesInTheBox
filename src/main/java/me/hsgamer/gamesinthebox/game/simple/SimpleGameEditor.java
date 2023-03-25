@@ -669,7 +669,7 @@ public class SimpleGameEditor extends SimpleGameAction implements GameEditor {
         DescriptiveHologramFeature hologramFeature = simpleGameArena.getFeature(DescriptiveHologramFeature.class);
         hologramList = new ArrayList<>();
         for (DescriptiveHologramFeature.HologramUpdater hologramUpdater : hologramFeature.getHologramUpdaters()) {
-            hologramList.add(Pair.of(hologramUpdater.hologram.getLocation(), hologramUpdater.lines));
+            hologramList.add(Pair.of(hologramUpdater.hologram.getLocation(), hologramUpdater.rawLines));
         }
 
         return true;
