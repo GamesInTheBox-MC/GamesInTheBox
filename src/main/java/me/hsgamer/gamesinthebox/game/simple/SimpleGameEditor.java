@@ -607,9 +607,9 @@ public class SimpleGameEditor extends SimpleGameAction implements GameEditor {
                 } else {
                     MessageUtils.sendMessage(sender, "&6Reward Commands:");
                     for (Map.Entry<String, List<String>> entry : rewardCommands.entrySet()) {
-                        MessageUtils.sendMessage(sender, "&6- " + entry.getKey() + ":");
+                        MessageUtils.sendMessage(sender, "  &e" + entry.getKey() + ":");
                         for (String command : entry.getValue()) {
-                            MessageUtils.sendMessage(sender, "&6  - " + command);
+                            MessageUtils.sendMessage(sender, "  &f- " + command);
                         }
                     }
                 }
@@ -649,10 +649,13 @@ public class SimpleGameEditor extends SimpleGameAction implements GameEditor {
                     MessageUtils.sendMessage(sender, "&6Hologram List: &eEmpty");
                 } else {
                     MessageUtils.sendMessage(sender, "&6Hologram List:");
-                    for (Pair<Location, List<String>> pair : hologramList) {
-                        MessageUtils.sendMessage(sender, "&6- " + LocationUtil.serializeLocation(pair.getKey(), true, false) + ":");
+                    for (int i = 0; i < hologramList.size(); i++) {
+                        Pair<Location, List<String>> pair = hologramList.get(i);
+                        MessageUtils.sendMessage(sender, "&e" + i + ":");
+                        MessageUtils.sendMessage(sender, "  &bLocation: &f" + LocationUtil.serializeLocation(pair.getKey(), true, false));
+                        MessageUtils.sendMessage(sender, "  &bLines:");
                         for (String line : pair.getValue()) {
-                            MessageUtils.sendMessage(sender, "&6  - " + line);
+                            MessageUtils.sendMessage(sender, "  &f- " + line);
                         }
                     }
                 }
