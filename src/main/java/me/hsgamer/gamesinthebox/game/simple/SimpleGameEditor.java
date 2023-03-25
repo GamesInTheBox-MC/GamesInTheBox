@@ -715,6 +715,7 @@ public class SimpleGameEditor extends SimpleGameAction implements GameEditor {
         for (Map.Entry<Integer, List<String>> entry : rewardFeature.getTopCommands().entrySet()) {
             rewardCommands.put(Integer.toString(entry.getKey()), entry.getValue());
         }
+        minPlayersToReward = rewardFeature.getMinPlayersToReward();
 
         // HOLOGRAM
         DescriptiveHologramFeature hologramFeature = simpleGameArena.getFeature(DescriptiveHologramFeature.class);
