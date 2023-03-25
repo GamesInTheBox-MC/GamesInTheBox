@@ -122,6 +122,26 @@ public interface MessageConfig {
     }
 
     /**
+     * Get the "editor arena not found" message
+     *
+     * @return the message
+     */
+    @ConfigPath("editor.arena-not-found")
+    default String getEditorArenaNotFound() {
+        return "&cArena not found";
+    }
+
+    /**
+     * Get the "editor cannot migrate" message
+     *
+     * @return the message
+     */
+    @ConfigPath("editor.cannot-migrate")
+    default String getEditorCannotMigrate() {
+        return "&cCannot migrate the arena";
+    }
+
+    /**
      * Get the display name of the Idling state of the planner
      *
      * @return the display name

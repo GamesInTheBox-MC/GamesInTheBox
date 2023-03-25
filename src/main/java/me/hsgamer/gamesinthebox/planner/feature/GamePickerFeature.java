@@ -132,6 +132,16 @@ public class GamePickerFeature implements Feature {
     }
 
     /**
+     * Get the {@link GameArena} by name
+     *
+     * @param name the name of the game arena
+     * @return the {@link GameArena}
+     */
+    public Optional<GameArena> getGameArena(String name) {
+        return Optional.ofNullable(gameArenaMap.get(name));
+    }
+
+    /**
      * Get the {@link GamePicker}
      *
      * @return the {@link GamePicker}

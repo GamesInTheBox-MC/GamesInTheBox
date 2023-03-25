@@ -38,6 +38,7 @@ public class EditorCommand extends Command {
         subCommandManager.registerSubcommand(new StatusCommand(plugin));
         subCommandManager.registerSubcommand(new ResetCommand(plugin));
         subCommandManager.registerSubcommand(new SaveCommand(plugin));
+        subCommandManager.registerSubcommand(new MigrateCommand(plugin));
     }
 
     @Override
