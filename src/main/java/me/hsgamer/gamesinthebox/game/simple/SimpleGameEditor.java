@@ -15,7 +15,11 @@
 */
 package me.hsgamer.gamesinthebox.game.simple;
 
+import me.hsgamer.gamesinthebox.game.GameArena;
 import me.hsgamer.gamesinthebox.game.GameEditor;
+import me.hsgamer.gamesinthebox.game.simple.feature.DescriptiveHologramFeature;
+import me.hsgamer.gamesinthebox.game.simple.feature.SimplePointFeature;
+import me.hsgamer.gamesinthebox.game.simple.feature.SimpleRewardFeature;
 import me.hsgamer.gamesinthebox.util.LocationUtil;
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import me.hsgamer.hscore.common.Pair;
@@ -638,6 +642,37 @@ public class SimpleGameEditor extends SimpleGameAction implements GameEditor {
             editorStatusList = createEditorStatusList();
         }
         return editorStatusList;
+    }
+
+    @Override
+    public boolean migrate(CommandSender sender, GameArena gameArena) {
+        if (!(gameArena instanceof SimpleGameArena)) {
+            return false;
+        }
+        SimpleGameArena simpleGameArena = (SimpleGameArena) gameArena;
+
+        // POINTS
+        SimplePointFeature pointFeature = simpleGameArena.getFeature(SimplePointFeature.class);
+        pointPlus = pointFeature.getPointPlus();
+        pointMinus = pointFeature.getPointMinus();
+        maxPlayersToAddPoint = pointFeature.getMaxPlayersToAdd();
+
+        // REWARD
+        SimpleRewardFeature rewardFeature = simpleGameArena.getFeature(SimpleRewardFeature.class);
+        rewardCommands = new LinkedHashMap<>();
+        rewardCommands.put("default", rewardFeature.getDefaultCommands());
+        for (Map.Entry<Integer, List<String>> entry : rewardFeature.getTopCommands().entrySet()) {
+            rewardCommands.put(Integer.toString(entry.getKey()), entry.getValue());
+        }
+
+        // HOLOGRAM
+        DescriptiveHologramFeature hologramFeature = simpleGameArena.getFeature(DescriptiveHologramFeature.class);
+        hologramList = new ArrayList<>();
+        for (DescriptiveHologramFeature.HologramUpdater hologramUpdater : hologramFeature.getHologramUpdaters()) {
+            hologramList.add(Pair.of(hologramUpdater.hologram.getLocation(), hologramUpdater.lines));
+        }
+
+        return true;
     }
 
     /**

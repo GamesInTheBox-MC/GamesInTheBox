@@ -88,4 +88,15 @@ public interface GameEditor extends GameAction {
      * @return the path-value map
      */
     Optional<Map<String, Object>> exportPathValueMap(CommandSender sender);
+
+    /**
+     * Migrate the settings from the {@link GameArena} to the {@link GameEditor}
+     *
+     * @param sender    the sender
+     * @param gameArena the game arena
+     * @return true if success
+     */
+    default boolean migrate(CommandSender sender, GameArena gameArena) {
+        return false;
+    }
 }

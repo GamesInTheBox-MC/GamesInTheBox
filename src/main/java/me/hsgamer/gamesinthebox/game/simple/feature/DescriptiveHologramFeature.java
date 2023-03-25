@@ -29,10 +29,7 @@ import me.hsgamer.unihologram.common.api.HologramLine;
 import me.hsgamer.unihologram.common.line.TextHologramLine;
 import org.bukkit.Location;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -142,16 +139,28 @@ public class DescriptiveHologramFeature implements Feature {
         hologramUpdaters.forEach(hologramUpdater -> HologramFeature.clearIfInitialized(hologramUpdater.hologram));
     }
 
-    private class HologramUpdater {
-        private final Hologram<Location> hologram;
-        private final List<String> lines;
+    /**
+     * Get the hologram updaters
+     *
+     * @return the hologram updaters
+     */
+    public List<HologramUpdater> getHologramUpdaters() {
+        return Collections.unmodifiableList(hologramUpdaters);
+    }
+
+    /**
+     * The updater for the hologram
+     */
+    public class HologramUpdater {
+        public final Hologram<Location> hologram;
+        public final List<String> lines;
 
         private HologramUpdater(Hologram<Location> hologram, List<String> lines) {
             this.hologram = hologram;
             this.lines = lines;
         }
 
-        public void update() {
+        private void update() {
             if (!hologram.isInitialized()) {
                 return;
             }

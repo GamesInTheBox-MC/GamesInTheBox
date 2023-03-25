@@ -51,6 +51,24 @@ public abstract class RewardFeature implements Feature {
     }
 
     /**
+     * Get the top commands
+     *
+     * @return the top commands
+     */
+    public Map<Integer, List<String>> getTopCommands() {
+        return topCommands;
+    }
+
+    /**
+     * Get the default commands
+     *
+     * @return the default commands
+     */
+    public List<String> getDefaultCommands() {
+        return defaultCommands;
+    }
+
+    /**
      * Reward the player
      *
      * @param topPosition the top position, starting from 1
