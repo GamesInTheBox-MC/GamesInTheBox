@@ -25,7 +25,7 @@ import java.util.UUID;
 /**
  * The utility for titles
  */
-public class TitleUtil {
+public final class TitleUtil {
     private TitleUtil() {
         // EMPTY
     }

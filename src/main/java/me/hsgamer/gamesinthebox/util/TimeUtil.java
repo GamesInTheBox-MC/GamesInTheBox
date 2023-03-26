@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * The time utility
  */
-public class TimeUtil {
+public final class TimeUtil {
     private static final Map<Character, Long> TIME_UNIT_MAP = ImmutableMap.<Character, Long>builder()
             .put('s', TimeUnit.SECONDS.toMillis(1))
             .put('m', TimeUnit.MINUTES.toMillis(1))
