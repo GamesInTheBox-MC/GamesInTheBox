@@ -2,8 +2,10 @@ name: GamesInTheBox
 version: '${project.version}'
 main: me.hsgamer.gamesinthebox.GamesInTheBox
 api-version: 1.13
-authors: [HSGamer]
+authors: [ HSGamer ]
 softdepend:
   - DecentHolograms
   - HolographicDisplays
   - PlaceholderAPI
+  - WorldEdit
+  - FastAsyncWorldEdit

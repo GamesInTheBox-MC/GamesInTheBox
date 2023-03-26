@@ -65,6 +65,8 @@ public final class GamesInTheBox extends BasePlugin {
 
     @Override
     public void load() {
+        mainConfig.updateBlockUtilSettings();
+
         MessageUtils.setPrefix(messageConfig::getPrefix);
     }
 
