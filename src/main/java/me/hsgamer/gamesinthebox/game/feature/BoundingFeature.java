@@ -34,15 +34,15 @@ public abstract class BoundingFeature implements Feature {
     private BlockBox blockBox;
 
     /**
-     * Get the {@link World} and the {@link BlockBox}
+     * Create the {@link World} and the {@link BlockBox}
      *
      * @return the {@link Pair} of the {@link World} and the {@link BlockBox}
      */
-    protected abstract Pair<World, BlockBox> getWorldBox();
+    protected abstract Pair<World, BlockBox> createWorldBox();
 
     @Override
     public void postInit() {
-        Pair<World, BlockBox> pair = getWorldBox();
+        Pair<World, BlockBox> pair = createWorldBox();
         this.world = pair.getKey();
         this.blockBox = pair.getValue();
     }

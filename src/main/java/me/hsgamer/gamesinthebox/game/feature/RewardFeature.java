@@ -31,15 +31,15 @@ public abstract class RewardFeature implements Feature {
     private List<String> defaultCommands = Collections.emptyList();
 
     /**
-     * Get the top commands and the default commands
+     * Create the top commands and the default commands
      *
      * @return the {@link Pair} of the top commands and the default commands
      */
-    protected abstract Pair<Map<Integer, List<String>>, List<String>> getTopAndDefaultCommands();
+    protected abstract Pair<Map<Integer, List<String>>, List<String>> createTopAndDefaultCommands();
 
     @Override
     public void postInit() {
-        Pair<Map<Integer, List<String>>, List<String>> pair = getTopAndDefaultCommands();
+        Pair<Map<Integer, List<String>>, List<String>> pair = createTopAndDefaultCommands();
         topCommands = pair.getKey();
         defaultCommands = pair.getValue();
     }

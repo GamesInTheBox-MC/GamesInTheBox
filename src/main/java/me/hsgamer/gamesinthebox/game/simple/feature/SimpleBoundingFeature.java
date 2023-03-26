@@ -98,7 +98,7 @@ public class SimpleBoundingFeature extends BoundingFeature {
     }
 
     @Override
-    protected Pair<World, BlockBox> getWorldBox() {
+    protected Pair<World, BlockBox> createWorldBox() {
         GameConfigFeature configFeature = arena.getFeature(GameConfigFeature.class);
         String worldName = configFeature.getString(path + ".world", "");
         World world = Bukkit.getWorld(worldName);

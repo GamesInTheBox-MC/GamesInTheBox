@@ -48,7 +48,7 @@ public class SimpleRewardFeature extends RewardFeature {
     }
 
     @Override
-    protected Pair<Map<Integer, List<String>>, List<String>> getTopAndDefaultCommands() {
+    protected Pair<Map<Integer, List<String>>, List<String>> createTopAndDefaultCommands() {
         GameConfigFeature gameConfigFeature = arena.getFeature(GameConfigFeature.class);
 
         minPlayersToReward = Optional.ofNullable(gameConfigFeature.getString("min-players-to-reward"))
