@@ -49,6 +49,6 @@ public class GamePickerManager extends Builder<Planner, GamePicker> {
      */
     @NotNull
     public GamePicker build(@NotNull Planner planner) {
-        return Optional.ofNullable(planner.getFeature(PlannerConfigFeature.class).getString("picker-type", "")).flatMap(s -> this.build(s, planner)).orElse(GamePicker.EMPTY);
+        return Optional.ofNullable(planner.getFeature(PlannerConfigFeature.class).getString("picker-type", null)).flatMap(s -> this.build(s, planner)).orElse(GamePicker.EMPTY);
     }
 }
