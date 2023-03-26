@@ -43,6 +43,14 @@
                             <createDependencyReducedPom>false</createDependencyReducedPom>
                             <shadedArtifactAttached>true</shadedArtifactAttached>
                             <shadeSourcesContent>true</shadeSourcesContent>
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/maven/**</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
                             <relocations>
                                 <relocation>
                                     <pattern>me.hsgamer.hscore</pattern>
