@@ -15,6 +15,7 @@
 */
 package me.hsgamer.gamesinthebox.game.feature;
 
+import com.google.common.base.Preconditions;
 import me.hsgamer.hscore.bukkit.block.BukkitBlockAdapter;
 import me.hsgamer.hscore.common.Pair;
 import me.hsgamer.hscore.minecraft.block.box.BlockBox;
@@ -23,6 +24,7 @@ import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -38,7 +40,8 @@ public abstract class BoundingFeature implements Feature {
      *
      * @return the {@link Pair} of the {@link World} and the {@link BlockBox}
      */
-    protected abstract Pair<World, BlockBox> createWorldBox();
+    @NotNull
+    protected abstract Pair<@NotNull World, @NotNull BlockBox> createWorldBox();
 
     @Override
     public void postInit() {
@@ -52,7 +55,9 @@ public abstract class BoundingFeature implements Feature {
      *
      * @return the world
      */
+    @NotNull
     public World getWorld() {
+        Preconditions.checkNotNull(world, "World is null. The feature is not initialized.");
         return world;
     }
 
@@ -61,7 +66,9 @@ public abstract class BoundingFeature implements Feature {
      *
      * @return the block box
      */
+    @NotNull
     public BlockBox getBlockBox() {
+        Preconditions.checkNotNull(blockBox, "BlockBox is null. The feature is not initialized.");
         return blockBox;
     }
 
@@ -71,7 +78,7 @@ public abstract class BoundingFeature implements Feature {
      * @param player the player
      * @return true if the player is in the bounding box
      */
-    public boolean checkBounding(OfflinePlayer player) {
+    public boolean checkBounding(@NotNull OfflinePlayer player) {
         Player onlinePlayer = player.getPlayer();
         return onlinePlayer != null && checkBounding(onlinePlayer.getLocation());
     }
@@ -82,8 +89,8 @@ public abstract class BoundingFeature implements Feature {
      * @param location the location
      * @return true if the location is in the bounding box
      */
-    public boolean checkBounding(Location location) {
-        if (location == null || blockBox == null) {
+    public boolean checkBounding(@NotNull Location location) {
+        if (blockBox == null) {
             return false;
         }
 
@@ -99,7 +106,8 @@ public abstract class BoundingFeature implements Feature {
      * @param vectorOffsetSetting the offset setting
      * @return the random location
      */
-    public Location getRandomLocation(OffsetSetting vectorOffsetSetting) {
+    @NotNull
+    public Location getRandomLocation(@NotNull OffsetSetting vectorOffsetSetting) {
         int minX = blockBox.minX + vectorOffsetSetting.minXOffset;
         int maxX = blockBox.maxX - vectorOffsetSetting.maxXOffset;
         int minY = blockBox.minY + vectorOffsetSetting.minYOffset;
@@ -117,6 +125,7 @@ public abstract class BoundingFeature implements Feature {
      *
      * @return the random location
      */
+    @NotNull
     public Location getRandomLocation() {
         return getRandomLocation(OffsetSetting.DEFAULT);
     }

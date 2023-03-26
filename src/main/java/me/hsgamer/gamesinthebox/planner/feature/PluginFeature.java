@@ -17,6 +17,7 @@ package me.hsgamer.gamesinthebox.planner.feature;
 
 import me.hsgamer.gamesinthebox.GamesInTheBox;
 import me.hsgamer.minigamecore.base.Feature;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The {@link Feature} to access the plugin
@@ -29,7 +30,7 @@ public class PluginFeature implements Feature {
      *
      * @param plugin the plugin
      */
-    public PluginFeature(GamesInTheBox plugin) {
+    public PluginFeature(@NotNull GamesInTheBox plugin) {
         this.plugin = plugin;
     }
 
@@ -38,6 +39,7 @@ public class PluginFeature implements Feature {
      *
      * @return the plugin
      */
+    @NotNull
     public GamesInTheBox getPlugin() {
         return plugin;
     }

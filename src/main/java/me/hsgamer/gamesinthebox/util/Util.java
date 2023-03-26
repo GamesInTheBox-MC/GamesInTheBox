@@ -20,6 +20,8 @@ import me.hsgamer.hscore.common.CollectionUtils;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.scheduler.BukkitTask;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -40,7 +42,8 @@ public final class Util {
      * @param values the map
      * @return the section
      */
-    public static ConfigurationSection createSection(Map<String, Object> values) {
+    @NotNull
+    public static ConfigurationSection createSection(@NotNull Map<String, Object> values) {
         Map<String, Object> finalValues = new HashMap<>(values);
         finalValues.replaceAll((key, value) -> {
             if (value instanceof Map) {
@@ -60,7 +63,7 @@ public final class Util {
      *
      * @param task the task
      */
-    public static void cancelSafe(BukkitTask task) {
+    public static void cancelSafe(@Nullable BukkitTask task) {
         if (task != null) {
             try {
                 task.cancel();
@@ -77,7 +80,8 @@ public final class Util {
      * @param defaultValue the default value
      * @return the random colorized string
      */
-    public static String getRandomColorizedString(Collection<String> collection, String defaultValue) {
+    @NotNull
+    public static String getRandomColorizedString(@NotNull Collection<@NotNull String> collection, @NotNull String defaultValue) {
         String s = Optional.ofNullable(CollectionUtils.pickRandom(collection)).orElse(defaultValue);
         return ColorUtils.colorize(s);
     }

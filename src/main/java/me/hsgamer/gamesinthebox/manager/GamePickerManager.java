@@ -22,6 +22,7 @@ import me.hsgamer.gamesinthebox.picker.impl.SequenceGamePicker;
 import me.hsgamer.gamesinthebox.planner.Planner;
 import me.hsgamer.gamesinthebox.planner.feature.PlannerConfigFeature;
 import me.hsgamer.hscore.builder.Builder;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
@@ -46,7 +47,8 @@ public class GamePickerManager extends Builder<Planner, GamePicker> {
      * @param planner the planner
      * @return the {@link GamePicker}
      */
-    public GamePicker build(Planner planner) {
+    @NotNull
+    public GamePicker build(@NotNull Planner planner) {
         return Optional.ofNullable(planner.getFeature(PlannerConfigFeature.class).getString("picker-type", "")).flatMap(s -> this.build(s, planner)).orElse(GamePicker.EMPTY);
     }
 }

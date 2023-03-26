@@ -22,6 +22,7 @@ import me.hsgamer.minigamecore.base.Feature;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitTask;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 
@@ -38,7 +39,7 @@ public class SimpleUpdateFeature implements Feature {
      *
      * @param arena the arena
      */
-    public SimpleUpdateFeature(SimpleGameArena arena) {
+    public SimpleUpdateFeature(@NotNull SimpleGameArena arena) {
         this.plugin = arena.getFeature(PluginFeature.class).getPlugin();
         this.arena = arena;
     }

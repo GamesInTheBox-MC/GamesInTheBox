@@ -20,6 +20,7 @@ import me.hsgamer.minigamecore.base.Feature;
 import me.hsgamer.unihologram.common.api.Hologram;
 import me.hsgamer.unihologram.spigot.SpigotHologramProvider;
 import org.bukkit.Location;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +44,7 @@ public class HologramFeature implements Feature {
      *
      * @param baseName the base name of the holograms
      */
-    public HologramFeature(String baseName) {
+    public HologramFeature(@NotNull String baseName) {
         this.baseName = baseName;
     }
 
@@ -52,7 +53,7 @@ public class HologramFeature implements Feature {
      *
      * @param arena the arena
      */
-    public HologramFeature(Arena arena) {
+    public HologramFeature(@NotNull Arena arena) {
         this(arena.getName());
     }
 
@@ -61,7 +62,7 @@ public class HologramFeature implements Feature {
      *
      * @param hologram the hologram
      */
-    public static void clearIfInitialized(Hologram<Location> hologram) {
+    public static void clearIfInitialized(@NotNull Hologram<Location> hologram) {
         if (hologram.isInitialized()) {
             hologram.clear();
         }
@@ -72,7 +73,7 @@ public class HologramFeature implements Feature {
      *
      * @param hologram the hologram
      */
-    public static void reInit(Hologram<Location> hologram) {
+    public static void reInit(@NotNull Hologram<Location> hologram) {
         clearIfInitialized(hologram);
         hologram.init();
     }
@@ -83,7 +84,8 @@ public class HologramFeature implements Feature {
      * @param location the location
      * @return the hologram
      */
-    public Hologram<Location> createHologram(Location location) {
+    @NotNull
+    public Hologram<Location> createHologram(@NotNull Location location) {
         return spigotHologramProvider.createHologram(baseName + "-" + UUID.randomUUID(), location);
     }
 

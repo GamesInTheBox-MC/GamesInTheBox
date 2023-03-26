@@ -17,6 +17,7 @@ package me.hsgamer.gamesinthebox.game;
 
 import me.hsgamer.gamesinthebox.planner.Planner;
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.List;
@@ -32,37 +33,37 @@ public interface GameEditor extends GameAction {
      */
     GameEditor EMPTY = new GameEditor() {
         @Override
-        public void reset(CommandSender sender) {
+        public void reset(@NotNull CommandSender sender) {
             // EMPTY
         }
 
         @Override
-        public void sendStatus(CommandSender sender) {
+        public void sendStatus(@NotNull CommandSender sender) {
             // EMPTY
         }
 
         @Override
-        public Optional<Map<String, Object>> exportPathValueMap(CommandSender sender) {
+        public @NotNull Optional<Map<String, Object>> exportPathValueMap(@NotNull CommandSender sender) {
             return Optional.empty();
         }
 
         @Override
-        public List<String> getActions() {
+        public @NotNull List<String> getActions() {
             return Collections.emptyList();
         }
 
         @Override
-        public List<String> getActionArgs(CommandSender sender, String action, String... args) {
+        public @NotNull List<@NotNull String> getActionArgs(@NotNull CommandSender sender, @NotNull String action, @NotNull String @NotNull ... args) {
             return Collections.emptyList();
         }
 
         @Override
-        public boolean performAction(CommandSender sender, String action, String... args) {
+        public boolean performAction(@NotNull CommandSender sender, @NotNull String action, @NotNull String @NotNull ... args) {
             return false;
         }
 
         @Override
-        public void sendUsage(CommandSender sender) {
+        public void sendUsage(@NotNull CommandSender sender) {
             // EMPTY
         }
     };
@@ -72,14 +73,14 @@ public interface GameEditor extends GameAction {
      *
      * @param sender the sender
      */
-    void reset(CommandSender sender);
+    void reset(@NotNull CommandSender sender);
 
     /**
      * Send the status of the editor
      *
      * @param sender the sender
      */
-    void sendStatus(CommandSender sender);
+    void sendStatus(@NotNull CommandSender sender);
 
     /**
      * Export the config path-value map used to save the settings to the {@link Planner}
@@ -87,7 +88,8 @@ public interface GameEditor extends GameAction {
      * @param sender the sender
      * @return the path-value map
      */
-    Optional<Map<String, Object>> exportPathValueMap(CommandSender sender);
+    @NotNull
+    Optional<Map<String, Object>> exportPathValueMap(@NotNull CommandSender sender);
 
     /**
      * Migrate the settings from the {@link GameArena} to the {@link GameEditor}
@@ -96,7 +98,7 @@ public interface GameEditor extends GameAction {
      * @param gameArena the game arena
      * @return true if success
      */
-    default boolean migrate(CommandSender sender, GameArena gameArena) {
+    default boolean migrate(@NotNull CommandSender sender, @NotNull GameArena gameArena) {
         return false;
     }
 }

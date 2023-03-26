@@ -20,6 +20,8 @@ import me.hsgamer.gamesinthebox.picker.GamePicker;
 import me.hsgamer.gamesinthebox.planner.Planner;
 import me.hsgamer.gamesinthebox.planner.feature.PlannerConfigFeature;
 import me.hsgamer.gamesinthebox.util.TimeUtil;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
@@ -39,7 +41,7 @@ public abstract class DelayedGamePicker implements GamePicker {
      *
      * @param planner the {@link Planner}
      */
-    protected DelayedGamePicker(Planner planner) {
+    protected DelayedGamePicker(@NotNull Planner planner) {
         this.planner = planner;
         this.delay = Optional.ofNullable(planner.getFeature(PlannerConfigFeature.class))
                 .map(feature -> feature.getString("pick-delay", "0"))
@@ -61,6 +63,7 @@ public abstract class DelayedGamePicker implements GamePicker {
      *
      * @return the picked arena
      */
+    @Nullable
     protected abstract GameArena pickArena();
 
     @Override
@@ -90,7 +93,7 @@ public abstract class DelayedGamePicker implements GamePicker {
     }
 
     @Override
-    public String replace(String input) {
+    public String replace(@NotNull String input) {
         if (input.equalsIgnoreCase("time_left")) {
             return TimeUtil.formatStandardTime(Math.max(0, nextPickTime - System.currentTimeMillis()));
         }

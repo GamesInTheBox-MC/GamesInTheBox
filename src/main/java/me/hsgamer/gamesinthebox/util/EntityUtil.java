@@ -19,6 +19,8 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.TNTPrimed;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Locale;
 
@@ -35,7 +37,7 @@ public final class EntityUtil {
      *
      * @param entity the entity
      */
-    public static void despawnSafe(Entity entity) {
+    public static void despawnSafe(@Nullable Entity entity) {
         if (entity != null && entity.isValid()) {
             try {
                 entity.remove();
@@ -52,7 +54,8 @@ public final class EntityUtil {
      * @param defaultValue the default value
      * @return the entity type
      */
-    public static EntityType tryGetLivingEntityType(String entityType, EntityType defaultValue) {
+    @NotNull
+    public static EntityType tryGetLivingEntityType(@NotNull String entityType, @NotNull EntityType defaultValue) {
         try {
             EntityType type = EntityType.valueOf(entityType.toUpperCase(Locale.ROOT));
             Class<? extends Entity> clazz = type.getEntityClass();
@@ -71,7 +74,8 @@ public final class EntityUtil {
      * @param entity the entity
      * @return the source
      */
-    public static Entity getTntSource(Entity entity) {
+    @Nullable
+    public static Entity getTntSource(@NotNull Entity entity) {
         Entity source;
         do {
             source = entity instanceof TNTPrimed ? ((TNTPrimed) entity).getSource() : null;

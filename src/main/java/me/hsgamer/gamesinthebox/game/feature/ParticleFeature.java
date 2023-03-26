@@ -16,7 +16,9 @@
 package me.hsgamer.gamesinthebox.game.feature;
 
 import com.cryptomorin.xseries.particles.ParticleDisplay;
+import com.google.common.base.Preconditions;
 import me.hsgamer.minigamecore.base.Feature;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The {@link Feature} for {@link ParticleDisplay}
@@ -29,6 +31,7 @@ public abstract class ParticleFeature implements Feature {
      *
      * @return the {@link ParticleDisplay}
      */
+    @NotNull
     protected abstract ParticleDisplay createParticleDisplay();
 
     @Override
@@ -41,7 +44,9 @@ public abstract class ParticleFeature implements Feature {
      *
      * @return the {@link ParticleDisplay}
      */
+    @NotNull
     public ParticleDisplay getParticleDisplay() {
+        Preconditions.checkNotNull(particleDisplay, "ParticleDisplay is null. The feature is not initialized.");
         return particleDisplay;
     }
 }

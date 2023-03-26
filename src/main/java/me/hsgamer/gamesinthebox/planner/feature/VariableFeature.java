@@ -19,6 +19,7 @@ import me.hsgamer.gamesinthebox.planner.Planner;
 import me.hsgamer.hscore.variable.InstanceVariableManager;
 import me.hsgamer.minigamecore.base.Feature;
 import org.bukkit.Bukkit;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -35,7 +36,7 @@ public class VariableFeature implements Feature {
      *
      * @param planner the {@link Planner}
      */
-    public VariableFeature(Planner planner) {
+    public VariableFeature(@NotNull Planner planner) {
         this.variableManager = new InstanceVariableManager();
         variableManager.register("", (original, uuid) -> Optional.ofNullable(planner.getFeature(ReplacementFeature.class))
                 .map(replacementFeature -> uuid.equals(DUMMY_UUID) ? replacementFeature.replace(original) : replacementFeature.replace(Bukkit.getOfflinePlayer(uuid), original))
@@ -50,7 +51,8 @@ public class VariableFeature implements Feature {
      * @param uuid  the uuid
      * @return the replaced string
      */
-    public String replace(String input, UUID uuid) {
+    @NotNull
+    public String replace(@NotNull String input, @NotNull UUID uuid) {
         return variableManager.setVariables(input, uuid);
     }
 
@@ -60,7 +62,8 @@ public class VariableFeature implements Feature {
      * @param input the input
      * @return the replaced string
      */
-    public String replace(String input) {
+    @NotNull
+    public String replace(@NotNull String input) {
         return replace(input, DUMMY_UUID);
     }
 }

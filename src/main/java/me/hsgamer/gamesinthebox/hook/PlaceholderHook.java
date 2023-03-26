@@ -31,7 +31,7 @@ import java.util.Optional;
 public class PlaceholderHook extends PlaceholderExpansion {
     private final GamesInTheBox plugin;
 
-    public PlaceholderHook(GamesInTheBox plugin) {
+    public PlaceholderHook(@NotNull GamesInTheBox plugin) {
         this.plugin = plugin;
     }
 

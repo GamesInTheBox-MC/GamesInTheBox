@@ -18,6 +18,9 @@ package me.hsgamer.gamesinthebox.game.feature;
 import me.hsgamer.gamesinthebox.game.GameArena;
 import me.hsgamer.gamesinthebox.planner.feature.PlannerConfigFeature;
 import me.hsgamer.minigamecore.base.Feature;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.Map;
@@ -39,7 +42,7 @@ public class GameConfigFeature implements Feature {
      *
      * @param gameArena the {@link GameArena}
      */
-    public GameConfigFeature(GameArena gameArena) {
+    public GameConfigFeature(@NotNull GameArena gameArena) {
         this.gameConfigName = gameArena.getLocalName();
         this.plannerConfigFeature = gameArena.getFeature(PlannerConfigFeature.class);
     }
@@ -59,7 +62,8 @@ public class GameConfigFeature implements Feature {
      * @param def  the default value
      * @return the string value
      */
-    public String getString(String path, String def) {
+    @Contract("_, !null -> !null")
+    public String getString(@NotNull String path, @Nullable String def) {
         return plannerConfigFeature.getString(getSettingPath(path), plannerConfigFeature.getString(getCommonPath(path), def));
     }
 
@@ -69,7 +73,8 @@ public class GameConfigFeature implements Feature {
      * @param path the path
      * @return the string value
      */
-    public String getString(String path) {
+    @Nullable
+    public String getString(@NotNull String path) {
         return getString(path, null);
     }
 
@@ -82,7 +87,8 @@ public class GameConfigFeature implements Feature {
      * @param <T>   the type of the value
      * @return the value
      */
-    public <T> T getInstance(String path, T def, Class<T> clazz) {
+    @Contract("_, !null, _ -> !null")
+    public <T> T getInstance(@NotNull String path, @Nullable T def, @NotNull Class<T> clazz) {
         return plannerConfigFeature.getInstance(getSettingPath(path), plannerConfigFeature.getInstance(getCommonPath(path), def, clazz), clazz);
     }
 
@@ -92,7 +98,8 @@ public class GameConfigFeature implements Feature {
      * @param path the path
      * @return the value
      */
-    public Object get(String path) {
+    @Nullable
+    public Object get(@NotNull String path) {
         Object value = plannerConfigFeature.get(getSettingPath(path));
         if (value == null) {
             value = plannerConfigFeature.get(getCommonPath(path));
@@ -107,7 +114,8 @@ public class GameConfigFeature implements Feature {
      * @param deep whether to get the deep values
      * @return the values
      */
-    public Map<String, Object> getValues(String path, boolean deep) {
+    @NotNull
+    public Map<String, Object> getValues(@NotNull String path, boolean deep) {
         if (containsSetting(path)) {
             return plannerConfigFeature.getValues(getSettingPath(path), deep);
         } else if (containsCommon(path)) {
@@ -123,7 +131,7 @@ public class GameConfigFeature implements Feature {
      * @param path the path
      * @return true if the settings contains the path
      */
-    public boolean containsSetting(String path) {
+    public boolean containsSetting(@NotNull String path) {
         return plannerConfigFeature.contains(getSettingPath(path));
     }
 
@@ -133,7 +141,7 @@ public class GameConfigFeature implements Feature {
      * @param path the path
      * @return true if the settings contains the common path
      */
-    public boolean containsCommon(String path) {
+    public boolean containsCommon(@NotNull String path) {
         return plannerConfigFeature.contains(getCommonPath(path));
     }
 
@@ -143,7 +151,7 @@ public class GameConfigFeature implements Feature {
      * @param path the path
      * @return true if the settings contains the path or the common path
      */
-    public boolean containsPath(String path) {
+    public boolean containsPath(@NotNull String path) {
         return containsSetting(path) || containsCommon(path);
     }
 
@@ -153,7 +161,7 @@ public class GameConfigFeature implements Feature {
      * @param path  the path
      * @param value the value
      */
-    public void setSetting(String path, Object value) {
+    public void setSetting(@NotNull String path, @Nullable Object value) {
         plannerConfigFeature.set(getSettingPath(path), value);
     }
 
@@ -163,7 +171,7 @@ public class GameConfigFeature implements Feature {
      * @param path  the path
      * @param value the value
      */
-    public void setCommon(String path, Object value) {
+    public void setCommon(@NotNull String path, @Nullable Object value) {
         plannerConfigFeature.set(getCommonPath(path), value);
     }
 }

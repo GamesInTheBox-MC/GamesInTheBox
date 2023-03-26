@@ -34,6 +34,7 @@ import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import me.hsgamer.hscore.config.annotation.converter.manager.DefaultConverterManager;
 import me.hsgamer.hscore.config.proxy.ConfigGenerator;
 import org.bukkit.Bukkit;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.List;
@@ -102,6 +103,7 @@ public final class GamesInTheBox extends BasePlugin {
      *
      * @return the main config
      */
+    @NotNull
     public MainConfig getMainConfig() {
         return mainConfig;
     }
@@ -111,6 +113,7 @@ public final class GamesInTheBox extends BasePlugin {
      *
      * @return the message config
      */
+    @NotNull
     public MessageConfig getMessageConfig() {
         return messageConfig;
     }
@@ -120,6 +123,7 @@ public final class GamesInTheBox extends BasePlugin {
      *
      * @return the game manager
      */
+    @NotNull
     public GameManager getGameManager() {
         return gameManager;
     }
@@ -129,6 +133,7 @@ public final class GamesInTheBox extends BasePlugin {
      *
      * @return the game picker manager
      */
+    @NotNull
     public GamePickerManager getGamePickerManager() {
         return gamePickerManager;
     }
@@ -138,6 +143,7 @@ public final class GamesInTheBox extends BasePlugin {
      *
      * @return the planner manager
      */
+    @NotNull
     public PlannerManager getPlannerManager() {
         return plannerManager;
     }
@@ -147,6 +153,7 @@ public final class GamesInTheBox extends BasePlugin {
      *
      * @return the expansion manager
      */
+    @NotNull
     public PluginExpansionManager getExpansionManager() {
         return expansionManager;
     }

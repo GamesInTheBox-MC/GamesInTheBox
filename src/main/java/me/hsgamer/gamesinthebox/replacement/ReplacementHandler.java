@@ -16,6 +16,8 @@
 package me.hsgamer.gamesinthebox.replacement;
 
 import org.bukkit.OfflinePlayer;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * The replacement handler
@@ -32,7 +34,8 @@ public interface ReplacementHandler {
      * @param input the input
      * @return the replaced string
      */
-    String replace(String input);
+    @Nullable
+    String replace(@NotNull String input);
 
     /**
      * Replace the string
@@ -41,7 +44,8 @@ public interface ReplacementHandler {
      * @param input  the input
      * @return the replaced string
      */
-    default String replace(OfflinePlayer player, String input) {
+    @Nullable
+    default String replace(@NotNull OfflinePlayer player, @NotNull String input) {
         return replace(input);
     }
 }

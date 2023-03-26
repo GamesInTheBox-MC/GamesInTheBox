@@ -17,6 +17,9 @@ package me.hsgamer.gamesinthebox.planner.feature;
 
 import me.hsgamer.gamesinthebox.planner.Planner;
 import me.hsgamer.minigamecore.base.Feature;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 import java.util.Objects;
@@ -35,7 +38,7 @@ public class PlannerConfigFeature implements Feature {
      * @param planner                    the {@link Planner}
      * @param globalPlannerConfigFeature the {@link GlobalPlannerConfigFeature}
      */
-    public PlannerConfigFeature(Planner planner, GlobalPlannerConfigFeature globalPlannerConfigFeature) {
+    public PlannerConfigFeature(@NotNull Planner planner, @NotNull GlobalPlannerConfigFeature globalPlannerConfigFeature) {
         this.planner = planner;
         this.globalPlannerConfigFeature = globalPlannerConfigFeature;
     }
@@ -49,7 +52,8 @@ public class PlannerConfigFeature implements Feature {
      * @param <T>   the type of the value
      * @return the value
      */
-    public <T> T getInstance(String path, T def, Class<T> clazz) {
+    @Contract("_, !null, _ -> !null")
+    public <T> T getInstance(@NotNull String path, @Nullable T def, @NotNull Class<T> clazz) {
         return globalPlannerConfigFeature.getPlannerConfig().getInstance(planner.getName() + "." + path, def, clazz);
     }
 
@@ -60,7 +64,8 @@ public class PlannerConfigFeature implements Feature {
      * @param def  the default value
      * @return the value
      */
-    public String getString(String path, String def) {
+    @Contract("_, !null -> !null")
+    public String getString(@NotNull String path, @Nullable String def) {
         return Objects.toString(globalPlannerConfigFeature.getPlannerConfig().getNormalized(planner.getName() + "." + path), def);
     }
 
@@ -70,7 +75,8 @@ public class PlannerConfigFeature implements Feature {
      * @param path the path
      * @return the value
      */
-    public Object get(String path) {
+    @Nullable
+    public Object get(@NotNull String path) {
         return globalPlannerConfigFeature.getPlannerConfig().get(planner.getName() + "." + path);
     }
 
@@ -81,7 +87,8 @@ public class PlannerConfigFeature implements Feature {
      * @param deep whether to get the deep values in the sub-paths
      * @return the values
      */
-    public Map<String, Object> getValues(String path, boolean deep) {
+    @NotNull
+    public Map<String, Object> getValues(@NotNull String path, boolean deep) {
         return globalPlannerConfigFeature.getPlannerConfig().getNormalizedValues(planner.getName() + "." + path, deep);
     }
 
@@ -91,7 +98,7 @@ public class PlannerConfigFeature implements Feature {
      * @param path the path
      * @return true if the path exists
      */
-    public boolean contains(String path) {
+    public boolean contains(@NotNull String path) {
         return globalPlannerConfigFeature.getPlannerConfig().contains(planner.getName() + "." + path);
     }
 
@@ -101,7 +108,7 @@ public class PlannerConfigFeature implements Feature {
      * @param path  the path
      * @param value the value
      */
-    public void set(String path, Object value) {
+    public void set(@NotNull String path, @Nullable Object value) {
         globalPlannerConfigFeature.getPlannerConfig().set(planner.getName() + "." + path, value);
         globalPlannerConfigFeature.getPlannerConfig().save();
     }

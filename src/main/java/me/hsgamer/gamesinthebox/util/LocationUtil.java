@@ -18,6 +18,8 @@ package me.hsgamer.gamesinthebox.util;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 import java.util.regex.Pattern;
@@ -38,7 +40,8 @@ public final class LocationUtil {
      * @param value the string
      * @return the location or null if the string is invalid
      */
-    public static Location getLocation(World world, String value) {
+    @Nullable
+    public static Location getLocation(@NotNull World world, @NotNull String value) {
         String[] split = value.split(Pattern.quote(","), 3);
         if (split.length < 3) {
             return null;
@@ -60,7 +63,8 @@ public final class LocationUtil {
      * @param value the string
      * @return the location or null if the world is not found or the string is invalid
      */
-    public static Location getLocation(String value) {
+    @Nullable
+    public static Location getLocation(@NotNull String value) {
         String[] split = value.split(",", 4);
         if (split.length != 4) {
             return null;
@@ -88,7 +92,8 @@ public final class LocationUtil {
      * @param roundNumbers whether to round the numbers
      * @return the serialized location
      */
-    public static String serializeLocation(Location location, boolean withWorld, boolean roundNumbers) {
+    @NotNull
+    public static String serializeLocation(@NotNull Location location, boolean withWorld, boolean roundNumbers) {
         String world = Optional.ofNullable(location.getWorld()).map(World::getName).orElse("world");
         double x = roundNumbers ? location.getBlockX() : location.getX();
         double y = roundNumbers ? location.getBlockY() : location.getY();

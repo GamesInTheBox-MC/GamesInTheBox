@@ -26,6 +26,7 @@ import me.hsgamer.hscore.expansion.common.ExpansionManager;
 import me.hsgamer.hscore.expansion.common.ExpansionState;
 import me.hsgamer.hscore.expansion.common.exception.InvalidExpansionDescriptionException;
 import me.hsgamer.hscore.expansion.extra.manager.DependableExpansionSortAndFilter;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.Arrays;
@@ -50,7 +51,7 @@ import java.util.Objects;
 public class PluginExpansionManager extends ExpansionManager {
     private final GamesInTheBox plugin;
 
-    public PluginExpansionManager(GamesInTheBox plugin) {
+    public PluginExpansionManager(@NotNull GamesInTheBox plugin) {
         super(new File(plugin.getDataFolder(), "expansions"), new BukkitConfigExpansionDescriptionLoader("expansion.yml"), plugin.getClass().getClassLoader());
         this.plugin = plugin;
 
@@ -78,7 +79,8 @@ public class PluginExpansionManager extends ExpansionManager {
      * @param loader the loader
      * @return the authors
      */
-    public static List<String> getAuthors(ExpansionClassLoader loader) {
+    @NotNull
+    public static List<@NotNull String> getAuthors(@NotNull ExpansionClassLoader loader) {
         Object value = MapUtils.getIfFound(loader.getDescription().getData(), "authors", "author");
         return CollectionUtils.createStringListFromObject(value, true);
     }
@@ -89,17 +91,19 @@ public class PluginExpansionManager extends ExpansionManager {
      * @param loader the loader
      * @return the description
      */
-    public static String getDescription(ExpansionClassLoader loader) {
+    @NotNull
+    public static String getDescription(@NotNull ExpansionClassLoader loader) {
         Object value = loader.getDescription().getData().get("description");
         return Objects.toString(value, "");
     }
 
-    private static List<String> getPluginDepends(ExpansionClassLoader loader) {
+    @NotNull
+    private static List<@NotNull String> getPluginDepends(@NotNull ExpansionClassLoader loader) {
         Object value = MapUtils.getIfFound(loader.getDescription().getData(), "plugin-depend", "plugin", "plugin-depends", "plugins");
         return CollectionUtils.createStringListFromObject(value, true);
     }
 
-    private void checkPluginDepends(ExpansionClassLoader loader) {
+    private void checkPluginDepends(@NotNull ExpansionClassLoader loader) {
         List<String> requiredPlugins = getPluginDepends(loader);
         if (Validate.isNullOrEmpty(requiredPlugins)) return;
 
@@ -109,6 +113,7 @@ public class PluginExpansionManager extends ExpansionManager {
         }
     }
 
+    @NotNull
     public GamesInTheBox getPlugin() {
         return plugin;
     }

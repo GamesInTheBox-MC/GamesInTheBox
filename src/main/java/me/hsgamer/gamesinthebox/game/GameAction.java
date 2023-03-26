@@ -16,6 +16,7 @@
 package me.hsgamer.gamesinthebox.game;
 
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -28,7 +29,8 @@ public interface GameAction {
      *
      * @return the available actions
      */
-    List<String> getActions();
+    @NotNull
+    List<@NotNull String> getActions();
 
     /**
      * Get the available arguments for the action
@@ -38,7 +40,8 @@ public interface GameAction {
      * @param args   the current arguments
      * @return the available arguments
      */
-    List<String> getActionArgs(CommandSender sender, String action, String... args);
+    @NotNull
+    List<@NotNull String> getActionArgs(@NotNull CommandSender sender, @NotNull String action, @NotNull String... args);
 
     /**
      * Perform the action
@@ -48,12 +51,12 @@ public interface GameAction {
      * @param args   the arguments
      * @return true if the action is performed successfully
      */
-    boolean performAction(CommandSender sender, String action, String... args);
+    boolean performAction(@NotNull CommandSender sender, @NotNull String action, @NotNull String... args);
 
     /**
      * Send the usage of all the actions
      *
      * @param sender the sender to send the usage
      */
-    void sendUsage(CommandSender sender);
+    void sendUsage(@NotNull CommandSender sender);
 }

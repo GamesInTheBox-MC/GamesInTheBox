@@ -31,6 +31,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -60,7 +61,7 @@ public class SimpleBoundingFeature extends BoundingFeature {
      * @param path         the path
      * @param maxInclusive whether the box should include the maximum position
      */
-    public SimpleBoundingFeature(SimpleGameArena arena, String path, boolean maxInclusive) {
+    public SimpleBoundingFeature(@NotNull SimpleGameArena arena, @NotNull String path, boolean maxInclusive) {
         this.arena = arena;
         this.path = path;
         this.maxInclusive = maxInclusive;
@@ -72,7 +73,7 @@ public class SimpleBoundingFeature extends BoundingFeature {
      * @param arena        the arena
      * @param maxInclusive whether the box should include the maximum position
      */
-    public SimpleBoundingFeature(SimpleGameArena arena, boolean maxInclusive) {
+    public SimpleBoundingFeature(@NotNull SimpleGameArena arena, boolean maxInclusive) {
         this(arena, "box", maxInclusive);
     }
 
@@ -84,7 +85,8 @@ public class SimpleBoundingFeature extends BoundingFeature {
      * @param actionName the name of the action
      * @return the editor
      */
-    public static Editor editor(String path, String editorName, String actionName) {
+    @NotNull
+    public static Editor editor(@NotNull String path, @NotNull String editorName, @NotNull String actionName) {
         return new Editor(path, editorName, actionName);
     }
 
@@ -93,12 +95,13 @@ public class SimpleBoundingFeature extends BoundingFeature {
      *
      * @return the editor
      */
+    @NotNull
     public static Editor editor() {
         return new Editor("box", "Bounding Box", "");
     }
 
     @Override
-    protected Pair<World, BlockBox> createWorldBox() {
+    protected @NotNull Pair<World, BlockBox> createWorldBox() {
         GameConfigFeature configFeature = arena.getFeature(GameConfigFeature.class);
         String worldName = configFeature.getString(path + ".world", "");
         World world = Bukkit.getWorld(worldName);
@@ -140,7 +143,7 @@ public class SimpleBoundingFeature extends BoundingFeature {
         public SimpleGameEditor.SimpleEditorStatus getStatus() {
             return new SimpleGameEditor.SimpleEditorStatus() {
                 @Override
-                public void sendStatus(CommandSender sender) {
+                public void sendStatus(@NotNull CommandSender sender) {
                     MessageUtils.sendMessage(sender, "&6&l" + editorName.toUpperCase(Locale.ROOT));
                     MessageUtils.sendMessage(sender, "&6Pos 1: &f" + (pos1 == null ? "Not set" : LocationUtil.serializeLocation(pos1, true, true)));
                     MessageUtils.sendMessage(sender, "&6Pos 2: &f" + (pos2 == null ? "Not set" : LocationUtil.serializeLocation(pos2, true, true)));
@@ -150,13 +153,13 @@ public class SimpleBoundingFeature extends BoundingFeature {
                 }
 
                 @Override
-                public void reset(CommandSender sender) {
+                public void reset(@NotNull CommandSender sender) {
                     pos1 = null;
                     pos2 = null;
                 }
 
                 @Override
-                public boolean canSave(CommandSender sender) {
+                public boolean canSave(@NotNull CommandSender sender) {
                     if (pos1 == null || pos2 == null) return false;
                     World world1 = pos1.getWorld();
                     World world2 = pos2.getWorld();
@@ -164,7 +167,7 @@ public class SimpleBoundingFeature extends BoundingFeature {
                 }
 
                 @Override
-                public Map<String, Object> toPathValueMap(CommandSender sender) {
+                public Map<String, Object> toPathValueMap(@NotNull CommandSender sender) {
                     Map<String, Object> map = new HashMap<>();
                     World world = pos1.getWorld();
                     assert world != null;
@@ -188,12 +191,12 @@ public class SimpleBoundingFeature extends BoundingFeature {
 
             map.put(pos1Name, new SimpleGameAction.SimpleAction() {
                 @Override
-                public String getDescription() {
+                public @NotNull String getDescription() {
                     return "Set the position 1 of the " + editorName + " at your current location";
                 }
 
                 @Override
-                public boolean performAction(CommandSender sender, String... args) {
+                public boolean performAction(@NotNull CommandSender sender, String... args) {
                     if (!(sender instanceof Player)) {
                         MessageUtils.sendMessage(sender, "&cOnly players can perform this action");
                         return false;
@@ -204,12 +207,12 @@ public class SimpleBoundingFeature extends BoundingFeature {
             });
             map.put(pos2Name, new SimpleGameAction.SimpleAction() {
                 @Override
-                public String getDescription() {
+                public @NotNull String getDescription() {
                     return "Set the position 2 of the " + editorName + " at your current location";
                 }
 
                 @Override
-                public boolean performAction(CommandSender sender, String... args) {
+                public boolean performAction(@NotNull CommandSender sender, String... args) {
                     if (!(sender instanceof Player)) {
                         MessageUtils.sendMessage(sender, "&cOnly players can perform this action");
                         return false;

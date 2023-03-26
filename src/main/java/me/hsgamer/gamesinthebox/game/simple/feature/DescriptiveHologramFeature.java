@@ -28,6 +28,7 @@ import me.hsgamer.unihologram.common.api.Hologram;
 import me.hsgamer.unihologram.common.api.HologramLine;
 import me.hsgamer.unihologram.common.line.TextHologramLine;
 import org.bukkit.Location;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -75,7 +76,7 @@ public class DescriptiveHologramFeature implements Feature {
      *
      * @param arena the arena
      */
-    public DescriptiveHologramFeature(SimpleGameArena arena) {
+    public DescriptiveHologramFeature(@NotNull SimpleGameArena arena) {
         this.arena = arena;
     }
 
@@ -144,6 +145,7 @@ public class DescriptiveHologramFeature implements Feature {
      *
      * @return the hologram updaters
      */
+    @NotNull
     public List<HologramUpdater> getHologramUpdaters() {
         return Collections.unmodifiableList(hologramUpdaters);
     }
@@ -152,11 +154,14 @@ public class DescriptiveHologramFeature implements Feature {
      * The updater for the hologram
      */
     public class HologramUpdater {
+        @NotNull
         public final Hologram<Location> hologram;
+        @NotNull
         public final List<String> lines;
+        @NotNull
         public final List<String> rawLines;
 
-        private HologramUpdater(Hologram<Location> hologram, List<String> lines, List<String> rawLines) {
+        private HologramUpdater(@NotNull Hologram<Location> hologram, @NotNull List<String> lines, @NotNull List<String> rawLines) {
             this.hologram = hologram;
             this.lines = lines;
             this.rawLines = rawLines;

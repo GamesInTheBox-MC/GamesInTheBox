@@ -20,6 +20,7 @@ import me.hsgamer.gamesinthebox.planner.feature.GameRunnerFeature;
 import me.hsgamer.minigamecore.base.Arena;
 import me.hsgamer.minigamecore.base.GameState;
 import me.hsgamer.minigamecore.bukkit.extra.ColoredDisplayName;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The {@link GameState} when the game is running and the planner is listening to the game
@@ -32,7 +33,7 @@ public class ListeningState implements GameState, ColoredDisplayName {
      *
      * @param plugin the plugin
      */
-    public ListeningState(GamesInTheBox plugin) {
+    public ListeningState(@NotNull GamesInTheBox plugin) {
         this.plugin = plugin;
     }
 

@@ -18,6 +18,7 @@ package me.hsgamer.gamesinthebox.game.feature;
 import me.hsgamer.hscore.common.Pair;
 import me.hsgamer.minigamecore.base.Feature;
 import org.bukkit.Bukkit;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -34,7 +35,7 @@ public class PointFeature implements Feature {
      *
      * @param pointConsumer the consumer when the point of a player is changed
      */
-    public PointFeature(PointConsumer pointConsumer) {
+    public PointFeature(@NotNull PointConsumer pointConsumer) {
         this.pointConsumer = pointConsumer;
     }
 
@@ -55,7 +56,7 @@ public class PointFeature implements Feature {
      * @param uuid  the uuid of the player
      * @param point the point to apply
      */
-    public void applyPoint(UUID uuid, int point) {
+    public void applyPoint(@NotNull UUID uuid, int point) {
         if (point > 0) {
             points.merge(uuid, point, Integer::sum);
             pointConsumer.onChanged(uuid, point, getPoint(uuid));
@@ -76,7 +77,7 @@ public class PointFeature implements Feature {
      * @param uuid the uuid of the player
      * @return the point of the player
      */
-    public int getPoint(UUID uuid) {
+    public int getPoint(@NotNull UUID uuid) {
         return points.getOrDefault(uuid, 0);
     }
 
@@ -85,6 +86,7 @@ public class PointFeature implements Feature {
      *
      * @return the top
      */
+    @NotNull
     public List<Pair<UUID, Integer>> getTop() {
         List<Pair<UUID, Integer>> list;
         if (points.isEmpty()) {
@@ -106,6 +108,7 @@ public class PointFeature implements Feature {
      *
      * @return the uuid part of the top
      */
+    @NotNull
     public List<UUID> getTopUUID() {
         return getTop().stream().map(Pair::getKey).collect(Collectors.toList());
     }
@@ -115,6 +118,7 @@ public class PointFeature implements Feature {
      *
      * @return the top as string pair
      */
+    @NotNull
     public List<Pair<UUID, String>> getTopAsStringPair() {
         return getTop()
                 .stream()
@@ -147,6 +151,6 @@ public class PointFeature implements Feature {
          * @param point      the applied point
          * @param totalPoint the total point
          */
-        void onChanged(UUID uuid, int point, int totalPoint);
+        void onChanged(@NotNull UUID uuid, int point, int totalPoint);
     }
 }

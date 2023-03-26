@@ -16,6 +16,7 @@
 package me.hsgamer.gamesinthebox.game;
 
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.List;
@@ -29,22 +30,22 @@ public interface GameArenaAction extends GameAction {
      */
     GameArenaAction EMPTY = new GameArenaAction() {
         @Override
-        public List<String> getActions() {
+        public @NotNull List<String> getActions() {
             return Collections.emptyList();
         }
 
         @Override
-        public List<String> getActionArgs(CommandSender sender, String action, String... args) {
+        public @NotNull List<@NotNull String> getActionArgs(@NotNull CommandSender sender, @NotNull String action, @NotNull String @NotNull ... args) {
             return Collections.emptyList();
         }
 
         @Override
-        public boolean performAction(CommandSender sender, String action, String... args) {
+        public boolean performAction(@NotNull CommandSender sender, @NotNull String action, @NotNull String @NotNull ... args) {
             return false;
         }
 
         @Override
-        public void sendUsage(CommandSender sender) {
+        public void sendUsage(@NotNull CommandSender sender) {
             // EMPTY
         }
     };

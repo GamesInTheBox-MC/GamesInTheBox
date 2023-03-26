@@ -25,6 +25,7 @@ import me.hsgamer.gamesinthebox.util.GameUtil;
 import me.hsgamer.hscore.bukkit.utils.ColorUtils;
 import me.hsgamer.minigamecore.base.Feature;
 import me.hsgamer.minigamecore.bukkit.SimpleBukkitArena;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
@@ -42,7 +43,7 @@ import java.util.Optional;
  * </ul>
  */
 public class Planner extends SimpleBukkitArena implements ReplacementHandler {
-    public Planner(String name, PlannerManager arenaManager) {
+    public Planner(@NotNull String name, @NotNull PlannerManager arenaManager) {
         super(name, arenaManager);
     }
 
@@ -64,7 +65,7 @@ public class Planner extends SimpleBukkitArena implements ReplacementHandler {
     }
 
     @Override
-    public String replace(String input) {
+    public String replace(@NotNull String input) {
         switch (input.toLowerCase()) {
             case "name":
                 return getName();

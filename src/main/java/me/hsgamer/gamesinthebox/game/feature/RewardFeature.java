@@ -15,11 +15,13 @@
 */
 package me.hsgamer.gamesinthebox.game.feature;
 
+import com.google.common.base.Preconditions;
 import me.hsgamer.hscore.common.Pair;
 import me.hsgamer.minigamecore.base.Feature;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -35,7 +37,8 @@ public abstract class RewardFeature implements Feature {
      *
      * @return the {@link Pair} of the top commands and the default commands
      */
-    protected abstract Pair<Map<Integer, List<String>>, List<String>> createTopAndDefaultCommands();
+    @NotNull
+    protected abstract Pair<@NotNull Map<@NotNull Integer, @NotNull List<@NotNull String>>, @NotNull List<@NotNull String>> createTopAndDefaultCommands();
 
     @Override
     public void postInit() {
@@ -55,7 +58,9 @@ public abstract class RewardFeature implements Feature {
      *
      * @return the top commands
      */
+    @NotNull
     public Map<Integer, List<String>> getTopCommands() {
+        Preconditions.checkNotNull(topCommands, "The top commands are null. The feature is not initialized.");
         return topCommands;
     }
 
@@ -65,6 +70,7 @@ public abstract class RewardFeature implements Feature {
      * @return the default commands
      */
     public List<String> getDefaultCommands() {
+        Preconditions.checkNotNull(defaultCommands, "The default commands are null. The feature is not initialized.");
         return defaultCommands;
     }
 
@@ -74,7 +80,7 @@ public abstract class RewardFeature implements Feature {
      * @param topPosition the top position, starting from 1
      * @param uuid        the uuid of the player
      */
-    public void reward(int topPosition, UUID uuid) {
+    public void reward(int topPosition, @NotNull UUID uuid) {
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
         String name = offlinePlayer.getName();
         if (name == null) return;
@@ -88,7 +94,7 @@ public abstract class RewardFeature implements Feature {
      *
      * @param topMap the map of the top position and the list of uuids
      */
-    public void reward(Map<Integer, List<UUID>> topMap) {
+    public void reward(@NotNull Map<Integer, List<UUID>> topMap) {
         topMap.forEach((topPosition, uuidList) -> {
             for (UUID uuid : uuidList) {
                 reward(topPosition, uuid);
@@ -101,7 +107,7 @@ public abstract class RewardFeature implements Feature {
      *
      * @param topList the list of uuids, sorted by the top position
      */
-    public void reward(List<UUID> topList) {
+    public void reward(@NotNull List<UUID> topList) {
         for (int i = 0; i < topList.size(); i++) {
             int top = i + 1;
             reward(top, topList.get(i));

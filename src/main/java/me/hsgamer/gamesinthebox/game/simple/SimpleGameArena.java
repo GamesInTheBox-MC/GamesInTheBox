@@ -30,6 +30,8 @@ import me.hsgamer.minigamecore.base.Feature;
 import me.hsgamer.minigamecore.implementation.feature.TimerFeature;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -69,7 +71,7 @@ public abstract class SimpleGameArena extends GameArena {
      * @param game    the game that the arena belongs to
      * @param planner the planner that the arena belongs to
      */
-    protected SimpleGameArena(String name, Game game, Planner planner) {
+    protected SimpleGameArena(@NotNull String name, @NotNull Game game, @NotNull Planner planner) {
         super(name, game, planner);
     }
 
@@ -80,7 +82,7 @@ public abstract class SimpleGameArena extends GameArena {
      * @param point       the applied point
      * @param totalPoints the total point
      */
-    protected void onPointChanged(UUID uuid, int point, int totalPoints) {
+    protected void onPointChanged(@NotNull UUID uuid, int point, int totalPoints) {
         // EMPTY
     }
 
@@ -90,7 +92,8 @@ public abstract class SimpleGameArena extends GameArena {
      * @param name the name to get
      * @return the default hologram lines
      */
-    public List<String> getDefaultHologramLines(String name) {
+    @NotNull
+    public List<@NotNull String> getDefaultHologramLines(@NotNull String name) {
         return Collections.emptyList();
     }
 
@@ -99,12 +102,13 @@ public abstract class SimpleGameArena extends GameArena {
      *
      * @return the created {@link SimpleGameArenaAction}
      */
+    @NotNull
     protected SimpleGameArenaAction createAction() {
         return new SimpleGameArenaAction(this);
     }
 
     @Override
-    public final SimpleGameArenaAction getAction() {
+    public final @NotNull SimpleGameArenaAction getAction() {
         if (gameAction == null) {
             gameAction = createAction();
         }
@@ -124,7 +128,7 @@ public abstract class SimpleGameArena extends GameArena {
     }
 
     @Override
-    public String replace(String input) {
+    public @Nullable String replace(@NotNull String input) {
         String lowerCase = input.toLowerCase();
         if (input.equalsIgnoreCase("time_left")) {
             return Optional.ofNullable(getFeature(TimerFeature.class))
@@ -165,7 +169,7 @@ public abstract class SimpleGameArena extends GameArena {
     }
 
     @Override
-    public String replace(OfflinePlayer player, String input) {
+    public @Nullable String replace(@NotNull OfflinePlayer player, @NotNull String input) {
         if (input.equalsIgnoreCase("point")) {
             return Optional.ofNullable(getFeature(PointFeature.class))
                     .map(pointFeature -> pointFeature.getPoint(player.getUniqueId()))

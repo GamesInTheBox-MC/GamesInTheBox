@@ -17,6 +17,8 @@ package me.hsgamer.gamesinthebox.picker;
 
 import me.hsgamer.gamesinthebox.game.GameArena;
 import me.hsgamer.gamesinthebox.replacement.ReplacementHandler;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
@@ -29,12 +31,12 @@ public interface GamePicker extends ReplacementHandler {
      */
     GamePicker EMPTY = new GamePicker() {
         @Override
-        public String replace(String input) {
+        public String replace(@NotNull String input) {
             return null;
         }
 
         @Override
-        public void setup(Map<String, GameArena> arenaMap) {
+        public void setup(@NotNull Map<String, GameArena> arenaMap) {
             // EMPTY
         }
 
@@ -54,13 +56,14 @@ public interface GamePicker extends ReplacementHandler {
      *
      * @param arenaMap the map of arena name and arena
      */
-    void setup(Map<String, GameArena> arenaMap);
+    void setup(@NotNull Map<@NotNull String, @NotNull GameArena> arenaMap);
 
     /**
      * Pick a {@link GameArena}
      *
      * @return the picked {@link GameArena} or null if it cannot pick
      */
+    @Nullable
     GameArena pick();
 
     /**

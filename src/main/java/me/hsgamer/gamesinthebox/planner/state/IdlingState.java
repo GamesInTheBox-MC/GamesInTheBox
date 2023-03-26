@@ -22,6 +22,7 @@ import me.hsgamer.gamesinthebox.planner.feature.GameRunnerFeature;
 import me.hsgamer.minigamecore.base.Arena;
 import me.hsgamer.minigamecore.base.GameState;
 import me.hsgamer.minigamecore.bukkit.extra.ColoredDisplayName;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The {@link GameState} when the planner is idling
@@ -34,7 +35,7 @@ public class IdlingState implements GameState, ColoredDisplayName {
      *
      * @param plugin the plugin
      */
-    public IdlingState(GamesInTheBox plugin) {
+    public IdlingState(@NotNull GamesInTheBox plugin) {
         this.plugin = plugin;
     }
 

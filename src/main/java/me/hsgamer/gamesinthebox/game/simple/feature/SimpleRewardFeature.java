@@ -21,6 +21,7 @@ import me.hsgamer.gamesinthebox.game.simple.SimpleGameArena;
 import me.hsgamer.hscore.common.CollectionUtils;
 import me.hsgamer.hscore.common.Pair;
 import me.hsgamer.hscore.common.Validate;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -43,12 +44,12 @@ public class SimpleRewardFeature extends RewardFeature {
      *
      * @param arena the arena
      */
-    public SimpleRewardFeature(SimpleGameArena arena) {
+    public SimpleRewardFeature(@NotNull SimpleGameArena arena) {
         this.arena = arena;
     }
 
     @Override
-    protected Pair<Map<Integer, List<String>>, List<String>> createTopAndDefaultCommands() {
+    protected @NotNull Pair<Map<Integer, List<String>>, List<String>> createTopAndDefaultCommands() {
         GameConfigFeature gameConfigFeature = arena.getFeature(GameConfigFeature.class);
 
         minPlayersToReward = Optional.ofNullable(gameConfigFeature.getString("min-players-to-reward"))
@@ -81,7 +82,7 @@ public class SimpleRewardFeature extends RewardFeature {
      * @param uuids the players
      * @return true if the players are rewarded
      */
-    public boolean tryReward(List<UUID> uuids) {
+    public boolean tryReward(@NotNull List<@NotNull UUID> uuids) {
         if (minPlayersToReward >= 0 && uuids.size() < minPlayersToReward) {
             return false;
         }

@@ -17,6 +17,7 @@ package me.hsgamer.gamesinthebox.util;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.lewdev.probabilitylib.ProbabilityCollection;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -37,7 +38,8 @@ public final class MaterialUtil {
      * @param values the map
      * @return the parsed map
      */
-    public static Map<XMaterial, Number> parseMaterialNumberMap(Map<String, Object> values) {
+    @NotNull
+    public static Map<@NotNull XMaterial, @NotNull Number> parseMaterialNumberMap(@NotNull Map<String, Object> values) {
         Map<XMaterial, Number> map = new EnumMap<>(XMaterial.class);
         values.forEach((k, v) -> {
             Optional<XMaterial> optionalXMaterial = XMaterial.matchXMaterial(k);
@@ -59,7 +61,8 @@ public final class MaterialUtil {
      * @param values the map
      * @return the parsed {@link ProbabilityCollection}
      */
-    public static ProbabilityCollection<XMaterial> parseMaterialProbability(Map<String, Object> values) {
+    @NotNull
+    public static ProbabilityCollection<@NotNull XMaterial> parseMaterialProbability(@NotNull Map<String, Object> values) {
         ProbabilityCollection<XMaterial> collection = new ProbabilityCollection<>();
         parseMaterialNumberMap(values).forEach((xMaterial, number) -> collection.add(xMaterial, number.intValue()));
         return collection;

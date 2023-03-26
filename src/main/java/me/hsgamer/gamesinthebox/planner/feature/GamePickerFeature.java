@@ -21,6 +21,8 @@ import me.hsgamer.gamesinthebox.manager.GameManager;
 import me.hsgamer.gamesinthebox.picker.GamePicker;
 import me.hsgamer.gamesinthebox.planner.Planner;
 import me.hsgamer.minigamecore.base.Feature;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.logging.Level;
@@ -50,7 +52,7 @@ public class GamePickerFeature implements Feature {
      *
      * @param planner the {@link Planner}
      */
-    public GamePickerFeature(Planner planner) {
+    public GamePickerFeature(@NotNull Planner planner) {
         this.planner = planner;
     }
 
@@ -98,6 +100,7 @@ public class GamePickerFeature implements Feature {
      *
      * @return the next game
      */
+    @Nullable
     public GameArena getNextGame() {
         if (forceNextGame != null) {
             GameArena gameArena = forceNextGame;
@@ -114,7 +117,7 @@ public class GamePickerFeature implements Feature {
      * @param name the name of the game
      * @return true if the game is found
      */
-    public boolean setNextGame(String name) {
+    public boolean setNextGame(@NotNull String name) {
         if (gameArenaMap.containsKey(name)) {
             forceNextGame = gameArenaMap.get(name);
             return true;
@@ -127,7 +130,8 @@ public class GamePickerFeature implements Feature {
      *
      * @return the names of the game arenas
      */
-    public Collection<String> getGameArenaNames() {
+    @NotNull
+    public Collection<@NotNull String> getGameArenaNames() {
         return Collections.unmodifiableCollection(gameArenaMap.keySet());
     }
 
@@ -137,7 +141,8 @@ public class GamePickerFeature implements Feature {
      * @param name the name of the game arena
      * @return the {@link GameArena}
      */
-    public Optional<GameArena> getGameArena(String name) {
+    @NotNull
+    public Optional<GameArena> getGameArena(@NotNull String name) {
         return Optional.ofNullable(gameArenaMap.get(name));
     }
 
@@ -146,6 +151,7 @@ public class GamePickerFeature implements Feature {
      *
      * @return the {@link GamePicker}
      */
+    @NotNull
     public GamePicker getGamePicker() {
         return gamePicker;
     }

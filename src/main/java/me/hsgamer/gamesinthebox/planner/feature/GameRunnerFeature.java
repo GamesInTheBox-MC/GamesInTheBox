@@ -18,6 +18,8 @@ package me.hsgamer.gamesinthebox.planner.feature;
 import me.hsgamer.gamesinthebox.game.GameArena;
 import me.hsgamer.gamesinthebox.game.GameArenaAction;
 import me.hsgamer.minigamecore.base.Feature;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * The {@link Feature} that handles the operations of the {@link GameArena}
@@ -31,6 +33,7 @@ public class GameRunnerFeature implements Feature {
      *
      * @return the current {@link GameArena}
      */
+    @Nullable
     public GameArena getCurrentGameArena() {
         return currentGameArena;
     }
@@ -40,7 +43,7 @@ public class GameRunnerFeature implements Feature {
      *
      * @param currentGameArena the current {@link GameArena}
      */
-    public void setCurrentGameArena(GameArena currentGameArena) {
+    public void setCurrentGameArena(@Nullable GameArena currentGameArena) {
         this.currentGameArena = currentGameArena;
     }
 
@@ -67,6 +70,7 @@ public class GameRunnerFeature implements Feature {
      *
      * @return the {@link GameArenaAction}
      */
+    @NotNull
     public GameArenaAction getGameArenaAction() {
         if (currentGameArena == null || isFinished) return GameArenaAction.EMPTY;
         return currentGameArena.getAction();

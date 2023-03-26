@@ -19,6 +19,7 @@ import com.cryptomorin.xseries.messages.ActionBar;
 import me.hsgamer.hscore.bukkit.utils.ColorUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
@@ -36,7 +37,7 @@ public final class ActionBarUtil {
      * @param player  the player
      * @param message the message
      */
-    public static void sendActionBar(Player player, String message) {
+    public static void sendActionBar(@NotNull Player player, @NotNull String message) {
         message = ColorUtils.colorize(message);
         ActionBar.sendActionBar(player, message);
     }
@@ -47,7 +48,7 @@ public final class ActionBarUtil {
      * @param uuid    the uuid of the player
      * @param message the message
      */
-    public static void sendActionBar(UUID uuid, String message) {
+    public static void sendActionBar(@NotNull UUID uuid, @NotNull String message) {
         Player player = Bukkit.getPlayer(uuid);
         if (player != null) {
             sendActionBar(player, message);

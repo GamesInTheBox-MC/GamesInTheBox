@@ -19,6 +19,7 @@ import com.lewdev.probabilitylib.ProbabilityCollection;
 import me.hsgamer.gamesinthebox.game.GameArena;
 import me.hsgamer.gamesinthebox.planner.Planner;
 import me.hsgamer.gamesinthebox.planner.feature.PlannerConfigFeature;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -45,7 +46,7 @@ public class ChanceGamePicker extends DelayedGamePicker {
      *
      * @param planner the {@link Planner}
      */
-    public ChanceGamePicker(Planner planner) {
+    public ChanceGamePicker(@NotNull Planner planner) {
         super(planner);
         this.chanceMap = Optional.ofNullable(planner.getFeature(PlannerConfigFeature.class))
                 .map(feature -> feature.getValues("pick-chance", false))
@@ -66,7 +67,7 @@ public class ChanceGamePicker extends DelayedGamePicker {
     }
 
     @Override
-    public void setup(Map<String, GameArena> arenaMap) {
+    public void setup(@NotNull Map<String, GameArena> arenaMap) {
         chanceMap.forEach((key, value) -> {
             GameArena arena = arenaMap.get(key);
             if (arena != null) {

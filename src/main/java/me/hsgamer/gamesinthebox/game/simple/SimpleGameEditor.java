@@ -27,6 +27,7 @@ import org.apache.commons.lang.StringUtils;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -52,26 +53,26 @@ public class SimpleGameEditor extends SimpleGameAction implements GameEditor {
      *
      * @param game the {@link SimpleGame}
      */
-    public SimpleGameEditor(SimpleGame game) {
+    public SimpleGameEditor(@NotNull SimpleGame game) {
         this.game = game;
     }
 
     @Override
-    public void reset(CommandSender sender) {
+    public void reset(@NotNull CommandSender sender) {
         for (SimpleEditorStatus editorStatus : getEditorStatusList()) {
             editorStatus.reset(sender);
         }
     }
 
     @Override
-    public void sendStatus(CommandSender sender) {
+    public void sendStatus(@NotNull CommandSender sender) {
         for (SimpleEditorStatus editorStatus : getEditorStatusList()) {
             editorStatus.sendStatus(sender);
         }
     }
 
     @Override
-    public Optional<Map<String, Object>> exportPathValueMap(CommandSender sender) {
+    public @NotNull Optional<Map<String, Object>> exportPathValueMap(@NotNull CommandSender sender) {
         Map<String, Object> pathValueMap = new LinkedHashMap<>();
         for (SimpleEditorStatus editorStatus : getEditorStatusList()) {
             if (!editorStatus.canSave(sender)) {
@@ -83,23 +84,23 @@ public class SimpleGameEditor extends SimpleGameAction implements GameEditor {
     }
 
     @Override
-    protected Map<String, SimpleAction> createActionMap() {
+    protected @NotNull Map<String, SimpleAction> createActionMap() {
         Map<String, SimpleAction> map = new LinkedHashMap<>();
 
         // POINTS
         map.put("set-point-plus", new SimpleAction() {
             @Override
-            public String getDescription() {
+            public @NotNull String getDescription() {
                 return "Set the point to add to the player";
             }
 
             @Override
-            public String getArgsUsage() {
+            public @NotNull String getArgsUsage() {
                 return "<point>";
             }
 
             @Override
-            public List<String> getActionArgs(CommandSender sender, String... args) {
+            public @NotNull List<String> getActionArgs(@NotNull CommandSender sender, String... args) {
                 if (args.length == 1) {
                     return Arrays.asList("1", "2", "3", "4", "5");
                 }
@@ -107,7 +108,7 @@ public class SimpleGameEditor extends SimpleGameAction implements GameEditor {
             }
 
             @Override
-            public boolean performAction(CommandSender sender, String... args) {
+            public boolean performAction(@NotNull CommandSender sender, String... args) {
                 if (args.length < 1) {
                     return false;
                 }
@@ -123,17 +124,17 @@ public class SimpleGameEditor extends SimpleGameAction implements GameEditor {
         });
         map.put("set-point-minus", new SimpleAction() {
             @Override
-            public String getDescription() {
+            public @NotNull String getDescription() {
                 return "Set the point to remove from the player";
             }
 
             @Override
-            public String getArgsUsage() {
+            public @NotNull String getArgsUsage() {
                 return "<point>";
             }
 
             @Override
-            public List<String> getActionArgs(CommandSender sender, String... args) {
+            public @NotNull List<String> getActionArgs(@NotNull CommandSender sender, String... args) {
                 if (args.length == 1) {
                     return Arrays.asList("1", "2", "3", "4", "5");
                 }
@@ -141,7 +142,7 @@ public class SimpleGameEditor extends SimpleGameAction implements GameEditor {
             }
 
             @Override
-            public boolean performAction(CommandSender sender, String... args) {
+            public boolean performAction(@NotNull CommandSender sender, String... args) {
                 if (args.length < 1) {
                     return false;
                 }
@@ -157,17 +158,17 @@ public class SimpleGameEditor extends SimpleGameAction implements GameEditor {
         });
         map.put("set-max-players-to-add-point", new SimpleAction() {
             @Override
-            public String getDescription() {
+            public @NotNull String getDescription() {
                 return "Set the maximum players to add point";
             }
 
             @Override
-            public String getArgsUsage() {
+            public @NotNull String getArgsUsage() {
                 return "<max players>";
             }
 
             @Override
-            public List<String> getActionArgs(CommandSender sender, String... args) {
+            public @NotNull List<String> getActionArgs(@NotNull CommandSender sender, String... args) {
                 if (args.length == 1) {
                     return Arrays.asList("1", "2", "3", "4", "5");
                 }
@@ -175,7 +176,7 @@ public class SimpleGameEditor extends SimpleGameAction implements GameEditor {
             }
 
             @Override
-            public boolean performAction(CommandSender sender, String... args) {
+            public boolean performAction(@NotNull CommandSender sender, String... args) {
                 if (args.length < 1) {
                     return false;
                 }
@@ -197,17 +198,17 @@ public class SimpleGameEditor extends SimpleGameAction implements GameEditor {
         // REWARD
         map.put("add-reward", new SimpleAction() {
             @Override
-            public String getDescription() {
+            public @NotNull String getDescription() {
                 return "Add a reward command";
             }
 
             @Override
-            public String getArgsUsage() {
+            public @NotNull String getArgsUsage() {
                 return "<top> <command>";
             }
 
             @Override
-            public List<String> getActionArgs(CommandSender sender, String... args) {
+            public @NotNull List<String> getActionArgs(@NotNull CommandSender sender, String... args) {
                 if (args.length == 1) {
                     return Arrays.asList("all", "1", "2", "3", "4", "5");
                 }
@@ -215,7 +216,7 @@ public class SimpleGameEditor extends SimpleGameAction implements GameEditor {
             }
 
             @Override
-            public boolean performAction(CommandSender sender, String... args) {
+            public boolean performAction(@NotNull CommandSender sender, String... args) {
                 if (args.length < 2) {
                     return false;
                 }
@@ -232,17 +233,17 @@ public class SimpleGameEditor extends SimpleGameAction implements GameEditor {
         });
         map.put("clear-reward", new SimpleAction() {
             @Override
-            public String getDescription() {
+            public @NotNull String getDescription() {
                 return "Clear all reward commands of a top position";
             }
 
             @Override
-            public String getArgsUsage() {
+            public @NotNull String getArgsUsage() {
                 return "<top>";
             }
 
             @Override
-            public List<String> getActionArgs(CommandSender sender, String... args) {
+            public @NotNull List<String> getActionArgs(@NotNull CommandSender sender, String... args) {
                 if (args.length == 1) {
                     return Arrays.asList("all", "1", "2", "3", "4", "5");
                 }
@@ -250,7 +251,7 @@ public class SimpleGameEditor extends SimpleGameAction implements GameEditor {
             }
 
             @Override
-            public boolean performAction(CommandSender sender, String... args) {
+            public boolean performAction(@NotNull CommandSender sender, String... args) {
                 if (args.length < 1) {
                     return false;
                 }
@@ -264,29 +265,29 @@ public class SimpleGameEditor extends SimpleGameAction implements GameEditor {
         });
         map.put("clear-all-reward", new SimpleAction() {
             @Override
-            public String getDescription() {
+            public @NotNull String getDescription() {
                 return "Clear all reward commands";
             }
 
             @Override
-            public boolean performAction(CommandSender sender, String... args) {
+            public boolean performAction(@NotNull CommandSender sender, String... args) {
                 rewardCommands = null;
                 return true;
             }
         });
         map.put("set-min-players-to-reward", new SimpleAction() {
             @Override
-            public String getDescription() {
+            public @NotNull String getDescription() {
                 return "Set the minimum players to reward";
             }
 
             @Override
-            public String getArgsUsage() {
+            public @NotNull String getArgsUsage() {
                 return "<min players>";
             }
 
             @Override
-            public List<String> getActionArgs(CommandSender sender, String... args) {
+            public @NotNull List<String> getActionArgs(@NotNull CommandSender sender, String... args) {
                 if (args.length == 1) {
                     return Arrays.asList("1", "2", "3", "4", "5");
                 }
@@ -294,7 +295,7 @@ public class SimpleGameEditor extends SimpleGameAction implements GameEditor {
             }
 
             @Override
-            public boolean performAction(CommandSender sender, String... args) {
+            public boolean performAction(@NotNull CommandSender sender, String... args) {
                 if (args.length < 1) {
                     return false;
                 }
@@ -316,12 +317,12 @@ public class SimpleGameEditor extends SimpleGameAction implements GameEditor {
         // HOLOGRAM
         map.put("new-hologram", new SimpleAction() {
             @Override
-            public String getDescription() {
+            public @NotNull String getDescription() {
                 return "Create a new hologram at your location";
             }
 
             @Override
-            public boolean performAction(CommandSender sender, String... args) {
+            public boolean performAction(@NotNull CommandSender sender, String... args) {
                 if (!(sender instanceof Player)) {
                     MessageUtils.sendMessage(sender, "&cOnly players can use this command");
                     return false;
@@ -341,17 +342,17 @@ public class SimpleGameEditor extends SimpleGameAction implements GameEditor {
         });
         map.put("set-hologram-location", new SimpleAction() {
             @Override
-            public String getDescription() {
+            public @NotNull String getDescription() {
                 return "Set the location of a hologram";
             }
 
             @Override
-            public String getArgsUsage() {
+            public @NotNull String getArgsUsage() {
                 return "<index>";
             }
 
             @Override
-            public List<String> getActionArgs(CommandSender sender, String... args) {
+            public @NotNull List<String> getActionArgs(@NotNull CommandSender sender, String... args) {
                 if (args.length == 1) {
                     if (hologramList == null) {
                         return Collections.emptyList();
@@ -362,7 +363,7 @@ public class SimpleGameEditor extends SimpleGameAction implements GameEditor {
             }
 
             @Override
-            public boolean performAction(CommandSender sender, String... args) {
+            public boolean performAction(@NotNull CommandSender sender, String... args) {
                 if (args.length < 1) {
                     return false;
                 }
@@ -392,17 +393,17 @@ public class SimpleGameEditor extends SimpleGameAction implements GameEditor {
         });
         map.put("add-hologram-line", new SimpleAction() {
             @Override
-            public String getDescription() {
+            public @NotNull String getDescription() {
                 return "Add a line to a hologram";
             }
 
             @Override
-            public String getArgsUsage() {
+            public @NotNull String getArgsUsage() {
                 return "<index> <line>";
             }
 
             @Override
-            public List<String> getActionArgs(CommandSender sender, String... args) {
+            public @NotNull List<String> getActionArgs(@NotNull CommandSender sender, String... args) {
                 if (args.length == 1) {
                     if (hologramList == null) {
                         return Collections.emptyList();
@@ -413,7 +414,7 @@ public class SimpleGameEditor extends SimpleGameAction implements GameEditor {
             }
 
             @Override
-            public boolean performAction(CommandSender sender, String... args) {
+            public boolean performAction(@NotNull CommandSender sender, String... args) {
                 if (args.length < 2) {
                     return false;
                 }
@@ -440,17 +441,17 @@ public class SimpleGameEditor extends SimpleGameAction implements GameEditor {
         });
         map.put("clear-hologram-line", new SimpleAction() {
             @Override
-            public String getDescription() {
+            public @NotNull String getDescription() {
                 return "Clear all lines of a hologram";
             }
 
             @Override
-            public String getArgsUsage() {
+            public @NotNull String getArgsUsage() {
                 return "<index>";
             }
 
             @Override
-            public List<String> getActionArgs(CommandSender sender, String... args) {
+            public @NotNull List<String> getActionArgs(@NotNull CommandSender sender, String... args) {
                 if (args.length == 1) {
                     if (hologramList == null) {
                         return Collections.emptyList();
@@ -461,7 +462,7 @@ public class SimpleGameEditor extends SimpleGameAction implements GameEditor {
             }
 
             @Override
-            public boolean performAction(CommandSender sender, String... args) {
+            public boolean performAction(@NotNull CommandSender sender, String... args) {
                 if (args.length < 1) {
                     return false;
                 }
@@ -487,17 +488,17 @@ public class SimpleGameEditor extends SimpleGameAction implements GameEditor {
         });
         map.put("remove-hologram", new SimpleAction() {
             @Override
-            public String getDescription() {
+            public @NotNull String getDescription() {
                 return "Remove a hologram";
             }
 
             @Override
-            public String getArgsUsage() {
+            public @NotNull String getArgsUsage() {
                 return "<index>";
             }
 
             @Override
-            public List<String> getActionArgs(CommandSender sender, String... args) {
+            public @NotNull List<String> getActionArgs(@NotNull CommandSender sender, String... args) {
                 if (args.length == 1) {
                     if (hologramList == null) {
                         return Collections.emptyList();
@@ -508,7 +509,7 @@ public class SimpleGameEditor extends SimpleGameAction implements GameEditor {
             }
 
             @Override
-            public boolean performAction(CommandSender sender, String... args) {
+            public boolean performAction(@NotNull CommandSender sender, String... args) {
                 if (args.length < 1) {
                     return false;
                 }
@@ -534,12 +535,12 @@ public class SimpleGameEditor extends SimpleGameAction implements GameEditor {
         });
         map.put("clear-all-hologram", new SimpleAction() {
             @Override
-            public String getDescription() {
+            public @NotNull String getDescription() {
                 return "Clear all holograms";
             }
 
             @Override
-            public boolean performAction(CommandSender sender, String... args) {
+            public boolean performAction(@NotNull CommandSender sender, String... args) {
                 if (hologramList != null) {
                     hologramList.clear();
                 }
@@ -556,13 +557,14 @@ public class SimpleGameEditor extends SimpleGameAction implements GameEditor {
      *
      * @return the list of {@link SimpleEditorStatus}
      */
-    protected List<SimpleEditorStatus> createEditorStatusList() {
+    @NotNull
+    protected List<@NotNull SimpleEditorStatus> createEditorStatusList() {
         List<SimpleEditorStatus> list = new ArrayList<>();
 
         // POINTS
         list.add(new SimpleEditorStatus() {
             @Override
-            public void sendStatus(CommandSender sender) {
+            public void sendStatus(@NotNull CommandSender sender) {
                 MessageUtils.sendMessage(sender, "&6&lPOINTS");
                 MessageUtils.sendMessage(sender, "&6Point Plus: &e" + (pointPlus == null ? "Default" : pointPlus));
                 MessageUtils.sendMessage(sender, "&6Point Minus: &e" + (pointMinus == null ? "Default" : pointMinus));
@@ -570,19 +572,19 @@ public class SimpleGameEditor extends SimpleGameAction implements GameEditor {
             }
 
             @Override
-            public void reset(CommandSender sender) {
+            public void reset(@NotNull CommandSender sender) {
                 pointPlus = null;
                 pointMinus = null;
                 maxPlayersToAddPoint = null;
             }
 
             @Override
-            public boolean canSave(CommandSender sender) {
+            public boolean canSave(@NotNull CommandSender sender) {
                 return true;
             }
 
             @Override
-            public Map<String, Object> toPathValueMap(CommandSender sender) {
+            public Map<String, Object> toPathValueMap(@NotNull CommandSender sender) {
                 Map<String, Object> pathValueMap = new LinkedHashMap<>();
                 if (pointPlus != null) {
                     pathValueMap.put("points.plus", pointPlus);
@@ -600,7 +602,7 @@ public class SimpleGameEditor extends SimpleGameAction implements GameEditor {
         // REWARD
         list.add(new SimpleEditorStatus() {
             @Override
-            public void sendStatus(CommandSender sender) {
+            public void sendStatus(@NotNull CommandSender sender) {
                 MessageUtils.sendMessage(sender, "&6&lREWARD");
                 if (rewardCommands == null) {
                     MessageUtils.sendMessage(sender, "&6Reward Commands: &eEmpty");
@@ -617,18 +619,18 @@ public class SimpleGameEditor extends SimpleGameAction implements GameEditor {
             }
 
             @Override
-            public void reset(CommandSender sender) {
+            public void reset(@NotNull CommandSender sender) {
                 rewardCommands = null;
                 minPlayersToReward = null;
             }
 
             @Override
-            public boolean canSave(CommandSender sender) {
+            public boolean canSave(@NotNull CommandSender sender) {
                 return true;
             }
 
             @Override
-            public Map<String, Object> toPathValueMap(CommandSender sender) {
+            public Map<String, Object> toPathValueMap(@NotNull CommandSender sender) {
                 Map<String, Object> pathValueMap = new LinkedHashMap<>();
                 if (rewardCommands != null && !rewardCommands.isEmpty()) {
                     pathValueMap.put("reward", rewardCommands);
@@ -643,7 +645,7 @@ public class SimpleGameEditor extends SimpleGameAction implements GameEditor {
         // HOLOGRAM
         list.add(new SimpleEditorStatus() {
             @Override
-            public void sendStatus(CommandSender sender) {
+            public void sendStatus(@NotNull CommandSender sender) {
                 MessageUtils.sendMessage(sender, "&6&lHOLOGRAM");
                 if (hologramList == null) {
                     MessageUtils.sendMessage(sender, "&6Hologram List: &eEmpty");
@@ -662,17 +664,17 @@ public class SimpleGameEditor extends SimpleGameAction implements GameEditor {
             }
 
             @Override
-            public void reset(CommandSender sender) {
+            public void reset(@NotNull CommandSender sender) {
                 hologramList = null;
             }
 
             @Override
-            public boolean canSave(CommandSender sender) {
+            public boolean canSave(@NotNull CommandSender sender) {
                 return true;
             }
 
             @Override
-            public Map<String, Object> toPathValueMap(CommandSender sender) {
+            public Map<String, Object> toPathValueMap(@NotNull CommandSender sender) {
                 Map<String, Object> pathValueMap = new LinkedHashMap<>();
                 if (hologramList != null && !hologramList.isEmpty()) {
                     List<Map<String, Object>> hologramListMap = new ArrayList<>();
@@ -699,7 +701,7 @@ public class SimpleGameEditor extends SimpleGameAction implements GameEditor {
     }
 
     @Override
-    public boolean migrate(CommandSender sender, GameArena gameArena) {
+    public boolean migrate(@NotNull CommandSender sender, @NotNull GameArena gameArena) {
         if (!(gameArena instanceof SimpleGameArena)) {
             return false;
         }
@@ -739,14 +741,14 @@ public class SimpleGameEditor extends SimpleGameAction implements GameEditor {
          *
          * @param sender the {@link CommandSender}
          */
-        void sendStatus(CommandSender sender);
+        void sendStatus(@NotNull CommandSender sender);
 
         /**
          * Reset the status
          *
          * @param sender the {@link CommandSender}
          */
-        void reset(CommandSender sender);
+        void reset(@NotNull CommandSender sender);
 
         /**
          * Check if the {@link CommandSender} can save the status
@@ -754,7 +756,7 @@ public class SimpleGameEditor extends SimpleGameAction implements GameEditor {
          * @param sender the {@link CommandSender}
          * @return true if the {@link CommandSender} can save the status
          */
-        boolean canSave(CommandSender sender);
+        boolean canSave(@NotNull CommandSender sender);
 
         /**
          * Get the path-value map to be used to save the status
@@ -762,6 +764,6 @@ public class SimpleGameEditor extends SimpleGameAction implements GameEditor {
          * @param sender the {@link CommandSender}
          * @return the path-value map
          */
-        Map<String, Object> toPathValueMap(CommandSender sender);
+        Map<String, Object> toPathValueMap(@NotNull CommandSender sender);
     }
 }

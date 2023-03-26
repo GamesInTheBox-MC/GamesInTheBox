@@ -19,6 +19,7 @@ import me.hsgamer.gamesinthebox.game.GameArena;
 import me.hsgamer.gamesinthebox.planner.Planner;
 import me.hsgamer.gamesinthebox.planner.feature.PlannerConfigFeature;
 import me.hsgamer.hscore.common.CollectionUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -39,7 +40,12 @@ public class SequenceGamePicker extends DelayedGamePicker {
     private final List<List<GameArena>> arenaListSequence = new ArrayList<>();
     private int index = 0;
 
-    public SequenceGamePicker(Planner planner) {
+    /**
+     * Create a new game picker
+     *
+     * @param planner the {@link Planner}
+     */
+    public SequenceGamePicker(@NotNull Planner planner) {
         super(planner);
         this.sequence = Optional.ofNullable(planner.getFeature(PlannerConfigFeature.class))
                 .map(feature -> feature.get("pick-sequence"))
@@ -48,7 +54,7 @@ public class SequenceGamePicker extends DelayedGamePicker {
     }
 
     @Override
-    public void setup(Map<String, GameArena> arenaMap) {
+    public void setup(@NotNull Map<String, GameArena> arenaMap) {
         sequence.forEach(subSequence -> {
             String[] split = subSequence.split(",");
             List<GameArena> arenaList = new ArrayList<>();

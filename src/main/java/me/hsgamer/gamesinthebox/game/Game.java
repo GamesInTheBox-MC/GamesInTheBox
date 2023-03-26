@@ -18,6 +18,7 @@ package me.hsgamer.gamesinthebox.game;
 import me.hsgamer.gamesinthebox.planner.Planner;
 import me.hsgamer.minigamecore.base.ArenaManager;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The game.
@@ -32,13 +33,15 @@ public abstract class Game extends ArenaManager {
      * @param planner the planner that the arena belongs to
      * @return the new arena
      */
-    protected abstract GameArena newArena(String name, Planner planner);
+    @NotNull
+    protected abstract GameArena newArena(@NotNull String name, @NotNull Planner planner);
 
     /**
      * Get the display name of the game
      *
      * @return the display name
      */
+    @NotNull
     public abstract String getDisplayName();
 
     /**
@@ -47,6 +50,7 @@ public abstract class Game extends ArenaManager {
      *
      * @return the {@link GameEditor}
      */
+    @NotNull
     public GameEditor getEditor() {
         return GameEditor.EMPTY;
     }
@@ -60,7 +64,8 @@ public abstract class Game extends ArenaManager {
      * @return the new arena
      */
     @ApiStatus.Internal
-    public final GameArena createArena(String name, Planner planner) {
+    @NotNull
+    public final GameArena createArena(@NotNull String name, @NotNull Planner planner) {
         GameArena arena = newArena(name, planner);
         if (!addArena(arena)) {
             throw new IllegalArgumentException("Arena " + name + " already exists");

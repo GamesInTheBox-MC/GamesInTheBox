@@ -19,6 +19,7 @@ import me.hsgamer.gamesinthebox.game.feature.GameConfigFeature;
 import me.hsgamer.gamesinthebox.game.feature.PointFeature;
 import me.hsgamer.gamesinthebox.game.simple.SimpleGameArena;
 import me.hsgamer.hscore.common.Validate;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Optional;
@@ -50,7 +51,7 @@ public class SimplePointFeature extends PointFeature {
      * @param arena         the arena
      * @param pointConsumer the point consumer
      */
-    public SimplePointFeature(SimpleGameArena arena, PointConsumer pointConsumer) {
+    public SimplePointFeature(@NotNull SimpleGameArena arena, @NotNull PointConsumer pointConsumer) {
         super(pointConsumer);
         this.arena = arena;
     }
@@ -79,7 +80,7 @@ public class SimplePointFeature extends PointFeature {
      *
      * @param uuid the uuid of the player
      */
-    public void addPoint(UUID uuid) {
+    public void addPoint(@NotNull UUID uuid) {
         applyPoint(uuid, pointPlus);
     }
 
@@ -88,7 +89,7 @@ public class SimplePointFeature extends PointFeature {
      *
      * @param uuids the uuids of the players
      */
-    public void addPoint(List<UUID> uuids) {
+    public void addPoint(@NotNull List<@NotNull UUID> uuids) {
         uuids.forEach(this::addPoint);
     }
 
@@ -97,7 +98,7 @@ public class SimplePointFeature extends PointFeature {
      *
      * @param uuid the uuid of the player
      */
-    public void removePoint(UUID uuid) {
+    public void removePoint(@NotNull UUID uuid) {
         applyPoint(uuid, -pointMinus);
     }
 
@@ -106,7 +107,7 @@ public class SimplePointFeature extends PointFeature {
      *
      * @param uuids the uuids of the players
      */
-    public void removePoint(List<UUID> uuids) {
+    public void removePoint(@NotNull List<@NotNull UUID> uuids) {
         uuids.forEach(this::removePoint);
     }
 
@@ -119,7 +120,7 @@ public class SimplePointFeature extends PointFeature {
      * @param uuids the uuids of the players
      * @return true if it can add the point to the players
      */
-    public boolean tryAddPoint(List<UUID> uuids) {
+    public boolean tryAddPoint(@NotNull List<@NotNull UUID> uuids) {
         if (maxPlayersToAdd >= 0 && uuids.size() > maxPlayersToAdd) {
             return false;
         }

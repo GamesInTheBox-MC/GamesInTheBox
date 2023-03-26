@@ -19,6 +19,7 @@ import me.hsgamer.gamesinthebox.game.Game;
 import me.hsgamer.gamesinthebox.game.feature.HologramFeature;
 import me.hsgamer.gamesinthebox.planner.Planner;
 import me.hsgamer.minigamecore.base.Feature;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,12 +39,13 @@ public abstract class SimpleGame extends Game {
      *
      * @return the {@link SimpleGameEditor}
      */
+    @NotNull
     protected SimpleGameEditor createEditor() {
         return new SimpleGameEditor(this);
     }
 
     @Override
-    public SimpleGameEditor getEditor() {
+    public @NotNull SimpleGameEditor getEditor() {
         if (editor == null) {
             editor = createEditor();
         }
@@ -51,7 +53,7 @@ public abstract class SimpleGame extends Game {
     }
 
     @Override
-    protected abstract SimpleGameArena newArena(String name, Planner planner);
+    protected abstract @NotNull SimpleGameArena newArena(@NotNull String name, @NotNull Planner planner);
 
     @Override
     protected List<Feature> loadFeatures() {

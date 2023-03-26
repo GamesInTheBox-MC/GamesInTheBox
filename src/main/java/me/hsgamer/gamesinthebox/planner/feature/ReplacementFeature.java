@@ -19,6 +19,8 @@ import me.hsgamer.gamesinthebox.planner.Planner;
 import me.hsgamer.gamesinthebox.replacement.ReplacementHandler;
 import me.hsgamer.minigamecore.base.Feature;
 import org.bukkit.OfflinePlayer;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.BiFunction;
 
@@ -35,7 +37,7 @@ public class ReplacementFeature implements Feature, ReplacementHandler {
      *
      * @param planner the planner
      */
-    public ReplacementFeature(Planner planner) {
+    public ReplacementFeature(@NotNull Planner planner) {
         this.planner = planner;
     }
 
@@ -66,12 +68,12 @@ public class ReplacementFeature implements Feature, ReplacementHandler {
     }
 
     @Override
-    public String replace(String query) {
+    public @Nullable String replace(@NotNull String query) {
         return query(query, ReplacementHandler::replace);
     }
 
     @Override
-    public String replace(OfflinePlayer player, String query) {
+    public @Nullable String replace(@NotNull OfflinePlayer player, @NotNull String query) {
         return query(query, (replacementHandler, name) -> replacementHandler.replace(player, name));
     }
 }

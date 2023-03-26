@@ -20,6 +20,7 @@ import me.hsgamer.gamesinthebox.planner.Planner;
 import me.hsgamer.gamesinthebox.replacement.ReplacementHandler;
 import me.hsgamer.minigamecore.base.Feature;
 import me.hsgamer.minigamecore.bukkit.SimpleBukkitArena;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +47,7 @@ public abstract class GameArena extends SimpleBukkitArena implements Replacement
      * @param game    the game that the arena belongs to
      * @param planner the planner that the arena belongs to
      */
-    protected GameArena(String name, Game game, Planner planner) {
+    protected GameArena(@NotNull String name, @NotNull Game game, @NotNull Planner planner) {
         super(planner.getName() + "-" + name, game);
         this.localName = name;
         this.game = game;
@@ -58,6 +59,7 @@ public abstract class GameArena extends SimpleBukkitArena implements Replacement
      *
      * @return the planner
      */
+    @NotNull
     public Planner getPlanner() {
         return planner;
     }
@@ -67,6 +69,7 @@ public abstract class GameArena extends SimpleBukkitArena implements Replacement
      *
      * @return the game
      */
+    @NotNull
     public Game getGame() {
         return game;
     }
@@ -77,6 +80,7 @@ public abstract class GameArena extends SimpleBukkitArena implements Replacement
      *
      * @return the local name
      */
+    @NotNull
     public String getLocalName() {
         return localName;
     }
@@ -99,6 +103,7 @@ public abstract class GameArena extends SimpleBukkitArena implements Replacement
      *
      * @return the {@link GameArenaAction}
      */
+    @NotNull
     public GameArenaAction getAction() {
         return GameArenaAction.EMPTY;
     }

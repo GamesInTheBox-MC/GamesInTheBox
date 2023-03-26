@@ -19,6 +19,7 @@ import com.cryptomorin.xseries.messages.Titles;
 import me.hsgamer.hscore.bukkit.utils.ColorUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
@@ -40,7 +41,7 @@ public final class TitleUtil {
      * @param stay     the time to stay
      * @param fadeOut  the time to fade out
      */
-    public static void sendTitle(Player player, String title, String subtitle, int fadeIn, int stay, int fadeOut) {
+    public static void sendTitle(@NotNull Player player, @NotNull String title, @NotNull String subtitle, int fadeIn, int stay, int fadeOut) {
         Titles.sendTitle(player, fadeIn, stay, fadeOut, ColorUtils.colorize(title), ColorUtils.colorize(subtitle));
     }
 
@@ -51,7 +52,7 @@ public final class TitleUtil {
      * @param title    the title
      * @param subtitle the subtitle
      */
-    public static void sendTitle(Player player, String title, String subtitle) {
+    public static void sendTitle(@NotNull Player player, @NotNull String title, @NotNull String subtitle) {
         Titles.sendTitle(player, ColorUtils.colorize(title), ColorUtils.colorize(subtitle));
     }
 
@@ -65,7 +66,7 @@ public final class TitleUtil {
      * @param stay     the time to stay
      * @param fadeOut  the time to fade out
      */
-    public static void sendTitle(UUID uuid, String title, String subtitle, int fadeIn, int stay, int fadeOut) {
+    public static void sendTitle(@NotNull UUID uuid, @NotNull String title, @NotNull String subtitle, int fadeIn, int stay, int fadeOut) {
         Player player = Bukkit.getPlayer(uuid);
         if (player != null) {
             sendTitle(player, title, subtitle, fadeIn, stay, fadeOut);
@@ -79,7 +80,7 @@ public final class TitleUtil {
      * @param title    the title
      * @param subtitle the subtitle
      */
-    public static void sendTitle(UUID uuid, String title, String subtitle) {
+    public static void sendTitle(@NotNull UUID uuid, @NotNull String title, @NotNull String subtitle) {
         Player player = Bukkit.getPlayer(uuid);
         if (player != null) {
             sendTitle(player, title, subtitle);

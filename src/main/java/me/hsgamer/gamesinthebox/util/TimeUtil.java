@@ -17,6 +17,7 @@ package me.hsgamer.gamesinthebox.util;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,8 +48,8 @@ public final class TimeUtil {
      * @param time the time
      * @return the milliseconds
      */
-    public static long parseMillis(String time) {
-        if (time == null || time.isEmpty()) {
+    public static long parseMillis(@NotNull String time) {
+        if (time.isEmpty()) {
             return 0;
         }
         long millis = 0;
@@ -75,8 +76,9 @@ public final class TimeUtil {
      * @param time the time
      * @return the list of time units
      */
-    public static List<String> suggest(String time) {
-        if (time == null || time.isEmpty() || Character.isAlphabetic(time.charAt(time.length() - 1))) {
+    @NotNull
+    public static List<String> suggest(@NotNull String time) {
+        if (time.isEmpty() || Character.isAlphabetic(time.charAt(time.length() - 1))) {
             return ImmutableList.of("1s", "1m", "1h", "1d", "1w", "1M", "1y");
         }
         List<String> timeUnits = new ArrayList<>();
@@ -90,6 +92,7 @@ public final class TimeUtil {
      * @param millis the time in milliseconds
      * @return the standard time
      */
+    @NotNull
     public static String formatStandardTime(long millis) {
         return formatStandardTime(millis, TimeUnit.MILLISECONDS);
     }
@@ -101,7 +104,8 @@ public final class TimeUtil {
      * @param unit the unit of the time
      * @return the standard time
      */
-    public static String formatStandardTime(long time, TimeUnit unit) {
+    @NotNull
+    public static String formatStandardTime(long time, @NotNull TimeUnit unit) {
         long millis = unit.toMillis(time);
         long hours = TimeUnit.MILLISECONDS.toHours(millis);
         long minutes = TimeUnit.MILLISECONDS.toMinutes(millis) % 60;

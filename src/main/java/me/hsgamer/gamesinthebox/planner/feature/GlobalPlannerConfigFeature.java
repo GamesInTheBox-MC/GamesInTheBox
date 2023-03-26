@@ -18,6 +18,7 @@ package me.hsgamer.gamesinthebox.planner.feature;
 import me.hsgamer.gamesinthebox.planner.Planner;
 import me.hsgamer.hscore.config.Config;
 import me.hsgamer.minigamecore.base.Feature;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The {@link Feature} to get the planner {@link Config}
@@ -30,7 +31,7 @@ public class GlobalPlannerConfigFeature implements Feature {
      *
      * @param plannerConfig the planner {@link Config}
      */
-    public GlobalPlannerConfigFeature(Config plannerConfig) {
+    public GlobalPlannerConfigFeature(@NotNull Config plannerConfig) {
         this.plannerConfig = plannerConfig;
     }
 
@@ -39,6 +40,7 @@ public class GlobalPlannerConfigFeature implements Feature {
      *
      * @return the planner {@link Config}
      */
+    @NotNull
     public Config getPlannerConfig() {
         return plannerConfig;
     }
@@ -49,7 +51,8 @@ public class GlobalPlannerConfigFeature implements Feature {
      * @param planner the {@link Planner}
      * @return the {@link PlannerConfigFeature}
      */
-    public PlannerConfigFeature createPlannerFeature(Planner planner) {
+    @NotNull
+    public PlannerConfigFeature createPlannerFeature(@NotNull Planner planner) {
         return new PlannerConfigFeature(planner, this);
     }
 }

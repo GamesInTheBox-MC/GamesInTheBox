@@ -18,6 +18,7 @@ package me.hsgamer.gamesinthebox.game.simple;
 import me.hsgamer.gamesinthebox.game.GameArenaAction;
 import me.hsgamer.minigamecore.implementation.feature.TimerFeature;
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -37,21 +38,21 @@ public class SimpleGameArenaAction extends SimpleGameAction implements GameArena
      *
      * @param arena the arena
      */
-    public SimpleGameArenaAction(SimpleGameArena arena) {
+    public SimpleGameArenaAction(@NotNull SimpleGameArena arena) {
         this.arena = arena;
     }
 
     @Override
-    protected Map<String, SimpleAction> createActionMap() {
+    protected @NotNull Map<String, SimpleAction> createActionMap() {
         Map<String, SimpleAction> map = new LinkedHashMap<>();
         map.put("skip-time", new SimpleAction() {
             @Override
-            public String getDescription() {
+            public @NotNull String getDescription() {
                 return "Skip the time";
             }
 
             @Override
-            public boolean performAction(CommandSender sender, String... args) {
+            public boolean performAction(@NotNull CommandSender sender, String... args) {
                 arena.getFeature(TimerFeature.class).setDuration(0);
                 return true;
             }

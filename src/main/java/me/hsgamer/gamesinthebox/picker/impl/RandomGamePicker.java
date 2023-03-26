@@ -18,6 +18,7 @@ package me.hsgamer.gamesinthebox.picker.impl;
 import me.hsgamer.gamesinthebox.game.GameArena;
 import me.hsgamer.gamesinthebox.planner.Planner;
 import me.hsgamer.hscore.common.CollectionUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.Map;
@@ -33,12 +34,12 @@ public class RandomGamePicker extends DelayedGamePicker {
      *
      * @param planner the {@link Planner}
      */
-    public RandomGamePicker(Planner planner) {
+    public RandomGamePicker(@NotNull Planner planner) {
         super(planner);
     }
 
     @Override
-    public void setup(Map<String, GameArena> arenaMap) {
+    public void setup(@NotNull Map<String, GameArena> arenaMap) {
         this.arenaMap = arenaMap;
     }
 

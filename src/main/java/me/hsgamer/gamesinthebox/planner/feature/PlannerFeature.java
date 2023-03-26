@@ -18,6 +18,7 @@ package me.hsgamer.gamesinthebox.planner.feature;
 import me.hsgamer.gamesinthebox.planner.Planner;
 import me.hsgamer.gamesinthebox.planner.state.IdlingState;
 import me.hsgamer.minigamecore.base.Feature;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The {@link Feature} to access the {@link Planner}
@@ -30,7 +31,7 @@ public class PlannerFeature implements Feature {
      *
      * @param planner the {@link Planner}
      */
-    public PlannerFeature(Planner planner) {
+    public PlannerFeature(@NotNull Planner planner) {
         this.planner = planner;
     }
 
@@ -39,6 +40,7 @@ public class PlannerFeature implements Feature {
      *
      * @return the {@link Planner}
      */
+    @NotNull
     public Planner getPlanner() {
         return planner;
     }

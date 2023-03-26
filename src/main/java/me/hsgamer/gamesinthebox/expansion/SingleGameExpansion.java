@@ -19,6 +19,7 @@ import me.hsgamer.gamesinthebox.game.Game;
 import me.hsgamer.gamesinthebox.game.GameArena;
 import me.hsgamer.gamesinthebox.manager.GameManager;
 import me.hsgamer.hscore.builder.Builder;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The {@link GameExpansion} that registers a single {@link Game}
@@ -46,6 +47,7 @@ public abstract class SingleGameExpansion implements GameExpansion {
      *
      * @return the game
      */
+    @NotNull
     protected abstract Game getGame();
 
     /**
@@ -54,7 +56,8 @@ public abstract class SingleGameExpansion implements GameExpansion {
      *
      * @return the type
      */
-    protected abstract String[] getGameType();
+    @NotNull
+    protected abstract String @NotNull [] getGameType();
 
     @Override
     public final void onEnable() {

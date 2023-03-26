@@ -19,6 +19,7 @@ import me.hsgamer.gamesinthebox.game.Game;
 import me.hsgamer.gamesinthebox.game.GameArena;
 import me.hsgamer.gamesinthebox.planner.Planner;
 import me.hsgamer.hscore.builder.Builder;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 import java.util.function.BiFunction;
@@ -34,7 +35,8 @@ public class GameManager extends Builder<GameManager.Input, GameArena> {
      * @param type the type of the game
      * @return the registered element, used for unregistering
      */
-    public FunctionElement<Input, GameArena> register(Game game, String... type) {
+    @NotNull
+    public FunctionElement<Input, GameArena> register(@NotNull Game game, @NotNull String... type) {
         return register(new GameFunction(game), type);
     }
 
@@ -70,7 +72,8 @@ public class GameManager extends Builder<GameManager.Input, GameArena> {
      * @param planner the planner that the arena belongs to
      * @return the {@link GameArena}
      */
-    public Optional<GameArena> build(String type, String name, Planner planner) {
+    @NotNull
+    public Optional<GameArena> build(@NotNull String type, @NotNull String name, @NotNull Planner planner) {
         return build(type, new Input(name, planner));
     }
 
@@ -80,7 +83,8 @@ public class GameManager extends Builder<GameManager.Input, GameArena> {
      * @param type the type of the game
      * @return the {@link Game}
      */
-    public Optional<Game> getGame(String type) {
+    @NotNull
+    public Optional<Game> getGame(@NotNull String type) {
         return Optional.ofNullable(getRegisteredMap().get(type))
                 .filter(GameFunction.class::isInstance)
                 .map(GameFunction.class::cast)
@@ -90,7 +94,7 @@ public class GameManager extends Builder<GameManager.Input, GameArena> {
     private static class GameFunction implements BiFunction<String, Input, GameArena> {
         private final Game game;
 
-        private GameFunction(Game game) {
+        private GameFunction(@NotNull Game game) {
             this.game = game;
         }
 
@@ -107,7 +111,7 @@ public class GameManager extends Builder<GameManager.Input, GameArena> {
         private final String name;
         private final Planner planner;
 
-        private Input(String name, Planner planner) {
+        private Input(@NotNull String name, @NotNull Planner planner) {
             this.name = name;
             this.planner = planner;
         }

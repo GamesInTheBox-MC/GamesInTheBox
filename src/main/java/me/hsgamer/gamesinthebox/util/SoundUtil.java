@@ -18,6 +18,7 @@ package me.hsgamer.gamesinthebox.util;
 import com.cryptomorin.xseries.XSound;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -39,8 +40,8 @@ public final class SoundUtil {
      * @param sound               the sound
      * @param soundRecordConsumer the sound record consumer
      */
-    public static void doSoundAction(String sound, Consumer<XSound.Record> soundRecordConsumer) {
-        if (sound == null || sound.isEmpty()) {
+    public static void doSoundAction(@NotNull String sound, @NotNull Consumer<XSound.Record> soundRecordConsumer) {
+        if (sound.isEmpty()) {
             return;
         }
 
@@ -59,7 +60,7 @@ public final class SoundUtil {
      * @param sound  the sound
      * @param player the player
      */
-    public static void playSound(String sound, Player player) {
+    public static void playSound(@NotNull String sound, @NotNull Player player) {
         doSoundAction(sound, soundRecord -> {
             soundRecord.forPlayer(player);
             soundRecord.play();
@@ -72,7 +73,7 @@ public final class SoundUtil {
      * @param sound    the sound
      * @param location the location
      */
-    public static void playSound(String sound, Location location) {
+    public static void playSound(@NotNull String sound, @NotNull Location location) {
         doSoundAction(sound, soundRecord -> {
             soundRecord.atLocation(location);
             soundRecord.play();
@@ -86,7 +87,7 @@ public final class SoundUtil {
      * @param player   the player
      * @param location the location
      */
-    public static void playSound(String sound, Player player, Location location) {
+    public static void playSound(@NotNull String sound, @NotNull Player player, @NotNull Location location) {
         doSoundAction(sound, soundRecord -> {
             soundRecord.forPlayerAtLocation(player, location);
             soundRecord.play();

@@ -17,6 +17,7 @@ package me.hsgamer.gamesinthebox.game.feature;
 
 import me.hsgamer.hscore.common.Pair;
 import me.hsgamer.minigamecore.base.Feature;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.List;
@@ -37,6 +38,7 @@ public class TopFeature implements Feature {
      *
      * @return the current top
      */
+    @NotNull
     public List<Pair<UUID, String>> getTop() {
         return top.get();
     }
@@ -46,7 +48,7 @@ public class TopFeature implements Feature {
      *
      * @param top the top
      */
-    public void setTop(List<Pair<UUID, String>> top) {
+    public void setTop(@NotNull List<Pair<UUID, String>> top) {
         this.top.lazySet(top);
         this.topUUIDs.lazySet(top.stream().map(Pair::getKey).collect(Collectors.toList()));
     }
@@ -57,7 +59,7 @@ public class TopFeature implements Feature {
      * @param uuid the UUID
      * @return the index or -1 if not found
      */
-    public int getTopIndex(UUID uuid) {
+    public int getTopIndex(@NotNull UUID uuid) {
         return topUUIDs.get().indexOf(uuid);
     }
 
@@ -67,6 +69,7 @@ public class TopFeature implements Feature {
      * @param index the index
      * @return the pair or empty if out of range
      */
+    @NotNull
     public Optional<Pair<UUID, String>> getTop(int index) {
         List<Pair<UUID, String>> getTopSnapshot = getTop();
         if (index < 0 || index >= getTopSnapshot.size()) {

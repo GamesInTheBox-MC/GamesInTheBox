@@ -27,6 +27,7 @@ import me.hsgamer.minigamecore.base.Arena;
 import me.hsgamer.minigamecore.base.Feature;
 import me.hsgamer.minigamecore.base.GameState;
 import me.hsgamer.minigamecore.implementation.manager.LoadedArenaManager;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
@@ -44,7 +45,7 @@ public class PlannerManager extends LoadedArenaManager {
      *
      * @param plugin the plugin
      */
-    public PlannerManager(GamesInTheBox plugin) {
+    public PlannerManager(@NotNull GamesInTheBox plugin) {
         this.plugin = plugin;
         this.plannerConfig = new BukkitConfig(plugin, "planner.yml");
     }

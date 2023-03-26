@@ -21,6 +21,7 @@ import me.hsgamer.gamesinthebox.game.feature.ParticleFeature;
 import me.hsgamer.gamesinthebox.game.simple.SimpleGameArena;
 import me.hsgamer.gamesinthebox.util.Util;
 import org.bukkit.configuration.ConfigurationSection;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The simple {@link ParticleFeature}.
@@ -46,7 +47,7 @@ public class SimpleParticleFeature extends ParticleFeature {
      * @param arena the arena
      * @param path  the path
      */
-    public SimpleParticleFeature(SimpleGameArena arena, String path) {
+    public SimpleParticleFeature(@NotNull SimpleGameArena arena, @NotNull String path) {
         this.arena = arena;
         this.path = path;
     }
@@ -56,12 +57,12 @@ public class SimpleParticleFeature extends ParticleFeature {
      *
      * @param arena the arena
      */
-    public SimpleParticleFeature(SimpleGameArena arena) {
+    public SimpleParticleFeature(@NotNull SimpleGameArena arena) {
         this(arena, "particle");
     }
 
     @Override
-    protected ParticleDisplay createParticleDisplay() {
+    protected @NotNull ParticleDisplay createParticleDisplay() {
         return ParticleDisplay.fromConfig(Util.createSection(arena.getFeature(GameConfigFeature.class).getValues(path, false)));
     }
 }

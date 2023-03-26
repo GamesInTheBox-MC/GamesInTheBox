@@ -18,6 +18,7 @@ package me.hsgamer.gamesinthebox.game.simple;
 import me.hsgamer.gamesinthebox.game.GameAction;
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -36,7 +37,8 @@ public abstract class SimpleGameAction implements GameAction {
      *
      * @return the action map
      */
-    protected abstract Map<String, SimpleAction> createActionMap();
+    @NotNull
+    protected abstract Map<@NotNull String, @NotNull SimpleAction> createActionMap();
 
     private Map<String, SimpleAction> getActionMap() {
         if (actionMap == null) {
@@ -46,12 +48,12 @@ public abstract class SimpleGameAction implements GameAction {
     }
 
     @Override
-    public List<String> getActions() {
+    public @NotNull List<@NotNull String> getActions() {
         return new ArrayList<>(getActionMap().keySet());
     }
 
     @Override
-    public List<String> getActionArgs(CommandSender sender, String action, String... args) {
+    public @NotNull List<@NotNull String> getActionArgs(@NotNull CommandSender sender, @NotNull String action, @NotNull String @NotNull ... args) {
         SimpleAction simpleAction = getActionMap().get(action);
         if (simpleAction != null) {
             return simpleAction.getActionArgs(sender, args);
@@ -60,7 +62,7 @@ public abstract class SimpleGameAction implements GameAction {
     }
 
     @Override
-    public boolean performAction(CommandSender sender, String action, String... args) {
+    public boolean performAction(@NotNull CommandSender sender, @NotNull String action, @NotNull String @NotNull ... args) {
         SimpleAction simpleAction = getActionMap().get(action);
         if (simpleAction != null) {
             return simpleAction.performAction(sender, args);
@@ -69,7 +71,7 @@ public abstract class SimpleGameAction implements GameAction {
     }
 
     @Override
-    public void sendUsage(CommandSender sender) {
+    public void sendUsage(@NotNull CommandSender sender) {
         MessageUtils.sendMessage(sender, "&6Usage:");
         getActionMap().forEach((key, value) -> {
             MessageUtils.sendMessage(sender, "&6- &e" + key);
@@ -87,6 +89,7 @@ public abstract class SimpleGameAction implements GameAction {
          *
          * @return the description
          */
+        @NotNull
         String getDescription();
 
         /**
@@ -94,6 +97,7 @@ public abstract class SimpleGameAction implements GameAction {
          *
          * @return the arguments usage
          */
+        @NotNull
         default String getArgsUsage() {
             return "";
         }
@@ -105,7 +109,8 @@ public abstract class SimpleGameAction implements GameAction {
          * @param args   the current arguments
          * @return the action arguments
          */
-        default List<String> getActionArgs(CommandSender sender, String... args) {
+        @NotNull
+        default List<@NotNull String> getActionArgs(@NotNull CommandSender sender, @NotNull String... args) {
             return Collections.emptyList();
         }
 
@@ -115,6 +120,6 @@ public abstract class SimpleGameAction implements GameAction {
          * @param sender the sender
          * @param args   the arguments
          */
-        boolean performAction(CommandSender sender, String... args);
+        boolean performAction(@NotNull CommandSender sender, @NotNull String... args);
     }
 }
