@@ -17,13 +17,15 @@ package me.hsgamer.gamesinthebox.game.simple.feature;
 
 import me.hsgamer.gamesinthebox.game.feature.GameConfigFeature;
 import me.hsgamer.gamesinthebox.game.feature.PointFeature;
+import me.hsgamer.gamesinthebox.game.simple.SimpleGameAction;
 import me.hsgamer.gamesinthebox.game.simple.SimpleGameArena;
+import me.hsgamer.gamesinthebox.game.simple.SimpleGameEditor;
+import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import me.hsgamer.hscore.common.Validate;
+import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * The simple {@link PointFeature}.
@@ -54,6 +56,15 @@ public class SimplePointFeature extends PointFeature {
     public SimplePointFeature(@NotNull SimpleGameArena arena, @NotNull PointConsumer pointConsumer) {
         super(pointConsumer);
         this.arena = arena;
+    }
+
+    /**
+     * Get the editor of the feature
+     *
+     * @return the editor
+     */
+    public static Editor editor() {
+        return new Editor();
     }
 
     @Override
@@ -153,5 +164,192 @@ public class SimplePointFeature extends PointFeature {
      */
     public int getMaxPlayersToAdd() {
         return maxPlayersToAdd;
+    }
+
+    /**
+     * The editor of the feature
+     */
+    public static class Editor {
+        private Integer pointPlus;
+        private Integer pointMinus;
+        private Integer maxPlayersToAddPoint;
+
+        private Editor() {
+            // EMPTY
+        }
+
+        /**
+         * Get the actions of the editor
+         *
+         * @return the actions
+         */
+        public Map<String, SimpleGameAction.SimpleAction> getActions() {
+            Map<String, SimpleGameAction.SimpleAction> map = new LinkedHashMap<>();
+
+            map.put("set-point-plus", new SimpleGameAction.SimpleAction() {
+                @Override
+                public @NotNull String getDescription() {
+                    return "Set the point to add to the player";
+                }
+
+                @Override
+                public @NotNull String getArgsUsage() {
+                    return "<point>";
+                }
+
+                @Override
+                public @NotNull List<String> getActionArgs(@NotNull CommandSender sender, String... args) {
+                    if (args.length == 1) {
+                        return Arrays.asList("1", "2", "3", "4", "5");
+                    }
+                    return SimpleGameAction.SimpleAction.super.getActionArgs(sender, args);
+                }
+
+                @Override
+                public boolean performAction(@NotNull CommandSender sender, String... args) {
+                    if (args.length < 1) {
+                        return false;
+                    }
+                    try {
+                        int point = Integer.parseInt(args[0]);
+                        pointPlus = Math.abs(point);
+                        return true;
+                    } catch (NumberFormatException e) {
+                        MessageUtils.sendMessage(sender, "&cInvalid number");
+                        return false;
+                    }
+                }
+            });
+            map.put("set-point-minus", new SimpleGameAction.SimpleAction() {
+                @Override
+                public @NotNull String getDescription() {
+                    return "Set the point to remove from the player";
+                }
+
+                @Override
+                public @NotNull String getArgsUsage() {
+                    return "<point>";
+                }
+
+                @Override
+                public @NotNull List<String> getActionArgs(@NotNull CommandSender sender, String... args) {
+                    if (args.length == 1) {
+                        return Arrays.asList("1", "2", "3", "4", "5");
+                    }
+                    return SimpleGameAction.SimpleAction.super.getActionArgs(sender, args);
+                }
+
+                @Override
+                public boolean performAction(@NotNull CommandSender sender, String... args) {
+                    if (args.length < 1) {
+                        return false;
+                    }
+                    try {
+                        int point = Integer.parseInt(args[0]);
+                        pointMinus = Math.abs(point);
+                        return true;
+                    } catch (NumberFormatException e) {
+                        MessageUtils.sendMessage(sender, "&cInvalid number");
+                        return false;
+                    }
+                }
+            });
+            map.put("set-max-players-to-add-point", new SimpleGameAction.SimpleAction() {
+                @Override
+                public @NotNull String getDescription() {
+                    return "Set the maximum players to add point";
+                }
+
+                @Override
+                public @NotNull String getArgsUsage() {
+                    return "<max players>";
+                }
+
+                @Override
+                public @NotNull List<String> getActionArgs(@NotNull CommandSender sender, String... args) {
+                    if (args.length == 1) {
+                        return Arrays.asList("1", "2", "3", "4", "5");
+                    }
+                    return SimpleGameAction.SimpleAction.super.getActionArgs(sender, args);
+                }
+
+                @Override
+                public boolean performAction(@NotNull CommandSender sender, String... args) {
+                    if (args.length < 1) {
+                        return false;
+                    }
+                    try {
+                        int players = Integer.parseInt(args[0]);
+                        if (players >= 0) {
+                            maxPlayersToAddPoint = players;
+                        } else {
+                            maxPlayersToAddPoint = null;
+                        }
+                        return true;
+                    } catch (NumberFormatException e) {
+                        MessageUtils.sendMessage(sender, "&cInvalid number");
+                        return false;
+                    }
+                }
+            });
+
+            return map;
+        }
+
+        /**
+         * Get the status of the editor
+         *
+         * @return the status
+         */
+        public SimpleGameEditor.SimpleEditorStatus getStatus() {
+            return new SimpleGameEditor.SimpleEditorStatus() {
+                @Override
+                public void sendStatus(@NotNull CommandSender sender) {
+                    MessageUtils.sendMessage(sender, "&6&lPOINTS");
+                    MessageUtils.sendMessage(sender, "&6Point Plus: &e" + (pointPlus == null ? "Default" : pointPlus));
+                    MessageUtils.sendMessage(sender, "&6Point Minus: &e" + (pointMinus == null ? "Default" : pointMinus));
+                    MessageUtils.sendMessage(sender, "&6Max Players to Add Point: &e" + (maxPlayersToAddPoint == null ? "Default" : maxPlayersToAddPoint));
+                }
+
+                @Override
+                public void reset(@NotNull CommandSender sender) {
+                    pointPlus = null;
+                    pointMinus = null;
+                    maxPlayersToAddPoint = null;
+                }
+
+                @Override
+                public boolean canSave(@NotNull CommandSender sender) {
+                    return true;
+                }
+
+                @Override
+                public Map<String, Object> toPathValueMap(@NotNull CommandSender sender) {
+                    Map<String, Object> pathValueMap = new LinkedHashMap<>();
+                    if (pointPlus != null) {
+                        pathValueMap.put("points.plus", pointPlus);
+                    }
+                    if (pointMinus != null) {
+                        pathValueMap.put("points.minus", pointMinus);
+                    }
+                    if (maxPlayersToAddPoint != null) {
+                        pathValueMap.put("points.max-players-to-add", maxPlayersToAddPoint);
+                    }
+                    return pathValueMap;
+                }
+            };
+        }
+
+        /**
+         * Migrate the data from the arena
+         *
+         * @param arena the arena
+         */
+        public void migrate(SimpleGameArena arena) {
+            SimplePointFeature pointFeature = arena.getFeature(SimplePointFeature.class);
+            pointPlus = pointFeature.getPointPlus();
+            pointMinus = pointFeature.getPointMinus();
+            maxPlayersToAddPoint = pointFeature.getMaxPlayersToAdd();
+        }
     }
 }

@@ -17,21 +17,29 @@ package me.hsgamer.gamesinthebox.game.simple.feature;
 
 import me.hsgamer.gamesinthebox.game.feature.GameConfigFeature;
 import me.hsgamer.gamesinthebox.game.feature.HologramFeature;
+import me.hsgamer.gamesinthebox.game.simple.SimpleGameAction;
 import me.hsgamer.gamesinthebox.game.simple.SimpleGameArena;
+import me.hsgamer.gamesinthebox.game.simple.SimpleGameEditor;
 import me.hsgamer.gamesinthebox.planner.feature.VariableFeature;
 import me.hsgamer.gamesinthebox.util.LocationUtil;
 import me.hsgamer.hscore.bukkit.utils.ColorUtils;
+import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import me.hsgamer.hscore.common.CollectionUtils;
 import me.hsgamer.hscore.common.MapUtils;
+import me.hsgamer.hscore.common.Pair;
 import me.hsgamer.minigamecore.base.Feature;
 import me.hsgamer.unihologram.common.api.Hologram;
 import me.hsgamer.unihologram.common.api.HologramLine;
 import me.hsgamer.unihologram.common.line.TextHologramLine;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Location;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * The {@link Feature} to create and handle the holograms that show the information of the arena.
@@ -78,6 +86,15 @@ public class DescriptiveHologramFeature implements Feature {
      */
     public DescriptiveHologramFeature(@NotNull SimpleGameArena arena) {
         this.arena = arena;
+    }
+
+    /**
+     * Get the editor for the feature
+     *
+     * @return the editor
+     */
+    public static Editor editor() {
+        return new Editor();
     }
 
     @Override
@@ -148,6 +165,298 @@ public class DescriptiveHologramFeature implements Feature {
     @NotNull
     public List<HologramUpdater> getHologramUpdaters() {
         return Collections.unmodifiableList(hologramUpdaters);
+    }
+
+    /**
+     * The editor for the feature
+     */
+    public static class Editor {
+        private final List<Pair<Location, List<String>>> hologramList;
+
+        private Editor() {
+            hologramList = new ArrayList<>();
+        }
+
+        /**
+         * Get the actions for the editor
+         *
+         * @return the actions
+         */
+        public Map<String, SimpleGameAction.SimpleAction> getActions() {
+            Map<String, SimpleGameAction.SimpleAction> map = new LinkedHashMap<>();
+
+            map.put("new-hologram", new SimpleGameAction.SimpleAction() {
+                @Override
+                public @NotNull String getDescription() {
+                    return "Create a new hologram at your location";
+                }
+
+                @Override
+                public boolean performAction(@NotNull CommandSender sender, String... args) {
+                    if (!(sender instanceof Player)) {
+                        MessageUtils.sendMessage(sender, "&cOnly players can use this command");
+                        return false;
+                    }
+
+                    Player player = (Player) sender;
+                    Location location = player.getLocation();
+
+                    hologramList.add(Pair.of(location, new ArrayList<>()));
+                    MessageUtils.sendMessage(sender, "&aThe hologram has been created. The index is " + (hologramList.size() - 1));
+                    return true;
+                }
+            });
+            map.put("set-hologram-location", new SimpleGameAction.SimpleAction() {
+                @Override
+                public @NotNull String getDescription() {
+                    return "Set the location of a hologram";
+                }
+
+                @Override
+                public @NotNull String getArgsUsage() {
+                    return "<index>";
+                }
+
+                @Override
+                public @NotNull List<String> getActionArgs(@NotNull CommandSender sender, String... args) {
+                    if (args.length == 1) {
+                        return IntStream.range(0, hologramList.size()).mapToObj(Integer::toString).collect(Collectors.toList());
+                    }
+                    return SimpleGameAction.SimpleAction.super.getActionArgs(sender, args);
+                }
+
+                @Override
+                public boolean performAction(@NotNull CommandSender sender, String... args) {
+                    if (args.length < 1) {
+                        return false;
+                    }
+                    try {
+                        int index = Integer.parseInt(args[0]);
+                        if (index < 0 || index >= hologramList.size()) {
+                            MessageUtils.sendMessage(sender, "&cInvalid index");
+                            return false;
+                        }
+
+                        if (!(sender instanceof Player)) {
+                            MessageUtils.sendMessage(sender, "&cOnly players can use this command");
+                            return false;
+                        }
+
+                        Player player = (Player) sender;
+                        Location location = player.getLocation();
+
+                        hologramList.set(index, Pair.of(location, hologramList.get(index).getValue()));
+                        MessageUtils.sendMessage(sender, "&aThe hologram has been updated");
+                        return true;
+                    } catch (NumberFormatException e) {
+                        MessageUtils.sendMessage(sender, "&cInvalid number");
+                        return false;
+                    }
+                }
+            });
+            map.put("add-hologram-line", new SimpleGameAction.SimpleAction() {
+                @Override
+                public @NotNull String getDescription() {
+                    return "Add a line to a hologram";
+                }
+
+                @Override
+                public @NotNull String getArgsUsage() {
+                    return "<index> <line>";
+                }
+
+                @Override
+                public @NotNull List<String> getActionArgs(@NotNull CommandSender sender, String... args) {
+                    if (args.length == 1) {
+                        return IntStream.range(0, hologramList.size()).mapToObj(Integer::toString).collect(Collectors.toList());
+                    }
+                    return SimpleGameAction.SimpleAction.super.getActionArgs(sender, args);
+                }
+
+                @Override
+                public boolean performAction(@NotNull CommandSender sender, String... args) {
+                    if (args.length < 2) {
+                        return false;
+                    }
+                    try {
+                        int index = Integer.parseInt(args[0]);
+                        String line = StringUtils.join(args, " ", 1, args.length);
+
+                        if (index < 0 || index >= hologramList.size()) {
+                            MessageUtils.sendMessage(sender, "&cInvalid index");
+                            return false;
+                        }
+
+                        hologramList.get(index).getValue().add(line);
+                        return true;
+                    } catch (NumberFormatException e) {
+                        MessageUtils.sendMessage(sender, "&cInvalid number");
+                        return false;
+                    }
+                }
+            });
+            map.put("clear-hologram-line", new SimpleGameAction.SimpleAction() {
+                @Override
+                public @NotNull String getDescription() {
+                    return "Clear all lines of a hologram";
+                }
+
+                @Override
+                public @NotNull String getArgsUsage() {
+                    return "<index>";
+                }
+
+                @Override
+                public @NotNull List<String> getActionArgs(@NotNull CommandSender sender, String... args) {
+                    if (args.length == 1) {
+                        return IntStream.range(0, hologramList.size()).mapToObj(Integer::toString).collect(Collectors.toList());
+                    }
+                    return SimpleGameAction.SimpleAction.super.getActionArgs(sender, args);
+                }
+
+                @Override
+                public boolean performAction(@NotNull CommandSender sender, String... args) {
+                    if (args.length < 1) {
+                        return false;
+                    }
+                    try {
+                        int index = Integer.parseInt(args[0]);
+
+                        if (index < 0 || index >= hologramList.size()) {
+                            MessageUtils.sendMessage(sender, "&cInvalid index");
+                            return false;
+                        }
+
+                        hologramList.get(index).getValue().clear();
+                        return true;
+                    } catch (NumberFormatException e) {
+                        MessageUtils.sendMessage(sender, "&cInvalid number");
+                        return false;
+                    }
+                }
+            });
+            map.put("remove-hologram", new SimpleGameAction.SimpleAction() {
+                @Override
+                public @NotNull String getDescription() {
+                    return "Remove a hologram";
+                }
+
+                @Override
+                public @NotNull String getArgsUsage() {
+                    return "<index>";
+                }
+
+                @Override
+                public @NotNull List<String> getActionArgs(@NotNull CommandSender sender, String... args) {
+                    if (args.length == 1) {
+                        return IntStream.range(0, hologramList.size()).mapToObj(Integer::toString).collect(Collectors.toList());
+                    }
+                    return SimpleGameAction.SimpleAction.super.getActionArgs(sender, args);
+                }
+
+                @Override
+                public boolean performAction(@NotNull CommandSender sender, String... args) {
+                    if (args.length < 1) {
+                        return false;
+                    }
+                    try {
+                        int index = Integer.parseInt(args[0]);
+
+                        if (index < 0 || index >= hologramList.size()) {
+                            MessageUtils.sendMessage(sender, "&cInvalid index");
+                            return false;
+                        }
+
+                        hologramList.remove(index);
+                        return true;
+                    } catch (NumberFormatException e) {
+                        MessageUtils.sendMessage(sender, "&cInvalid number");
+                        return false;
+                    }
+                }
+            });
+            map.put("clear-all-hologram", new SimpleGameAction.SimpleAction() {
+                @Override
+                public @NotNull String getDescription() {
+                    return "Clear all holograms";
+                }
+
+                @Override
+                public boolean performAction(@NotNull CommandSender sender, String... args) {
+                    hologramList.clear();
+                    return true;
+                }
+            });
+
+            return map;
+        }
+
+        /**
+         * Get the status of the editor
+         *
+         * @return the status
+         */
+        public SimpleGameEditor.SimpleEditorStatus getStatus() {
+            return new SimpleGameEditor.SimpleEditorStatus() {
+                @Override
+                public void sendStatus(@NotNull CommandSender sender) {
+                    MessageUtils.sendMessage(sender, "&6&lHOLOGRAM");
+                    if (hologramList.isEmpty()) {
+                        MessageUtils.sendMessage(sender, "&6Hologram List: &eEmpty");
+                    } else {
+                        MessageUtils.sendMessage(sender, "&6Hologram List:");
+                        for (int i = 0; i < hologramList.size(); i++) {
+                            Pair<Location, List<String>> pair = hologramList.get(i);
+                            MessageUtils.sendMessage(sender, "&e" + i + ":");
+                            MessageUtils.sendMessage(sender, "  &bLocation: &f" + LocationUtil.serializeLocation(pair.getKey(), true, false));
+                            MessageUtils.sendMessage(sender, "  &bLines:");
+                            for (String line : pair.getValue()) {
+                                MessageUtils.sendMessage(sender, "  &f- " + line);
+                            }
+                        }
+                    }
+                }
+
+                @Override
+                public void reset(@NotNull CommandSender sender) {
+                    hologramList.clear();
+                }
+
+                @Override
+                public boolean canSave(@NotNull CommandSender sender) {
+                    return true;
+                }
+
+                @Override
+                public Map<String, Object> toPathValueMap(@NotNull CommandSender sender) {
+                    Map<String, Object> pathValueMap = new LinkedHashMap<>();
+                    if (!hologramList.isEmpty()) {
+                        List<Map<String, Object>> hologramListMap = new ArrayList<>();
+                        for (Pair<Location, List<String>> pair : hologramList) {
+                            Map<String, Object> hologramMap = new LinkedHashMap<>();
+                            hologramMap.put("location", LocationUtil.serializeLocation(pair.getKey(), true, false));
+                            hologramMap.put("lines", pair.getValue());
+                            hologramListMap.add(hologramMap);
+                        }
+                        pathValueMap.put("hologram", hologramListMap);
+                    }
+                    return pathValueMap;
+                }
+            };
+        }
+
+        /**
+         * Migrate the data from the arena
+         *
+         * @param arena the arena
+         */
+        public void migrate(SimpleGameArena arena) {
+            hologramList.clear();
+            DescriptiveHologramFeature hologramFeature = arena.getFeature(DescriptiveHologramFeature.class);
+            for (DescriptiveHologramFeature.HologramUpdater hologramUpdater : hologramFeature.getHologramUpdaters()) {
+                hologramList.add(Pair.of(hologramUpdater.hologram.getLocation(), hologramUpdater.rawLines));
+            }
+        }
     }
 
     /**
