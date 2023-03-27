@@ -31,7 +31,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -197,7 +196,7 @@ public class SimpleBoundingFeature extends BoundingFeature {
                 }
 
                 @Override
-                protected boolean performAction(@NotNull Player player, @NotNull Location location, String... args) {
+                protected boolean performAction(@NotNull CommandSender sender, @NotNull Location location, String... args) {
                     pos1 = location;
                     return true;
                 }
@@ -209,7 +208,7 @@ public class SimpleBoundingFeature extends BoundingFeature {
                 }
 
                 @Override
-                protected boolean performAction(@NotNull Player player, @NotNull Location location, String... args) {
+                protected boolean performAction(@NotNull CommandSender sender, @NotNull Location location, String... args) {
                     pos2 = location;
                     return true;
                 }

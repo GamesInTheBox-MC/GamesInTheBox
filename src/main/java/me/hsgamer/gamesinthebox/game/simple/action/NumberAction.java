@@ -15,51 +15,16 @@
 */
 package me.hsgamer.gamesinthebox.game.simple.action;
 
-import me.hsgamer.gamesinthebox.game.simple.SimpleGameAction;
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 /**
  * The {@link me.hsgamer.gamesinthebox.game.simple.SimpleGameAction.SimpleAction} that handles number as the first argument
  */
-public abstract class NumberAction implements SimpleGameAction.SimpleAction {
-    /**
-     * Perform the action
-     *
-     * @param sender the sender
-     * @param number the number
-     * @param args   the remaining arguments
-     * @return true if the action is performed successfully
-     */
-    protected abstract boolean performAction(@NotNull CommandSender sender, @NotNull Number number, String... args);
-
-    /**
-     * Get the number arguments
-     *
-     * @param sender the sender
-     * @return the number arguments
-     */
-    @NotNull
-    protected abstract List<Number> getNumberArgs(@NotNull CommandSender sender);
-
-    /**
-     * Get the additional arguments
-     *
-     * @param sender the sender
-     * @param args   the remaining arguments
-     * @return the additional arguments
-     */
-    @NotNull
-    protected List<String> getAdditionalArgs(@NotNull CommandSender sender, String... args) {
-        return Collections.emptyList();
-    }
-
+public abstract class NumberAction extends ValueAction<Number> {
     /**
      * Send the "invalid number" message
      *
@@ -70,30 +35,22 @@ public abstract class NumberAction implements SimpleGameAction.SimpleAction {
     }
 
     @Override
-    public @NotNull String getArgsUsage() {
-        return "<number>";
-    }
-
-    @Override
-    public boolean performAction(@NotNull CommandSender sender, @NotNull String... args) {
-        if (args.length < 1) {
-            return false;
-        }
+    protected Optional<Number> parseValue(@NotNull CommandSender sender, String... args) {
         try {
-            return performAction(sender, Double.parseDouble(args[0]), Arrays.copyOfRange(args, 1, args.length));
+            return Optional.of(Double.parseDouble(args[0]));
         } catch (NumberFormatException e) {
             sendInvalidNumberMessage(sender);
-            return false;
+            return Optional.empty();
         }
     }
 
     @Override
-    public @NotNull List<@NotNull String> getActionArgs(@NotNull CommandSender sender, @NotNull String... args) {
-        if (args.length == 1) {
-            return getNumberArgs(sender).stream().map(Number::toString).collect(Collectors.toList());
-        } else if (args.length > 1) {
-            return getAdditionalArgs(sender, Arrays.copyOfRange(args, 1, args.length));
-        }
-        return SimpleGameAction.SimpleAction.super.getActionArgs(sender, args);
+    protected int getValueArgCount() {
+        return 1;
+    }
+
+    @Override
+    public @NotNull String getArgsUsage() {
+        return "<number>";
     }
 }

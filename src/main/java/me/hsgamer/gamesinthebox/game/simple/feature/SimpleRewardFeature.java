@@ -157,8 +157,8 @@ public class SimpleRewardFeature extends RewardFeature {
                 }
 
                 @Override
-                protected @NotNull List<Number> getNumberArgs(@NotNull CommandSender sender) {
-                    return Arrays.asList(-1, 1, 2, 3, 4, 5);
+                protected @NotNull List<String> getValueArgs(@NotNull CommandSender sender, String... args) {
+                    return Arrays.asList("-1", "1", "2", "3", "4", "5");
                 }
 
                 @Override
@@ -183,8 +183,8 @@ public class SimpleRewardFeature extends RewardFeature {
                 }
 
                 @Override
-                protected @NotNull List<Number> getNumberArgs(@NotNull CommandSender sender) {
-                    return Arrays.asList(-1, 1, 2, 3, 4, 5);
+                protected @NotNull List<String> getValueArgs(@NotNull CommandSender sender, String... args) {
+                    return Arrays.asList("-1", "1", "2", "3", "4", "5");
                 }
 
                 @Override
@@ -222,8 +222,8 @@ public class SimpleRewardFeature extends RewardFeature {
                 }
 
                 @Override
-                protected @NotNull List<Number> getNumberArgs(@NotNull CommandSender sender) {
-                    return Arrays.asList(0, 1, 2, 3, 4, 5);
+                protected @NotNull List<String> getValueArgs(@NotNull CommandSender sender, String... args) {
+                    return Arrays.asList("0", "1", "2", "3", "4", "5");
                 }
             });
 

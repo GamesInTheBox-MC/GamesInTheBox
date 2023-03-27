@@ -35,7 +35,6 @@ import me.hsgamer.unihologram.common.api.HologramLine;
 import me.hsgamer.unihologram.common.line.TextHologramLine;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -193,9 +192,9 @@ public class DescriptiveHologramFeature implements Feature {
                 }
 
                 @Override
-                protected boolean performAction(@NotNull Player player, @NotNull Location location, String... args) {
+                protected boolean performAction(@NotNull CommandSender sender, @NotNull Location location, String... args) {
                     hologramList.add(Pair.of(location, new ArrayList<>()));
-                    MessageUtils.sendMessage(player, "&aThe hologram has been created. The index is " + (hologramList.size() - 1));
+                    MessageUtils.sendMessage(sender, "&aThe hologram has been created. The index is " + (hologramList.size() - 1));
                     return true;
                 }
             });
@@ -219,21 +218,21 @@ public class DescriptiveHologramFeature implements Feature {
                 }
 
                 @Override
-                protected boolean performAction(@NotNull Player player, @NotNull Location location, String... args) {
+                protected boolean performAction(@NotNull CommandSender sender, @NotNull Location location, String... args) {
                     if (args.length < 1) {
                         return false;
                     }
                     try {
                         int index = Integer.parseInt(args[0]);
                         if (index < 0 || index >= hologramList.size()) {
-                            MessageUtils.sendMessage(player, "&cInvalid index");
+                            MessageUtils.sendMessage(sender, "&cInvalid index");
                             return false;
                         }
 
                         hologramList.set(index, Pair.of(location, hologramList.get(index).getValue()));
                         return true;
                     } catch (NumberFormatException e) {
-                        MessageUtils.sendMessage(player, "&cInvalid number");
+                        MessageUtils.sendMessage(sender, "&cInvalid number");
                         return false;
                     }
                 }
@@ -259,8 +258,8 @@ public class DescriptiveHologramFeature implements Feature {
                 }
 
                 @Override
-                protected @NotNull List<Number> getNumberArgs(@NotNull CommandSender sender) {
-                    return IntStream.range(0, hologramList.size()).boxed().collect(Collectors.toList());
+                protected @NotNull List<String> getValueArgs(@NotNull CommandSender sender, String... args) {
+                    return IntStream.range(0, hologramList.size()).mapToObj(Integer::toString).collect(Collectors.toList());
                 }
 
                 @Override
@@ -288,8 +287,8 @@ public class DescriptiveHologramFeature implements Feature {
                 }
 
                 @Override
-                protected @NotNull List<Number> getNumberArgs(@NotNull CommandSender sender) {
-                    return IntStream.range(0, hologramList.size()).boxed().collect(Collectors.toList());
+                protected @NotNull List<String> getValueArgs(@NotNull CommandSender sender, String... args) {
+                    return IntStream.range(0, hologramList.size()).mapToObj(Integer::toString).collect(Collectors.toList());
                 }
 
                 @Override
@@ -317,8 +316,8 @@ public class DescriptiveHologramFeature implements Feature {
                 }
 
                 @Override
-                protected @NotNull List<Number> getNumberArgs(@NotNull CommandSender sender) {
-                    return IntStream.range(0, hologramList.size()).boxed().collect(Collectors.toList());
+                protected @NotNull List<String> getValueArgs(@NotNull CommandSender sender, String... args) {
+                    return IntStream.range(0, hologramList.size()).mapToObj(Integer::toString).collect(Collectors.toList());
                 }
 
                 @Override

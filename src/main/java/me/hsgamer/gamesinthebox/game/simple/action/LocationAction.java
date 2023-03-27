@@ -22,20 +22,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Optional;
+
 /**
  * The {@link SimpleGameAction.SimpleAction} that uses the location of the player
  */
-public abstract class LocationAction implements SimpleGameAction.SimpleAction {
-    /**
-     * Perform the action
-     *
-     * @param player   the player
-     * @param location the location
-     * @param args     the arguments
-     * @return true if the action is successful
-     */
-    protected abstract boolean performAction(@NotNull Player player, @NotNull Location location, String... args);
-
+public abstract class LocationAction extends ValueAction<Location> {
     /**
      * Get the location
      *
@@ -54,15 +46,17 @@ public abstract class LocationAction implements SimpleGameAction.SimpleAction {
     }
 
     @Override
-    public boolean performAction(@NotNull CommandSender sender, @NotNull String... args) {
+    protected int getValueArgCount() {
+        return 0;
+    }
+
+    @Override
+    protected Optional<Location> parseValue(@NotNull CommandSender sender, String... args) {
         if (!(sender instanceof Player)) {
             sendPlayerOnlyMessage(sender);
-            return false;
+            return Optional.empty();
         }
 
-        Player player = (Player) sender;
-        Location location = getLocation(player);
-
-        return performAction(player, location, args);
+        return Optional.ofNullable(getLocation((Player) sender));
     }
 }

@@ -200,8 +200,8 @@ public class SimplePointFeature extends PointFeature {
                 }
 
                 @Override
-                protected @NotNull List<Number> getNumberArgs(@NotNull CommandSender sender) {
-                    return Arrays.asList(1, 2, 3, 4, 5);
+                protected @NotNull List<String> getValueArgs(@NotNull CommandSender sender, String... args) {
+                    return Arrays.asList("1", "2", "3", "4", "5");
                 }
             });
             map.put("set-point-minus", new NumberAction() {
@@ -217,8 +217,8 @@ public class SimplePointFeature extends PointFeature {
                 }
 
                 @Override
-                protected @NotNull List<Number> getNumberArgs(@NotNull CommandSender sender) {
-                    return Arrays.asList(1, 2, 3, 4, 5);
+                protected @NotNull List<String> getValueArgs(@NotNull CommandSender sender, String... args) {
+                    return Arrays.asList("1", "2", "3", "4", "5");
                 }
             });
             map.put("set-max-players-to-add-point", new NumberAction() {
@@ -239,8 +239,8 @@ public class SimplePointFeature extends PointFeature {
                 }
 
                 @Override
-                protected @NotNull List<Number> getNumberArgs(@NotNull CommandSender sender) {
-                    return Arrays.asList(1, 2, 3, 4, 5);
+                protected @NotNull List<String> getValueArgs(@NotNull CommandSender sender, String... args) {
+                    return Arrays.asList("1", "2", "3", "4", "5");
                 }
             });
 
