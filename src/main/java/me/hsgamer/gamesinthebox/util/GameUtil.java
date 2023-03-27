@@ -20,11 +20,20 @@ import me.hsgamer.minigamecore.base.extra.DisplayName;
 import me.hsgamer.minigamecore.bukkit.extra.ColoredDisplayName;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * The utility for games and arenas
+ */
 public final class GameUtil {
     private GameUtil() {
         // EMPTY
     }
 
+    /**
+     * Get the display name of the state of the arena
+     *
+     * @param arena the arena
+     * @return the display name
+     */
     @NotNull
     public static String getState(@NotNull Arena arena) {
         return arena.getCurrentStateInstance().map(gameState -> {
