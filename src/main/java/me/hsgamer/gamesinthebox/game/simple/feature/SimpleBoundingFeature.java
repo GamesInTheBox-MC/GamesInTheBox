@@ -20,6 +20,7 @@ import me.hsgamer.gamesinthebox.game.feature.GameConfigFeature;
 import me.hsgamer.gamesinthebox.game.simple.SimpleGameAction;
 import me.hsgamer.gamesinthebox.game.simple.SimpleGameArena;
 import me.hsgamer.gamesinthebox.game.simple.SimpleGameEditor;
+import me.hsgamer.gamesinthebox.game.simple.action.CurrentLocationAction;
 import me.hsgamer.gamesinthebox.util.LocationUtil;
 import me.hsgamer.hscore.bukkit.block.BukkitBlockAdapter;
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
@@ -189,35 +190,27 @@ public class SimpleBoundingFeature extends BoundingFeature {
             String pos1Name = actionName.isEmpty() ? "set-pos1" : actionName + "-set-pos1";
             String pos2Name = actionName.isEmpty() ? "set-pos2" : actionName + "-set-pos2";
 
-            map.put(pos1Name, new SimpleGameAction.SimpleAction() {
+            map.put(pos1Name, new CurrentLocationAction() {
                 @Override
                 public @NotNull String getDescription() {
                     return "Set the position 1 of the " + editorName + " at your current location";
                 }
 
                 @Override
-                public boolean performAction(@NotNull CommandSender sender, String... args) {
-                    if (!(sender instanceof Player)) {
-                        MessageUtils.sendMessage(sender, "&cOnly players can perform this action");
-                        return false;
-                    }
-                    pos1 = ((Player) sender).getLocation();
+                protected boolean performAction(@NotNull Player player, @NotNull Location location, String... args) {
+                    pos1 = location;
                     return true;
                 }
             });
-            map.put(pos2Name, new SimpleGameAction.SimpleAction() {
+            map.put(pos2Name, new CurrentLocationAction() {
                 @Override
                 public @NotNull String getDescription() {
                     return "Set the position 2 of the " + editorName + " at your current location";
                 }
 
                 @Override
-                public boolean performAction(@NotNull CommandSender sender, String... args) {
-                    if (!(sender instanceof Player)) {
-                        MessageUtils.sendMessage(sender, "&cOnly players can perform this action");
-                        return false;
-                    }
-                    pos2 = ((Player) sender).getLocation();
+                protected boolean performAction(@NotNull Player player, @NotNull Location location, String... args) {
+                    pos2 = location;
                     return true;
                 }
             });

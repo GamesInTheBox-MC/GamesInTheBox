@@ -20,6 +20,7 @@ import me.hsgamer.gamesinthebox.game.feature.PointFeature;
 import me.hsgamer.gamesinthebox.game.simple.SimpleGameAction;
 import me.hsgamer.gamesinthebox.game.simple.SimpleGameArena;
 import me.hsgamer.gamesinthebox.game.simple.SimpleGameEditor;
+import me.hsgamer.gamesinthebox.game.simple.action.NumberAction;
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import me.hsgamer.hscore.common.Validate;
 import org.bukkit.command.CommandSender;
@@ -186,110 +187,60 @@ public class SimplePointFeature extends PointFeature {
         public Map<String, SimpleGameAction.SimpleAction> getActions() {
             Map<String, SimpleGameAction.SimpleAction> map = new LinkedHashMap<>();
 
-            map.put("set-point-plus", new SimpleGameAction.SimpleAction() {
+            map.put("set-point-plus", new NumberAction() {
                 @Override
                 public @NotNull String getDescription() {
                     return "Set the point to add to the player";
                 }
 
                 @Override
-                public @NotNull String getArgsUsage() {
-                    return "<point>";
+                protected boolean performAction(@NotNull CommandSender sender, @NotNull Number number, String... args) {
+                    pointPlus = Math.abs(number.intValue());
+                    return true;
                 }
 
                 @Override
-                public @NotNull List<String> getActionArgs(@NotNull CommandSender sender, String... args) {
-                    if (args.length == 1) {
-                        return Arrays.asList("1", "2", "3", "4", "5");
-                    }
-                    return SimpleGameAction.SimpleAction.super.getActionArgs(sender, args);
-                }
-
-                @Override
-                public boolean performAction(@NotNull CommandSender sender, String... args) {
-                    if (args.length < 1) {
-                        return false;
-                    }
-                    try {
-                        int point = Integer.parseInt(args[0]);
-                        pointPlus = Math.abs(point);
-                        return true;
-                    } catch (NumberFormatException e) {
-                        MessageUtils.sendMessage(sender, "&cInvalid number");
-                        return false;
-                    }
+                protected @NotNull List<Number> getNumberArgs(@NotNull CommandSender sender) {
+                    return Arrays.asList(1, 2, 3, 4, 5);
                 }
             });
-            map.put("set-point-minus", new SimpleGameAction.SimpleAction() {
+            map.put("set-point-minus", new NumberAction() {
                 @Override
                 public @NotNull String getDescription() {
                     return "Set the point to remove from the player";
                 }
 
                 @Override
-                public @NotNull String getArgsUsage() {
-                    return "<point>";
+                protected boolean performAction(@NotNull CommandSender sender, @NotNull Number number, String... args) {
+                    pointMinus = Math.abs(number.intValue());
+                    return true;
                 }
 
                 @Override
-                public @NotNull List<String> getActionArgs(@NotNull CommandSender sender, String... args) {
-                    if (args.length == 1) {
-                        return Arrays.asList("1", "2", "3", "4", "5");
-                    }
-                    return SimpleGameAction.SimpleAction.super.getActionArgs(sender, args);
-                }
-
-                @Override
-                public boolean performAction(@NotNull CommandSender sender, String... args) {
-                    if (args.length < 1) {
-                        return false;
-                    }
-                    try {
-                        int point = Integer.parseInt(args[0]);
-                        pointMinus = Math.abs(point);
-                        return true;
-                    } catch (NumberFormatException e) {
-                        MessageUtils.sendMessage(sender, "&cInvalid number");
-                        return false;
-                    }
+                protected @NotNull List<Number> getNumberArgs(@NotNull CommandSender sender) {
+                    return Arrays.asList(1, 2, 3, 4, 5);
                 }
             });
-            map.put("set-max-players-to-add-point", new SimpleGameAction.SimpleAction() {
+            map.put("set-max-players-to-add-point", new NumberAction() {
                 @Override
                 public @NotNull String getDescription() {
                     return "Set the maximum players to add point";
                 }
 
                 @Override
-                public @NotNull String getArgsUsage() {
-                    return "<max players>";
+                protected boolean performAction(@NotNull CommandSender sender, @NotNull Number number, String... args) {
+                    int players = number.intValue();
+                    if (players >= 0) {
+                        maxPlayersToAddPoint = players;
+                    } else {
+                        maxPlayersToAddPoint = null;
+                    }
+                    return true;
                 }
 
                 @Override
-                public @NotNull List<String> getActionArgs(@NotNull CommandSender sender, String... args) {
-                    if (args.length == 1) {
-                        return Arrays.asList("1", "2", "3", "4", "5");
-                    }
-                    return SimpleGameAction.SimpleAction.super.getActionArgs(sender, args);
-                }
-
-                @Override
-                public boolean performAction(@NotNull CommandSender sender, String... args) {
-                    if (args.length < 1) {
-                        return false;
-                    }
-                    try {
-                        int players = Integer.parseInt(args[0]);
-                        if (players >= 0) {
-                            maxPlayersToAddPoint = players;
-                        } else {
-                            maxPlayersToAddPoint = null;
-                        }
-                        return true;
-                    } catch (NumberFormatException e) {
-                        MessageUtils.sendMessage(sender, "&cInvalid number");
-                        return false;
-                    }
+                protected @NotNull List<Number> getNumberArgs(@NotNull CommandSender sender) {
+                    return Arrays.asList(1, 2, 3, 4, 5);
                 }
             });
 

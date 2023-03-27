@@ -20,6 +20,7 @@ import me.hsgamer.gamesinthebox.game.feature.RewardFeature;
 import me.hsgamer.gamesinthebox.game.simple.SimpleGameAction;
 import me.hsgamer.gamesinthebox.game.simple.SimpleGameArena;
 import me.hsgamer.gamesinthebox.game.simple.SimpleGameEditor;
+import me.hsgamer.gamesinthebox.game.simple.action.NumberAction;
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import me.hsgamer.hscore.common.CollectionUtils;
 import me.hsgamer.hscore.common.Pair;
@@ -132,31 +133,19 @@ public class SimpleRewardFeature extends RewardFeature {
         public Map<String, SimpleGameAction.SimpleAction> getActions() {
             Map<String, SimpleGameAction.SimpleAction> map = new LinkedHashMap<>();
 
-            map.put("add-reward", new SimpleGameAction.SimpleAction() {
+            map.put("add-reward", new NumberAction() {
                 @Override
                 public @NotNull String getDescription() {
-                    return "Add a reward command";
+                    return "Add a reward command. Use -1 for all players";
                 }
 
                 @Override
-                public @NotNull String getArgsUsage() {
-                    return "<top> <command>";
-                }
-
-                @Override
-                public @NotNull List<String> getActionArgs(@NotNull CommandSender sender, String... args) {
-                    if (args.length == 1) {
-                        return Arrays.asList("all", "1", "2", "3", "4", "5");
-                    }
-                    return SimpleGameAction.SimpleAction.super.getActionArgs(sender, args);
-                }
-
-                @Override
-                public boolean performAction(@NotNull CommandSender sender, String... args) {
-                    if (args.length < 2) {
+                protected boolean performAction(@NotNull CommandSender sender, @NotNull Number number, String... args) {
+                    if (args.length < 1) {
                         return false;
                     }
-                    String top = args[0];
+
+                    String top = number.intValue() <= 0 ? "default" : String.valueOf(number.intValue());
                     String command = StringUtils.join(args, " ", 1, args.length);
 
                     if (rewardCommands == null) {
@@ -166,37 +155,41 @@ public class SimpleRewardFeature extends RewardFeature {
                     rewardCommands.computeIfAbsent(top, k -> new ArrayList<>()).add(command);
                     return true;
                 }
-            });
-            map.put("clear-reward", new SimpleGameAction.SimpleAction() {
+
                 @Override
-                public @NotNull String getDescription() {
-                    return "Clear all reward commands of a top position";
+                protected @NotNull List<Number> getNumberArgs(@NotNull CommandSender sender) {
+                    return Arrays.asList(-1, 1, 2, 3, 4, 5);
                 }
 
                 @Override
                 public @NotNull String getArgsUsage() {
-                    return "<top>";
+                    return "<top> <command>";
+                }
+            });
+            map.put("clear-reward", new NumberAction() {
+                @Override
+                public @NotNull String getDescription() {
+                    return "Clear all reward commands of a top position. Use -1 for all players";
                 }
 
                 @Override
-                public @NotNull List<String> getActionArgs(@NotNull CommandSender sender, String... args) {
-                    if (args.length == 1) {
-                        return Arrays.asList("all", "1", "2", "3", "4", "5");
-                    }
-                    return SimpleGameAction.SimpleAction.super.getActionArgs(sender, args);
-                }
-
-                @Override
-                public boolean performAction(@NotNull CommandSender sender, String... args) {
-                    if (args.length < 1) {
-                        return false;
-                    }
-                    String top = args[0];
+                protected boolean performAction(@NotNull CommandSender sender, @NotNull Number number, String... args) {
+                    String top = number.intValue() <= 0 ? "default" : String.valueOf(number.intValue());
 
                     if (rewardCommands != null) {
                         rewardCommands.remove(top);
                     }
                     return true;
+                }
+
+                @Override
+                protected @NotNull List<Number> getNumberArgs(@NotNull CommandSender sender) {
+                    return Arrays.asList(-1, 1, 2, 3, 4, 5);
+                }
+
+                @Override
+                public @NotNull String getArgsUsage() {
+                    return "<top>";
                 }
             });
             map.put("clear-all-reward", new SimpleGameAction.SimpleAction() {
@@ -211,42 +204,26 @@ public class SimpleRewardFeature extends RewardFeature {
                     return true;
                 }
             });
-            map.put("set-min-players-to-reward", new SimpleGameAction.SimpleAction() {
+            map.put("set-min-players-to-reward", new NumberAction() {
                 @Override
                 public @NotNull String getDescription() {
                     return "Set the minimum players to reward";
                 }
 
                 @Override
-                public @NotNull String getArgsUsage() {
-                    return "<min players>";
+                protected boolean performAction(@NotNull CommandSender sender, @NotNull Number number, String... args) {
+                    int players = number.intValue();
+                    if (players >= 0) {
+                        minPlayersToReward = players;
+                    } else {
+                        minPlayersToReward = null;
+                    }
+                    return true;
                 }
 
                 @Override
-                public @NotNull List<String> getActionArgs(@NotNull CommandSender sender, String... args) {
-                    if (args.length == 1) {
-                        return Arrays.asList("1", "2", "3", "4", "5");
-                    }
-                    return SimpleGameAction.SimpleAction.super.getActionArgs(sender, args);
-                }
-
-                @Override
-                public boolean performAction(@NotNull CommandSender sender, String... args) {
-                    if (args.length < 1) {
-                        return false;
-                    }
-                    try {
-                        int players = Integer.parseInt(args[0]);
-                        if (players >= 0) {
-                            minPlayersToReward = players;
-                        } else {
-                            minPlayersToReward = null;
-                        }
-                        return true;
-                    } catch (NumberFormatException e) {
-                        MessageUtils.sendMessage(sender, "&cInvalid number");
-                        return false;
-                    }
+                protected @NotNull List<Number> getNumberArgs(@NotNull CommandSender sender) {
+                    return Arrays.asList(0, 1, 2, 3, 4, 5);
                 }
             });
 

@@ -20,6 +20,8 @@ import me.hsgamer.gamesinthebox.game.feature.HologramFeature;
 import me.hsgamer.gamesinthebox.game.simple.SimpleGameAction;
 import me.hsgamer.gamesinthebox.game.simple.SimpleGameArena;
 import me.hsgamer.gamesinthebox.game.simple.SimpleGameEditor;
+import me.hsgamer.gamesinthebox.game.simple.action.CurrentLocationAction;
+import me.hsgamer.gamesinthebox.game.simple.action.NumberAction;
 import me.hsgamer.gamesinthebox.planner.feature.VariableFeature;
 import me.hsgamer.gamesinthebox.util.LocationUtil;
 import me.hsgamer.hscore.bukkit.utils.ColorUtils;
@@ -31,7 +33,6 @@ import me.hsgamer.minigamecore.base.Feature;
 import me.hsgamer.unihologram.common.api.Hologram;
 import me.hsgamer.unihologram.common.api.HologramLine;
 import me.hsgamer.unihologram.common.line.TextHologramLine;
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -185,28 +186,20 @@ public class DescriptiveHologramFeature implements Feature {
         public Map<String, SimpleGameAction.SimpleAction> getActions() {
             Map<String, SimpleGameAction.SimpleAction> map = new LinkedHashMap<>();
 
-            map.put("new-hologram", new SimpleGameAction.SimpleAction() {
+            map.put("new-hologram", new CurrentLocationAction() {
                 @Override
                 public @NotNull String getDescription() {
                     return "Create a new hologram at your location";
                 }
 
                 @Override
-                public boolean performAction(@NotNull CommandSender sender, String... args) {
-                    if (!(sender instanceof Player)) {
-                        MessageUtils.sendMessage(sender, "&cOnly players can use this command");
-                        return false;
-                    }
-
-                    Player player = (Player) sender;
-                    Location location = player.getLocation();
-
+                protected boolean performAction(@NotNull Player player, @NotNull Location location, String... args) {
                     hologramList.add(Pair.of(location, new ArrayList<>()));
-                    MessageUtils.sendMessage(sender, "&aThe hologram has been created. The index is " + (hologramList.size() - 1));
+                    MessageUtils.sendMessage(player, "&aThe hologram has been created. The index is " + (hologramList.size() - 1));
                     return true;
                 }
             });
-            map.put("set-hologram-location", new SimpleGameAction.SimpleAction() {
+            map.put("set-hologram-location", new CurrentLocationAction() {
                 @Override
                 public @NotNull String getDescription() {
                     return "Set the location of a hologram";
@@ -222,157 +215,115 @@ public class DescriptiveHologramFeature implements Feature {
                     if (args.length == 1) {
                         return IntStream.range(0, hologramList.size()).mapToObj(Integer::toString).collect(Collectors.toList());
                     }
-                    return SimpleGameAction.SimpleAction.super.getActionArgs(sender, args);
+                    return super.getActionArgs(sender, args);
                 }
 
                 @Override
-                public boolean performAction(@NotNull CommandSender sender, String... args) {
+                protected boolean performAction(@NotNull Player player, @NotNull Location location, String... args) {
                     if (args.length < 1) {
                         return false;
                     }
                     try {
                         int index = Integer.parseInt(args[0]);
                         if (index < 0 || index >= hologramList.size()) {
-                            MessageUtils.sendMessage(sender, "&cInvalid index");
+                            MessageUtils.sendMessage(player, "&cInvalid index");
                             return false;
                         }
-
-                        if (!(sender instanceof Player)) {
-                            MessageUtils.sendMessage(sender, "&cOnly players can use this command");
-                            return false;
-                        }
-
-                        Player player = (Player) sender;
-                        Location location = player.getLocation();
 
                         hologramList.set(index, Pair.of(location, hologramList.get(index).getValue()));
-                        MessageUtils.sendMessage(sender, "&aThe hologram has been updated");
                         return true;
                     } catch (NumberFormatException e) {
-                        MessageUtils.sendMessage(sender, "&cInvalid number");
+                        MessageUtils.sendMessage(player, "&cInvalid number");
                         return false;
                     }
                 }
             });
-            map.put("add-hologram-line", new SimpleGameAction.SimpleAction() {
+            map.put("add-hologram-line", new NumberAction() {
                 @Override
                 public @NotNull String getDescription() {
                     return "Add a line to a hologram";
                 }
 
                 @Override
+                protected boolean performAction(@NotNull CommandSender sender, @NotNull Number number, String... args) {
+                    int index = number.intValue();
+                    String line = String.join(" ", args);
+
+                    if (index < 0 || index >= hologramList.size()) {
+                        MessageUtils.sendMessage(sender, "&cInvalid index");
+                        return false;
+                    }
+
+                    hologramList.get(index).getValue().add(line);
+                    return true;
+                }
+
+                @Override
+                protected @NotNull List<Number> getNumberArgs(@NotNull CommandSender sender) {
+                    return IntStream.range(0, hologramList.size()).boxed().collect(Collectors.toList());
+                }
+
+                @Override
                 public @NotNull String getArgsUsage() {
                     return "<index> <line>";
                 }
-
-                @Override
-                public @NotNull List<String> getActionArgs(@NotNull CommandSender sender, String... args) {
-                    if (args.length == 1) {
-                        return IntStream.range(0, hologramList.size()).mapToObj(Integer::toString).collect(Collectors.toList());
-                    }
-                    return SimpleGameAction.SimpleAction.super.getActionArgs(sender, args);
-                }
-
-                @Override
-                public boolean performAction(@NotNull CommandSender sender, String... args) {
-                    if (args.length < 2) {
-                        return false;
-                    }
-                    try {
-                        int index = Integer.parseInt(args[0]);
-                        String line = StringUtils.join(args, " ", 1, args.length);
-
-                        if (index < 0 || index >= hologramList.size()) {
-                            MessageUtils.sendMessage(sender, "&cInvalid index");
-                            return false;
-                        }
-
-                        hologramList.get(index).getValue().add(line);
-                        return true;
-                    } catch (NumberFormatException e) {
-                        MessageUtils.sendMessage(sender, "&cInvalid number");
-                        return false;
-                    }
-                }
             });
-            map.put("clear-hologram-line", new SimpleGameAction.SimpleAction() {
+            map.put("clear-hologram-line", new NumberAction() {
                 @Override
                 public @NotNull String getDescription() {
                     return "Clear all lines of a hologram";
                 }
 
                 @Override
+                protected boolean performAction(@NotNull CommandSender sender, @NotNull Number number, String... args) {
+                    int index = number.intValue();
+
+                    if (index < 0 || index >= hologramList.size()) {
+                        MessageUtils.sendMessage(sender, "&cInvalid index");
+                        return false;
+                    }
+
+                    hologramList.get(index).getValue().clear();
+                    return true;
+                }
+
+                @Override
+                protected @NotNull List<Number> getNumberArgs(@NotNull CommandSender sender) {
+                    return IntStream.range(0, hologramList.size()).boxed().collect(Collectors.toList());
+                }
+
+                @Override
                 public @NotNull String getArgsUsage() {
                     return "<index>";
                 }
-
-                @Override
-                public @NotNull List<String> getActionArgs(@NotNull CommandSender sender, String... args) {
-                    if (args.length == 1) {
-                        return IntStream.range(0, hologramList.size()).mapToObj(Integer::toString).collect(Collectors.toList());
-                    }
-                    return SimpleGameAction.SimpleAction.super.getActionArgs(sender, args);
-                }
-
-                @Override
-                public boolean performAction(@NotNull CommandSender sender, String... args) {
-                    if (args.length < 1) {
-                        return false;
-                    }
-                    try {
-                        int index = Integer.parseInt(args[0]);
-
-                        if (index < 0 || index >= hologramList.size()) {
-                            MessageUtils.sendMessage(sender, "&cInvalid index");
-                            return false;
-                        }
-
-                        hologramList.get(index).getValue().clear();
-                        return true;
-                    } catch (NumberFormatException e) {
-                        MessageUtils.sendMessage(sender, "&cInvalid number");
-                        return false;
-                    }
-                }
             });
-            map.put("remove-hologram", new SimpleGameAction.SimpleAction() {
+            map.put("remove-hologram", new NumberAction() {
                 @Override
                 public @NotNull String getDescription() {
                     return "Remove a hologram";
                 }
 
                 @Override
+                protected boolean performAction(@NotNull CommandSender sender, @NotNull Number number, String... args) {
+                    int index = number.intValue();
+
+                    if (index < 0 || index >= hologramList.size()) {
+                        MessageUtils.sendMessage(sender, "&cInvalid index");
+                        return false;
+                    }
+
+                    hologramList.remove(index);
+                    return true;
+                }
+
+                @Override
+                protected @NotNull List<Number> getNumberArgs(@NotNull CommandSender sender) {
+                    return IntStream.range(0, hologramList.size()).boxed().collect(Collectors.toList());
+                }
+
+                @Override
                 public @NotNull String getArgsUsage() {
                     return "<index>";
-                }
-
-                @Override
-                public @NotNull List<String> getActionArgs(@NotNull CommandSender sender, String... args) {
-                    if (args.length == 1) {
-                        return IntStream.range(0, hologramList.size()).mapToObj(Integer::toString).collect(Collectors.toList());
-                    }
-                    return SimpleGameAction.SimpleAction.super.getActionArgs(sender, args);
-                }
-
-                @Override
-                public boolean performAction(@NotNull CommandSender sender, String... args) {
-                    if (args.length < 1) {
-                        return false;
-                    }
-                    try {
-                        int index = Integer.parseInt(args[0]);
-
-                        if (index < 0 || index >= hologramList.size()) {
-                            MessageUtils.sendMessage(sender, "&cInvalid index");
-                            return false;
-                        }
-
-                        hologramList.remove(index);
-                        return true;
-                    } catch (NumberFormatException e) {
-                        MessageUtils.sendMessage(sender, "&cInvalid number");
-                        return false;
-                    }
                 }
             });
             map.put("clear-all-hologram", new SimpleGameAction.SimpleAction() {
