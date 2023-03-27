@@ -27,7 +27,7 @@ import java.util.Optional;
 /**
  * The {@link SimpleGameAction.SimpleAction} that uses the location of the player
  */
-public abstract class LocationAction extends ValueAction<Location> {
+public abstract class PlayerLocationAction extends ValueAction<Location> {
     /**
      * Get the location
      *

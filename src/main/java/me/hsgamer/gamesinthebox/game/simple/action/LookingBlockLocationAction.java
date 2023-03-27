@@ -26,7 +26,7 @@ import java.util.Set;
 /**
  * The {@link me.hsgamer.gamesinthebox.game.simple.SimpleGameAction.SimpleAction} that uses the location that the player is looking at
  */
-public abstract class LookingBlockLocationAction extends LocationAction {
+public abstract class LookingBlockLocationAction extends PlayerLocationAction {
     /**
      * Get the maximum distance of the block that the player is looking at
      *

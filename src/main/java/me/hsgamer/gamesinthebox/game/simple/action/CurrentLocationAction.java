@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * The {@link me.hsgamer.gamesinthebox.game.simple.SimpleGameAction.SimpleAction} that uses the current location of the player
  */
-public abstract class CurrentLocationAction extends LocationAction {
+public abstract class CurrentLocationAction extends PlayerLocationAction {
     @Override
     protected Location getLocation(@NotNull Player player) {
         return player.getLocation();
