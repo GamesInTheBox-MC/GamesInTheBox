@@ -289,23 +289,6 @@ ij_editorconfig_space_before_colon = false
 ij_editorconfig_space_before_comma = false
 ij_editorconfig_spaces_around_assignment_operators = true
 
-[{*.har,*.jsb2,*.jsb3,*.json,.babelrc,.eslintrc,.prettierrc,.stylelintrc,bowerrc,jest.config}]
-indent_size = 2
-ij_json_array_wrapping = split_into_lines
-ij_json_keep_blank_lines_in_code = 0
-ij_json_keep_indents_on_empty_lines = false
-ij_json_keep_line_breaks = true
-ij_json_keep_trailing_comma = false
-ij_json_object_wrapping = split_into_lines
-ij_json_property_alignment = do_not_align
-ij_json_space_after_colon = true
-ij_json_space_after_comma = true
-ij_json_space_before_colon = false
-ij_json_space_before_comma = false
-ij_json_spaces_within_braces = false
-ij_json_spaces_within_brackets = false
-ij_json_wrap_long_lines = false
-
 [{*.yaml,*.yml}]
 indent_size = 2
 ij_yaml_align_values_properties = do_not_align
