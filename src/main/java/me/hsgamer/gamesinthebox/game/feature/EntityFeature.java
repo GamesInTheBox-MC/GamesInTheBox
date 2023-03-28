@@ -16,7 +16,7 @@
 package me.hsgamer.gamesinthebox.game.feature;
 
 import me.hsgamer.gamesinthebox.util.EntityUtil;
-import me.hsgamer.gamesinthebox.util.Util;
+import me.hsgamer.gamesinthebox.util.TaskUtil;
 import me.hsgamer.minigamecore.base.Feature;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -53,7 +53,7 @@ public abstract class EntityFeature implements Feature {
      */
     public CompletableFuture<Entity> spawn(Location location, Consumer<Entity> onSpawnConsumer) {
         CompletableFuture<Entity> completableFuture = new CompletableFuture<>();
-        Util.runSync(() -> {
+        TaskUtil.runSync(() -> {
             Entity entity = createEntity(location);
             if (entity == null) {
                 completableFuture.completeExceptionally(new NullPointerException("Entity is null"));
@@ -121,7 +121,7 @@ public abstract class EntityFeature implements Feature {
      */
     public CompletableFuture<Void> clearEntities() {
         CompletableFuture<Void> completableFuture = new CompletableFuture<>();
-        Util.runSync(() -> {
+        TaskUtil.runSync(() -> {
             entities.forEach(EntityUtil::despawnSafe);
             entities.clear();
             completableFuture.complete(null);
