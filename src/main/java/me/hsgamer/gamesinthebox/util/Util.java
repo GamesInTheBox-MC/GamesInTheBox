@@ -17,8 +17,10 @@ package me.hsgamer.gamesinthebox.util;
 
 import me.hsgamer.hscore.bukkit.utils.ColorUtils;
 import me.hsgamer.hscore.common.CollectionUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemoryConfiguration;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -70,6 +72,19 @@ public final class Util {
             } catch (Exception ignored) {
                 // IGNORED
             }
+        }
+    }
+
+    /**
+     * Run a task synchronously
+     *
+     * @param runnable the runnable
+     */
+    public static void runSync(@NotNull Runnable runnable) {
+        if (Bukkit.isPrimaryThread()) {
+            runnable.run();
+        } else {
+            Bukkit.getScheduler().runTask(JavaPlugin.getProvidingPlugin(Util.class), runnable);
         }
     }
 

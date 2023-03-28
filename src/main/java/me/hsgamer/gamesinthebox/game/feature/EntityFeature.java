@@ -16,11 +16,10 @@
 package me.hsgamer.gamesinthebox.game.feature;
 
 import me.hsgamer.gamesinthebox.util.EntityUtil;
+import me.hsgamer.gamesinthebox.util.Util;
 import me.hsgamer.minigamecore.base.Feature;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -54,7 +53,7 @@ public abstract class EntityFeature implements Feature {
      */
     public CompletableFuture<Entity> spawn(Location location, Consumer<Entity> onSpawnConsumer) {
         CompletableFuture<Entity> completableFuture = new CompletableFuture<>();
-        Runnable runnable = () -> {
+        Util.runSync(() -> {
             Entity entity = createEntity(location);
             if (entity == null) {
                 completableFuture.completeExceptionally(new NullPointerException("Entity is null"));
@@ -63,12 +62,7 @@ public abstract class EntityFeature implements Feature {
             entities.add(entity);
             onSpawnConsumer.accept(entity);
             completableFuture.complete(entity);
-        };
-        if (Bukkit.isPrimaryThread()) {
-            runnable.run();
-        } else {
-            Bukkit.getScheduler().runTask(JavaPlugin.getProvidingPlugin(EntityFeature.class), runnable);
-        }
+        });
         return completableFuture;
     }
 
@@ -127,16 +121,11 @@ public abstract class EntityFeature implements Feature {
      */
     public CompletableFuture<Void> clearEntities() {
         CompletableFuture<Void> completableFuture = new CompletableFuture<>();
-        Runnable runnable = () -> {
+        Util.runSync(() -> {
             entities.forEach(EntityUtil::despawnSafe);
             entities.clear();
             completableFuture.complete(null);
-        };
-        if (Bukkit.isPrimaryThread()) {
-            runnable.run();
-        } else {
-            Bukkit.getScheduler().runTask(JavaPlugin.getProvidingPlugin(EntityFeature.class), runnable);
-        }
+        });
         return completableFuture;
     }
 
