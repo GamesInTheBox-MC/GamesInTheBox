@@ -91,8 +91,9 @@ public final class GamesInTheBox extends BasePlugin {
 
     @Override
     public void disable() {
-        plannerManager.clear();
         expansionManager.disableExpansions();
+        plannerManager.clear();
+        expansionManager.clearExpansions();
     }
 
     @Override
