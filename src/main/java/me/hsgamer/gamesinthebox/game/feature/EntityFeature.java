@@ -56,7 +56,7 @@ public abstract class EntityFeature implements Feature {
      */
     public CompletableFuture<Entity> spawn(Location location, Consumer<Entity> onSpawnConsumer) {
         CompletableFuture<Entity> completableFuture = new CompletableFuture<>();
-        Scheduler.CURRENT.runTask(JavaPlugin.getProvidingPlugin(EntityFeature.class), () -> {
+        Scheduler.CURRENT.runLocationTask(JavaPlugin.getProvidingPlugin(EntityFeature.class), location, () -> {
             Entity entity = createEntity(location);
             if (entity == null) {
                 completableFuture.completeExceptionally(new NullPointerException("Entity is null"));
@@ -65,7 +65,7 @@ public abstract class EntityFeature implements Feature {
             entities.add(entity);
             onSpawnConsumer.accept(entity);
             completableFuture.complete(entity);
-        }, false);
+        });
         return completableFuture;
     }
 
