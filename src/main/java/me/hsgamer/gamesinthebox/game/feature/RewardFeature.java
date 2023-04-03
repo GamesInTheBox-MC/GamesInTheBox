@@ -16,6 +16,7 @@
 package me.hsgamer.gamesinthebox.game.feature;
 
 import com.google.common.base.Preconditions;
+import me.hsgamer.hscore.bukkit.scheduler.Scheduler;
 import me.hsgamer.hscore.common.Pair;
 import me.hsgamer.minigamecore.base.Feature;
 import org.bukkit.Bukkit;
@@ -86,7 +87,7 @@ public abstract class RewardFeature implements Feature {
         if (name == null) return;
         List<String> commands = new ArrayList<>(topCommands.getOrDefault(topPosition, defaultCommands));
         commands.replaceAll(s -> s.replace("{name}", name).replace("{top}", Integer.toString(topPosition)));
-        Bukkit.getScheduler().runTask(JavaPlugin.getProvidingPlugin(getClass()), () -> commands.forEach(c -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), c)));
+        Scheduler.CURRENT.runTask(JavaPlugin.getProvidingPlugin(getClass()), () -> commands.forEach(c -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), c)), false);
     }
 
     /**

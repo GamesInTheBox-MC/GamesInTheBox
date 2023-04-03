@@ -15,10 +15,8 @@
 */
 package me.hsgamer.gamesinthebox.util;
 
-import org.bukkit.Bukkit;
-import org.bukkit.plugin.java.JavaPlugin;
+import me.hsgamer.hscore.bukkit.scheduler.Task;
 import org.bukkit.scheduler.BukkitTask;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -45,15 +43,17 @@ public final class TaskUtil {
     }
 
     /**
-     * Run a task synchronously
+     * Cancel a task safely
      *
-     * @param runnable the runnable
+     * @param task the task
      */
-    public static void runSync(@NotNull Runnable runnable) {
-        if (Bukkit.isPrimaryThread()) {
-            runnable.run();
-        } else {
-            Bukkit.getScheduler().runTask(JavaPlugin.getProvidingPlugin(Util.class), runnable);
+    public static void cancelSafe(@Nullable Task task) {
+        if (task != null) {
+            try {
+                task.cancel();
+            } catch (Exception ignored) {
+                // IGNORED
+            }
         }
     }
 }

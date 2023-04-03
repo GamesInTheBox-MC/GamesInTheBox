@@ -18,10 +18,10 @@ package me.hsgamer.gamesinthebox.game.simple.feature;
 import me.hsgamer.gamesinthebox.game.feature.TopFeature;
 import me.hsgamer.gamesinthebox.game.simple.SimpleGameArena;
 import me.hsgamer.gamesinthebox.planner.feature.PluginFeature;
+import me.hsgamer.hscore.bukkit.scheduler.Scheduler;
+import me.hsgamer.hscore.bukkit.scheduler.Task;
 import me.hsgamer.minigamecore.base.Feature;
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -32,7 +32,7 @@ import java.util.Collections;
 public class SimpleUpdateFeature implements Feature {
     private final Plugin plugin;
     private final SimpleGameArena arena;
-    private BukkitTask task;
+    private Task task;
 
     /**
      * Create a new {@link SimpleUpdateFeature}
@@ -49,7 +49,7 @@ public class SimpleUpdateFeature implements Feature {
      */
     public void initState() {
         arena.getFeature(DescriptiveHologramFeature.class).initHologram();
-        task = Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, this::updateState, 0L, 20L);
+        task = Scheduler.CURRENT.runTaskTimer(plugin, this::updateState, 0L, 20L, true);
     }
 
     /**
