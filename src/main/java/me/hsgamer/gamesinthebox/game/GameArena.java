@@ -19,7 +19,7 @@ import me.hsgamer.gamesinthebox.game.feature.GameConfigFeature;
 import me.hsgamer.gamesinthebox.planner.Planner;
 import me.hsgamer.gamesinthebox.replacement.ReplacementHandler;
 import me.hsgamer.minigamecore.base.Feature;
-import me.hsgamer.minigamecore.bukkit.SimpleBukkitArena;
+import me.hsgamer.minigamecore.bukkit.hscore.HSCoreBukkitArena;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -35,7 +35,7 @@ import java.util.List;
  *     <li>{@link #getFeature(Class)} will get the {@link Feature} from both the {@link GameArena} and the {@link Planner} that the arena belongs to</li>
  * </ul>
  */
-public abstract class GameArena extends SimpleBukkitArena implements ReplacementHandler {
+public abstract class GameArena extends HSCoreBukkitArena implements ReplacementHandler {
     private final String localName;
     private final Planner planner;
     private final Game game;

@@ -24,7 +24,7 @@ import me.hsgamer.gamesinthebox.replacement.ReplacementHandler;
 import me.hsgamer.gamesinthebox.util.GameUtil;
 import me.hsgamer.hscore.bukkit.utils.ColorUtils;
 import me.hsgamer.minigamecore.base.Feature;
-import me.hsgamer.minigamecore.bukkit.SimpleBukkitArena;
+import me.hsgamer.minigamecore.bukkit.hscore.HSCoreBukkitArena;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -42,7 +42,7 @@ import java.util.Optional;
  *     <li>{@code game_state}: the state of the planner</li>
  * </ul>
  */
-public class Planner extends SimpleBukkitArena implements ReplacementHandler {
+public class Planner extends HSCoreBukkitArena implements ReplacementHandler {
     public Planner(@NotNull String name, @NotNull PlannerManager arenaManager) {
         super(name, arenaManager);
     }

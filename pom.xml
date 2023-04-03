@@ -13,8 +13,8 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <core.version>4.2.16</core.version>
-        <minigamecore.version>2.1.3</minigamecore.version>
+        <core.version>4.2.19</core.version>
+        <minigamecore.version>2.2.0</minigamecore.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -177,7 +177,7 @@
 
         <dependency>
             <groupId>me.hsgamer</groupId>
-            <artifactId>minigamecore-bukkit</artifactId>
+            <artifactId>minigamecore-bukkit-hscore</artifactId>
             <version>${minigamecore.version}</version>
         </dependency>
         <dependency>
