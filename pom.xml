@@ -255,7 +255,7 @@
         <dependency>
             <groupId>me.hsgamer</groupId>
             <artifactId>uni-hologram-spigot-bundle</artifactId>
-            <version>1.5.4</version>
+            <version>1.5.5</version>
         </dependency>
         <dependency>
             <groupId>me.hsgamer</groupId>
