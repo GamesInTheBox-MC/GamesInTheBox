@@ -21,14 +21,13 @@ import me.hsgamer.gamesinthebox.planner.feature.GlobalPlannerConfigFeature;
 import me.hsgamer.gamesinthebox.planner.feature.PluginFeature;
 import me.hsgamer.gamesinthebox.planner.state.IdlingState;
 import me.hsgamer.gamesinthebox.planner.state.ListeningState;
-import me.hsgamer.hscore.bukkit.config.BukkitConfig;
-import me.hsgamer.hscore.config.Config;
 import me.hsgamer.minigamecore.base.Arena;
 import me.hsgamer.minigamecore.base.Feature;
 import me.hsgamer.minigamecore.base.GameState;
 import me.hsgamer.minigamecore.implementation.manager.LoadedArenaManager;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,7 +37,7 @@ import java.util.stream.Collectors;
  */
 public class PlannerManager extends LoadedArenaManager {
     private final GamesInTheBox plugin;
-    private final Config plannerConfig;
+    private final File plannerFolder;
 
     /**
      * Create a new manager
@@ -47,25 +46,26 @@ public class PlannerManager extends LoadedArenaManager {
      */
     public PlannerManager(@NotNull GamesInTheBox plugin) {
         this.plugin = plugin;
-        this.plannerConfig = new BukkitConfig(plugin, "planner.yml");
+        this.plannerFolder = new File(plugin.getDataFolder(), "planners");
     }
 
     @Override
     public void init() {
-        plannerConfig.setup();
+        if (!plannerFolder.exists()) {
+            plannerFolder.mkdirs();
+        }
         super.init();
     }
 
     @Override
     protected List<Arena> loadArenas() {
-        return plannerConfig.getKeys(false).stream()
+        return getFeature(GlobalPlannerConfigFeature.class).getPlannerNames().stream()
                 .map(name -> new Planner(name, this))
                 .collect(Collectors.toList());
     }
 
     @Override
     public void reloadArena() {
-        plannerConfig.reload();
         super.reloadArena();
         getAllArenas().forEach(Arena::postInit);
     }
@@ -81,7 +81,7 @@ public class PlannerManager extends LoadedArenaManager {
     @Override
     protected List<Feature> loadFeatures() {
         return Arrays.asList(
-                new GlobalPlannerConfigFeature(plannerConfig),
+                new GlobalPlannerConfigFeature(plannerFolder),
                 new PluginFeature(plugin)
         );
     }

@@ -35,11 +35,12 @@ public class SaveCommand extends GameEditorCommand {
 
     @Override
     protected void onEditorSubCommand(String gameType, GameEditor gameEditor, @NotNull CommandSender sender, @NotNull String label, @NotNull String... args) {
-        Config plannerConfig = plugin.getPlannerManager().getFeature(GlobalPlannerConfigFeature.class).getPlannerConfig();
-
         String plannerName = args[0];
         String arenaName = args[1];
-        String path = plannerName + ".settings." + arenaName;
+
+        Config plannerConfig = plugin.getPlannerManager().getFeature(GlobalPlannerConfigFeature.class).getPlannerFeature(plannerName, true).getConfig();
+
+        String path = "settings." + arenaName;
         boolean override = args.length >= 3 && Boolean.parseBoolean(args[2]);
         if (plannerConfig.contains(path) && !override) {
             MessageUtils.sendMessage(sender, plugin.getMessageConfig().getEditorArenaAlreadyExists());
@@ -70,9 +71,13 @@ public class SaveCommand extends GameEditorCommand {
     @Override
     protected @NotNull List<String> onEditorTabComplete(GameEditor gameEditor, @NotNull CommandSender sender, @NotNull String label, @NotNull String... args) {
         if (args.length == 1) {
-            return new ArrayList<>(plugin.getPlannerManager().getFeature(GlobalPlannerConfigFeature.class).getPlannerConfig().getKeys(false));
+            return plugin.getPlannerManager().getFeature(GlobalPlannerConfigFeature.class).getPlannerNames();
         } else if (args.length == 2) {
-            return new ArrayList<>(plugin.getPlannerManager().getFeature(GlobalPlannerConfigFeature.class).getPlannerConfig().getKeys(args[0] + ".settings", false));
+            return Optional.ofNullable(plugin.getPlannerManager().getFeature(GlobalPlannerConfigFeature.class))
+                    .map(feature -> feature.getPlannerFeature(args[0], false))
+                    .map(feature -> feature.getValues("settings", false).keySet())
+                    .<List<String>>map(ArrayList::new)
+                    .orElse(Collections.emptyList());
         } else if (args.length == 3) {
             return Arrays.asList("true", "false");
         }

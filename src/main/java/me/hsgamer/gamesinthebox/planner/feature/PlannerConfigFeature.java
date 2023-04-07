@@ -16,6 +16,7 @@
 package me.hsgamer.gamesinthebox.planner.feature;
 
 import me.hsgamer.gamesinthebox.planner.Planner;
+import me.hsgamer.hscore.config.Config;
 import me.hsgamer.minigamecore.base.Feature;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -25,22 +26,28 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * The {@link Feature} to access the settings of the {@link Planner}.
- * The settings are stored in the {@link GlobalPlannerConfigFeature} and the path format is {@code [planner].[path]}
+ * The {@link Feature} to access the settings of the {@link Planner}
  */
 public class PlannerConfigFeature implements Feature {
-    private final Planner planner;
-    private final GlobalPlannerConfigFeature globalPlannerConfigFeature;
+    private final Config config;
 
     /**
      * Create a new {@link PlannerConfigFeature}
      *
-     * @param planner                    the {@link Planner}
-     * @param globalPlannerConfigFeature the {@link GlobalPlannerConfigFeature}
+     * @param config the {@link Config} to access the settings
      */
-    public PlannerConfigFeature(@NotNull Planner planner, @NotNull GlobalPlannerConfigFeature globalPlannerConfigFeature) {
-        this.planner = planner;
-        this.globalPlannerConfigFeature = globalPlannerConfigFeature;
+    public PlannerConfigFeature(@NotNull Config config) {
+        this.config = config;
+    }
+
+    /**
+     * Get the {@link Config}
+     *
+     * @return the {@link Config}
+     */
+    @NotNull
+    public Config getConfig() {
+        return config;
     }
 
     /**
@@ -54,7 +61,7 @@ public class PlannerConfigFeature implements Feature {
      */
     @Contract("_, !null, _ -> !null")
     public <T> T getInstance(@NotNull String path, @Nullable T def, @NotNull Class<T> clazz) {
-        return globalPlannerConfigFeature.getPlannerConfig().getInstance(planner.getName() + "." + path, def, clazz);
+        return config.getInstance(path, def, clazz);
     }
 
     /**
@@ -66,7 +73,7 @@ public class PlannerConfigFeature implements Feature {
      */
     @Contract("_, !null -> !null")
     public String getString(@NotNull String path, @Nullable String def) {
-        return Objects.toString(globalPlannerConfigFeature.getPlannerConfig().getNormalized(planner.getName() + "." + path), def);
+        return Objects.toString(config.getNormalized(path), def);
     }
 
     /**
@@ -77,7 +84,7 @@ public class PlannerConfigFeature implements Feature {
      */
     @Nullable
     public Object get(@NotNull String path) {
-        return globalPlannerConfigFeature.getPlannerConfig().get(planner.getName() + "." + path);
+        return config.get(path);
     }
 
     /**
@@ -89,7 +96,7 @@ public class PlannerConfigFeature implements Feature {
      */
     @NotNull
     public Map<String, Object> getValues(@NotNull String path, boolean deep) {
-        return globalPlannerConfigFeature.getPlannerConfig().getNormalizedValues(planner.getName() + "." + path, deep);
+        return config.getNormalizedValues(path, deep);
     }
 
     /**
@@ -99,7 +106,7 @@ public class PlannerConfigFeature implements Feature {
      * @return true if the path exists
      */
     public boolean contains(@NotNull String path) {
-        return globalPlannerConfigFeature.getPlannerConfig().contains(planner.getName() + "." + path);
+        return config.contains(path);
     }
 
     /**
@@ -109,7 +116,7 @@ public class PlannerConfigFeature implements Feature {
      * @param value the value
      */
     public void set(@NotNull String path, @Nullable Object value) {
-        globalPlannerConfigFeature.getPlannerConfig().set(planner.getName() + "." + path, value);
-        globalPlannerConfigFeature.getPlannerConfig().save();
+        config.set(path, value);
+        config.save();
     }
 }

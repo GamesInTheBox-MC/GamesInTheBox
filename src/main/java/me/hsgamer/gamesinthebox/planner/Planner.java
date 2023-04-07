@@ -55,7 +55,7 @@ public class Planner extends HSCoreBukkitArena implements ReplacementHandler {
                 new ReplacementFeature(this),
                 new VariableFeature(this),
                 new PlannerFeature(this),
-                getFeature(GlobalPlannerConfigFeature.class).createPlannerFeature(this)
+                getFeature(GlobalPlannerConfigFeature.class).getPlannerFeature(this)
         );
     }
 
