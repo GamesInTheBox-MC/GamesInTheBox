@@ -19,6 +19,8 @@ import me.hsgamer.gamesinthebox.replacement.ReplacementHandler;
 import me.hsgamer.minigamecore.base.Feature;
 import me.hsgamer.minigamecore.base.Initializer;
 import me.hsgamer.minigamecore.implementation.feature.TimerFeature;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.List;
@@ -145,5 +147,15 @@ public abstract class TemplateGameArenaLogic implements Initializer, Replacement
      */
     public void onEndingOver() {
         // EMPTY
+    }
+
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Return null by default. Override it if you want to use it.
+     */
+    @Override
+    public @Nullable String replace(@NotNull String input) {
+        return null;
     }
 }
