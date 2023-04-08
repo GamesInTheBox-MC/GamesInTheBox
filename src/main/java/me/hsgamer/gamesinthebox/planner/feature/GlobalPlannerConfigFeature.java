@@ -64,6 +64,14 @@ public class GlobalPlannerConfigFeature implements Feature {
     }
 
     /**
+     * Reload the {@link Config} for all {@link Planner}
+     */
+    public void reload() {
+        clear();
+        init();
+    }
+
+    /**
      * Get the folder to store the {@link Config}
      *
      * @return the folder

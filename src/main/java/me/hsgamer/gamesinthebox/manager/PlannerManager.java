@@ -65,12 +65,6 @@ public class PlannerManager extends LoadedArenaManager {
     }
 
     @Override
-    public void reloadArena() {
-        super.reloadArena();
-        getAllArenas().forEach(Arena::postInit);
-    }
-
-    @Override
     protected List<GameState> loadGameStates() {
         return Arrays.asList(
                 new IdlingState(plugin),
