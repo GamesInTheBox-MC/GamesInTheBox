@@ -37,6 +37,11 @@ public class TemplateGameArena extends SimpleGameArena {
     }
 
     @Override
+    public @NotNull List<@NotNull String> getDefaultHologramLines(@NotNull String name) {
+        return expansion.getDefaultHologramLines(name);
+    }
+
+    @Override
     protected List<Feature> loadFeatures() {
         List<Feature> features = super.loadFeatures();
 

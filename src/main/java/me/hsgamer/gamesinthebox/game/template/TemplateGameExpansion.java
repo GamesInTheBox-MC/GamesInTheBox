@@ -18,6 +18,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 public abstract class TemplateGameExpansion extends SingleGameExpansion implements Reloadable {
     private final GameConfig gameConfig = ConfigGenerator.newInstance(GameConfig.class, new BukkitConfig(new File(getDataFolder(), "game.yml")));
@@ -26,6 +27,10 @@ public abstract class TemplateGameExpansion extends SingleGameExpansion implemen
     public abstract ArenaLogic createArenaLogic(SimpleGameArena arena);
 
     public abstract String getDisplayName();
+
+    public List<String> getDefaultHologramLines(String name) {
+        return Collections.emptyList();
+    }
 
     public SimpleGameEditor getEditor(SimpleGame game) {
         return new SimpleGameEditor(game);
