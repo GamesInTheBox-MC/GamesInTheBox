@@ -3,6 +3,7 @@ package me.hsgamer.gamesinthebox.game.template;
 import me.hsgamer.gamesinthebox.game.simple.SimpleGameArena;
 import me.hsgamer.minigamecore.base.Feature;
 import me.hsgamer.minigamecore.base.Initializer;
+import me.hsgamer.minigamecore.implementation.feature.TimerFeature;
 
 import java.util.Collections;
 import java.util.List;
@@ -18,27 +19,55 @@ public abstract class TemplateGameArenaLogic implements Initializer {
         return Collections.emptyList();
     }
 
-    public abstract void forceEnd();
+    public void forceEnd() {
+        // EMPTY
+    }
 
-    public abstract void start();
+    public void onWaitingStart() {
+        // EMPTY
+    }
 
-    public abstract void end();
+    public void onWaitingUpdate() {
+        // EMPTY
+    }
 
-    public abstract void onWaitingStart();
+    public boolean isWaitingOver() {
+        return arena.getFeature(TimerFeature.class).getDuration() <= 0;
+    }
 
-    public abstract boolean isWaitingOver();
+    public void onWaitingOver() {
+        // EMPTY
+    }
 
-    public abstract void onWaitingOver();
+    public void onInGameStart() {
+        // EMPTY
+    }
 
-    public abstract void onInGameStart();
+    public void onInGameUpdate() {
+        // EMPTY
+    }
 
-    public abstract boolean isInGameOver();
+    public boolean isInGameOver() {
+        return arena.getFeature(TimerFeature.class).getDuration() <= 0;
+    }
 
-    public abstract void onInGameOver();
+    public void onInGameOver() {
+        // EMPTY
+    }
 
-    public abstract void onEndingStart();
+    public void onEndingStart() {
+        // EMPTY
+    }
 
-    public abstract boolean isEndingOver();
+    public void onEndingUpdate() {
+        // EMPTY
+    }
 
-    public abstract void onEndingOver();
+    public boolean isEndingOver() {
+        return arena.getFeature(TimerFeature.class).getDuration() <= 0;
+    }
+
+    public void onEndingOver() {
+        // EMPTY
+    }
 }
