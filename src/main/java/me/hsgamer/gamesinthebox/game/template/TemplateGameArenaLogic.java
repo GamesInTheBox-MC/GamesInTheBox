@@ -24,7 +24,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * The game logic
+ * The logic of a {@link TemplateGameArena}
  */
 public abstract class TemplateGameArenaLogic implements Initializer, ReplacementHandler {
     /**

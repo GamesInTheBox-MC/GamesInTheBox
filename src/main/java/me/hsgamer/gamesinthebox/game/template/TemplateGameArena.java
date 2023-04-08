@@ -35,26 +35,26 @@ import java.util.UUID;
  * The {@link SimpleGameArena} for template
  */
 public class TemplateGameArena extends SimpleGameArena {
-    private final TemplateGameExpansion expansion;
+    private final TemplateGameLogic gameLogic;
 
     /**
      * Create a new arena
      *
-     * @param expansion the expansion
+     * @param gameLogic the game logic
      * @param name      the name
      * @param game      the game
      * @param planner   the planner
      */
-    public TemplateGameArena(TemplateGameExpansion expansion, @NotNull String name, @NotNull TemplateGame game, @NotNull Planner planner) {
+    public TemplateGameArena(TemplateGameLogic gameLogic, @NotNull String name, @NotNull TemplateGame game, @NotNull Planner planner) {
         super(name, game, planner);
-        this.expansion = expansion;
+        this.gameLogic = gameLogic;
     }
 
     @Override
     protected void onPointChanged(@NotNull UUID uuid, int point, int totalPoints) {
         if (point == 0) return;
 
-        String message = point < 0 ? expansion.getGameMessageConfig().getPointMinus() : expansion.getGameMessageConfig().getPointPlus();
+        String message = point < 0 ? gameLogic.getGameMessageConfig().getPointMinus() : gameLogic.getGameMessageConfig().getPointPlus();
         int absPoint = Math.abs(point);
 
         String finalMessage = message
@@ -66,7 +66,7 @@ public class TemplateGameArena extends SimpleGameArena {
 
     @Override
     public @NotNull List<@NotNull String> getDefaultHologramLines(@NotNull String name) {
-        return expansion.getDefaultHologramLines(name);
+        return gameLogic.getDefaultHologramLines(name);
     }
 
     @Override
@@ -75,7 +75,7 @@ public class TemplateGameArena extends SimpleGameArena {
 
         features.add(new CooldownFeature(this));
 
-        TemplateGameArenaLogic templateGameArenaLogic = expansion.createArenaLogic(this);
+        TemplateGameArenaLogic templateGameArenaLogic = gameLogic.createArenaLogic(this);
         features.add(new ArenaLogicFeature(templateGameArenaLogic));
         features.addAll(templateGameArenaLogic.loadFeatures());
 
@@ -108,7 +108,7 @@ public class TemplateGameArena extends SimpleGameArena {
 
     @Override
     protected @NotNull SimpleGameArenaAction createAction() {
-        return expansion.getArenaAction(this);
+        return gameLogic.getArenaAction(this);
     }
 
     @Override
@@ -129,16 +129,16 @@ public class TemplateGameArena extends SimpleGameArena {
 
     @Override
     public long getDelay() {
-        return expansion.getGameConfig().getInterval();
+        return gameLogic.getGameConfig().getInterval();
     }
 
     @Override
     public long getPeriod() {
-        return expansion.getGameConfig().getInterval();
+        return gameLogic.getGameConfig().getInterval();
     }
 
     @Override
     public boolean isAsync() {
-        return expansion.getGameConfig().isAsync();
+        return gameLogic.getGameConfig().isAsync();
     }
 }

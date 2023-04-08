@@ -17,7 +17,7 @@ package me.hsgamer.gamesinthebox.game.template.state;
 
 import me.hsgamer.gamesinthebox.game.simple.feature.SimpleUpdateFeature;
 import me.hsgamer.gamesinthebox.game.template.TemplateGameArenaLogic;
-import me.hsgamer.gamesinthebox.game.template.TemplateGameExpansion;
+import me.hsgamer.gamesinthebox.game.template.TemplateGameLogic;
 import me.hsgamer.gamesinthebox.game.template.feature.ArenaLogicFeature;
 import me.hsgamer.gamesinthebox.game.template.feature.CooldownFeature;
 import me.hsgamer.minigamecore.base.Arena;
@@ -29,15 +29,15 @@ import me.hsgamer.minigamecore.bukkit.extra.ColoredDisplayName;
  * The arena will be in this state when preparing for the game.
  */
 public class WaitingState implements GameState, ColoredDisplayName {
-    private final TemplateGameExpansion expansion;
+    private final TemplateGameLogic gameLogic;
 
     /**
-     * Create a new waiting state
+     * Create a new state
      *
-     * @param expansion the expansion
+     * @param gameLogic the game logic
      */
-    public WaitingState(TemplateGameExpansion expansion) {
-        this.expansion = expansion;
+    public WaitingState(TemplateGameLogic gameLogic) {
+        this.gameLogic = gameLogic;
     }
 
     @Override
@@ -64,6 +64,6 @@ public class WaitingState implements GameState, ColoredDisplayName {
 
     @Override
     public String getDisplayName() {
-        return expansion.getGameMessageConfig().getStateWaiting();
+        return gameLogic.getGameMessageConfig().getStateWaiting();
     }
 }

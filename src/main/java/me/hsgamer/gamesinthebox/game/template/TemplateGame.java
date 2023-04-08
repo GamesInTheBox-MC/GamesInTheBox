@@ -34,46 +34,46 @@ import java.util.List;
  * The {@link SimpleGame} for template
  */
 public class TemplateGame extends SimpleGame {
-    private final TemplateGameExpansion expansion;
+    private final TemplateGameLogic gameLogic;
 
     /**
      * Create a new game
      *
-     * @param expansion the expansion
+     * @param gameLogic the game logic
      */
-    public TemplateGame(TemplateGameExpansion expansion) {
-        this.expansion = expansion;
+    public TemplateGame(TemplateGameLogic gameLogic) {
+        this.gameLogic = gameLogic;
     }
 
     @Override
     public @NotNull String getDisplayName() {
-        return expansion.getDisplayName();
+        return gameLogic.getDisplayName();
     }
 
     @Override
     public @NotNull SimpleGameEditor createEditor() {
-        return expansion.getEditor(this);
+        return gameLogic.getEditor(this);
     }
 
     @Override
     protected @NotNull SimpleGameArena newArena(@NotNull String name, @NotNull Planner planner) {
-        return new TemplateGameArena(expansion, name, this, planner);
+        return new TemplateGameArena(gameLogic, name, this, planner);
     }
 
     @Override
     protected List<Feature> loadFeatures() {
         List<Feature> features = super.loadFeatures();
-        features.addAll(expansion.getGameFeatures(this));
+        features.addAll(gameLogic.getGameFeatures(this));
         return features;
     }
 
     @Override
     protected List<GameState> loadGameStates() {
         return Arrays.asList(
-                new IdlingState(expansion),
-                new WaitingState(expansion),
-                new InGameState(expansion),
-                new EndingState(expansion)
+                new IdlingState(gameLogic),
+                new WaitingState(gameLogic),
+                new InGameState(gameLogic),
+                new EndingState(gameLogic)
         );
     }
 }

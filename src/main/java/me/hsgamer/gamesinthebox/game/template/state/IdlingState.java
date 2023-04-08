@@ -15,7 +15,7 @@
 */
 package me.hsgamer.gamesinthebox.game.template.state;
 
-import me.hsgamer.gamesinthebox.game.template.TemplateGameExpansion;
+import me.hsgamer.gamesinthebox.game.template.TemplateGameLogic;
 import me.hsgamer.gamesinthebox.game.template.feature.CooldownFeature;
 import me.hsgamer.minigamecore.base.Arena;
 import me.hsgamer.minigamecore.base.GameState;
@@ -26,15 +26,15 @@ import me.hsgamer.minigamecore.bukkit.extra.ColoredDisplayName;
  * The arena will be in this state while waiting for the {@link me.hsgamer.gamesinthebox.planner.Planner} to start the game.
  */
 public class IdlingState implements GameState, ColoredDisplayName {
-    private final TemplateGameExpansion expansion;
+    private final TemplateGameLogic gameLogic;
 
     /**
-     * Create a new idling state
+     * Create a new state
      *
-     * @param expansion the expansion
+     * @param gameLogic the game logic
      */
-    public IdlingState(TemplateGameExpansion expansion) {
-        this.expansion = expansion;
+    public IdlingState(TemplateGameLogic gameLogic) {
+        this.gameLogic = gameLogic;
     }
 
     @Override
@@ -51,6 +51,6 @@ public class IdlingState implements GameState, ColoredDisplayName {
 
     @Override
     public String getDisplayName() {
-        return expansion.getGameMessageConfig().getStateIdle();
+        return gameLogic.getGameMessageConfig().getStateIdle();
     }
 }

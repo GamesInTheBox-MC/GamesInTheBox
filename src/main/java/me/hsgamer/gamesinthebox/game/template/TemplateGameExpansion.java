@@ -18,82 +18,20 @@ package me.hsgamer.gamesinthebox.game.template;
 import me.hsgamer.gamesinthebox.expansion.SingleGameExpansion;
 import me.hsgamer.gamesinthebox.expansion.extra.Reloadable;
 import me.hsgamer.gamesinthebox.game.Game;
-import me.hsgamer.gamesinthebox.game.simple.SimpleGame;
-import me.hsgamer.gamesinthebox.game.simple.SimpleGameArenaAction;
 import me.hsgamer.gamesinthebox.game.template.config.GameConfig;
 import me.hsgamer.gamesinthebox.game.template.config.GameMessageConfig;
 import me.hsgamer.hscore.bukkit.config.BukkitConfig;
 import me.hsgamer.hscore.config.proxy.ConfigGenerator;
-import me.hsgamer.minigamecore.base.Feature;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-import java.util.Collections;
-import java.util.List;
 
 /**
- * The expansion to register the game using {@link TemplateGameArenaLogic}
+ * The expansion to register the game using {@link TemplateGameLogic}
  */
-public abstract class TemplateGameExpansion extends SingleGameExpansion implements Reloadable {
+public abstract class TemplateGameExpansion extends SingleGameExpansion implements Reloadable, TemplateGameLogic {
     private final GameConfig gameConfig = ConfigGenerator.newInstance(GameConfig.class, new BukkitConfig(new File(getDataFolder(), "game.yml")));
     private final GameMessageConfig gameMessageConfig = ConfigGenerator.newInstance(GameMessageConfig.class, new BukkitConfig(new File(getDataFolder(), "game-messages.yml")));
-
-    /**
-     * Create a new arena logic
-     *
-     * @param arena the arena
-     * @return the arena logic
-     */
-    public abstract TemplateGameArenaLogic createArenaLogic(TemplateGameArena arena);
-
-    /**
-     * Get the display name of the game
-     *
-     * @return the display name
-     */
-    public abstract String getDisplayName();
-
-    /**
-     * Get the default hologram lines by the name
-     *
-     * @param name the name to get
-     * @return the default hologram lines
-     */
-    public List<String> getDefaultHologramLines(String name) {
-        return Collections.emptyList();
-    }
-
-    /**
-     * Get the editor of the game.
-     * Override this method if you want to use your own editor.
-     *
-     * @param game the game
-     * @return the editor
-     */
-    public TemplateGameEditor getEditor(TemplateGame game) {
-        return new TemplateGameEditor(game);
-    }
-
-    /**
-     * Get the arena action of the game.
-     * Override this method if you want to use your own arena action.
-     *
-     * @param arena the arena
-     * @return the arena action
-     */
-    public SimpleGameArenaAction getArenaAction(TemplateGameArena arena) {
-        return new SimpleGameArenaAction(arena);
-    }
-
-    /**
-     * Get the features of the game
-     *
-     * @param game the game
-     * @return the features
-     */
-    public List<Feature> getGameFeatures(SimpleGame game) {
-        return Collections.emptyList();
-    }
 
     @Override
     protected @NotNull Game getGame() {
@@ -106,20 +44,12 @@ public abstract class TemplateGameExpansion extends SingleGameExpansion implemen
         gameMessageConfig.reloadConfig();
     }
 
-    /**
-     * Get the game config
-     *
-     * @return the game config
-     */
+    @Override
     public GameConfig getGameConfig() {
         return gameConfig;
     }
 
-    /**
-     * Get the game message config
-     *
-     * @return the game message config
-     */
+    @Override
     public GameMessageConfig getGameMessageConfig() {
         return gameMessageConfig;
     }
