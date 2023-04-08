@@ -15,6 +15,10 @@
 */
 package me.hsgamer.gamesinthebox.game.template;
 
+import me.hsgamer.gamesinthebox.game.template.state.EndingState;
+import me.hsgamer.gamesinthebox.game.template.state.IdlingState;
+import me.hsgamer.gamesinthebox.game.template.state.InGameState;
+import me.hsgamer.gamesinthebox.game.template.state.WaitingState;
 import me.hsgamer.gamesinthebox.replacement.ReplacementHandler;
 import me.hsgamer.minigamecore.base.Feature;
 import me.hsgamer.minigamecore.base.Initializer;
@@ -147,6 +151,42 @@ public abstract class TemplateGameArenaLogic implements Initializer, Replacement
      */
     public void onEndingOver() {
         // EMPTY
+    }
+
+    /**
+     * Check if the game is in the idling state
+     *
+     * @return true if the game is in the idling state
+     */
+    public boolean isIdle() {
+        return arena.getCurrentState() == null || arena.getCurrentState() == IdlingState.class;
+    }
+
+    /**
+     * Check if the game is in the waiting state
+     *
+     * @return true if the game is in the waiting state
+     */
+    public boolean isWaiting() {
+        return arena.getCurrentState() == WaitingState.class;
+    }
+
+    /**
+     * Check if the game is in the in-game state
+     *
+     * @return true if the game is in the in-game state
+     */
+    public boolean isInGame() {
+        return arena.getCurrentState() == InGameState.class;
+    }
+
+    /**
+     * Check if the game is in the ending state
+     *
+     * @return true if the game is in the ending state
+     */
+    public boolean isEnding() {
+        return arena.getCurrentState() == EndingState.class;
     }
 
     /**
