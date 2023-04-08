@@ -13,11 +13,13 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-package me.hsgamer.gamesinthebox.game.template;
+package me.hsgamer.gamesinthebox.game.template.expansion;
 
 import me.hsgamer.gamesinthebox.expansion.SingleGameExpansion;
 import me.hsgamer.gamesinthebox.expansion.extra.Reloadable;
 import me.hsgamer.gamesinthebox.game.Game;
+import me.hsgamer.gamesinthebox.game.template.TemplateGame;
+import me.hsgamer.gamesinthebox.game.template.TemplateGameLogic;
 import me.hsgamer.gamesinthebox.game.template.config.GameConfig;
 import me.hsgamer.gamesinthebox.game.template.config.GameMessageConfig;
 import me.hsgamer.hscore.bukkit.config.BukkitConfig;
