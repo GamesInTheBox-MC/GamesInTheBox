@@ -4,7 +4,6 @@ import me.hsgamer.gamesinthebox.game.simple.SimpleGameArena;
 import me.hsgamer.gamesinthebox.game.simple.SimpleGameArenaAction;
 import me.hsgamer.gamesinthebox.game.template.feature.ArenaLogicFeature;
 import me.hsgamer.gamesinthebox.game.template.feature.CooldownFeature;
-import me.hsgamer.gamesinthebox.game.template.logic.ArenaLogic;
 import me.hsgamer.gamesinthebox.game.template.state.IdlingState;
 import me.hsgamer.gamesinthebox.planner.Planner;
 import me.hsgamer.gamesinthebox.util.ActionBarUtil;
@@ -47,9 +46,9 @@ public class TemplateGameArena extends SimpleGameArena {
 
         features.add(new CooldownFeature(this));
 
-        ArenaLogic arenaLogic = expansion.createArenaLogic(this);
-        features.add(new ArenaLogicFeature(arenaLogic));
-        features.addAll(arenaLogic.loadFeatures());
+        TemplateGameArenaLogic templateGameArenaLogic = expansion.createArenaLogic(this);
+        features.add(new ArenaLogicFeature(templateGameArenaLogic));
+        features.addAll(templateGameArenaLogic.loadFeatures());
 
         return features;
     }

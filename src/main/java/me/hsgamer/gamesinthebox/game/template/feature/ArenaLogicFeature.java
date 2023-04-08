@@ -1,31 +1,31 @@
 package me.hsgamer.gamesinthebox.game.template.feature;
 
-import me.hsgamer.gamesinthebox.game.template.logic.ArenaLogic;
+import me.hsgamer.gamesinthebox.game.template.TemplateGameArenaLogic;
 import me.hsgamer.minigamecore.base.Feature;
 
 public class ArenaLogicFeature implements Feature {
-    private final ArenaLogic arenaLogic;
+    private final TemplateGameArenaLogic templateGameArenaLogic;
 
-    public ArenaLogicFeature(ArenaLogic arenaLogic) {
-        this.arenaLogic = arenaLogic;
+    public ArenaLogicFeature(TemplateGameArenaLogic templateGameArenaLogic) {
+        this.templateGameArenaLogic = templateGameArenaLogic;
     }
 
-    public ArenaLogic getArenaLogic() {
-        return arenaLogic;
+    public TemplateGameArenaLogic getArenaLogic() {
+        return templateGameArenaLogic;
     }
 
     @Override
     public void init() {
-        arenaLogic.init();
+        templateGameArenaLogic.init();
     }
 
     @Override
     public void postInit() {
-        arenaLogic.postInit();
+        templateGameArenaLogic.postInit();
     }
 
     @Override
     public void clear() {
-        arenaLogic.clear();
+        templateGameArenaLogic.clear();
     }
 }

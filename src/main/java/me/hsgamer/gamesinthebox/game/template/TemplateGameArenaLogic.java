@@ -1,4 +1,4 @@
-package me.hsgamer.gamesinthebox.game.template.logic;
+package me.hsgamer.gamesinthebox.game.template;
 
 import me.hsgamer.gamesinthebox.game.simple.SimpleGameArena;
 import me.hsgamer.minigamecore.base.Feature;
@@ -7,10 +7,10 @@ import me.hsgamer.minigamecore.base.Initializer;
 import java.util.Collections;
 import java.util.List;
 
-public abstract class ArenaLogic implements Initializer {
+public abstract class TemplateGameArenaLogic implements Initializer {
     protected final SimpleGameArena arena;
 
-    protected ArenaLogic(SimpleGameArena arena) {
+    protected TemplateGameArenaLogic(SimpleGameArena arena) {
         this.arena = arena;
     }
 

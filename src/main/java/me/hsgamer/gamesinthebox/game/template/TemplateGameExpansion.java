@@ -6,10 +6,8 @@ import me.hsgamer.gamesinthebox.game.Game;
 import me.hsgamer.gamesinthebox.game.simple.SimpleGame;
 import me.hsgamer.gamesinthebox.game.simple.SimpleGameArena;
 import me.hsgamer.gamesinthebox.game.simple.SimpleGameArenaAction;
-import me.hsgamer.gamesinthebox.game.simple.SimpleGameEditor;
 import me.hsgamer.gamesinthebox.game.template.config.GameConfig;
 import me.hsgamer.gamesinthebox.game.template.config.GameMessageConfig;
-import me.hsgamer.gamesinthebox.game.template.logic.ArenaLogic;
 import me.hsgamer.hscore.bukkit.config.BukkitConfig;
 import me.hsgamer.hscore.config.proxy.ConfigGenerator;
 import me.hsgamer.minigamecore.base.Feature;
@@ -18,13 +16,12 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 public abstract class TemplateGameExpansion extends SingleGameExpansion implements Reloadable {
     private final GameConfig gameConfig = ConfigGenerator.newInstance(GameConfig.class, new BukkitConfig(new File(getDataFolder(), "game.yml")));
     private final GameMessageConfig gameMessageConfig = ConfigGenerator.newInstance(GameMessageConfig.class, new BukkitConfig(new File(getDataFolder(), "game-messages.yml")));
 
-    public abstract ArenaLogic createArenaLogic(SimpleGameArena arena);
+    public abstract TemplateGameArenaLogic createArenaLogic(SimpleGameArena arena);
 
     public abstract String getDisplayName();
 
@@ -32,8 +29,8 @@ public abstract class TemplateGameExpansion extends SingleGameExpansion implemen
         return Collections.emptyList();
     }
 
-    public SimpleGameEditor getEditor(SimpleGame game) {
-        return new SimpleGameEditor(game);
+    public TemplateGameEditor getEditor(SimpleGame game) {
+        return new TemplateGameEditor(game);
     }
 
     public SimpleGameArenaAction getArenaAction(SimpleGameArena arena) {
