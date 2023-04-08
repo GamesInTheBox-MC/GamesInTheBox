@@ -278,13 +278,13 @@ public class SimplePointFeature extends PointFeature {
                 public Map<String, Object> toPathValueMap(@NotNull CommandSender sender) {
                     Map<String, Object> pathValueMap = new LinkedHashMap<>();
                     if (pointPlus != null) {
-                        pathValueMap.put("points.plus", pointPlus);
+                        pathValueMap.put("point.plus", pointPlus);
                     }
                     if (pointMinus != null) {
-                        pathValueMap.put("points.minus", pointMinus);
+                        pathValueMap.put("point.minus", pointMinus);
                     }
                     if (maxPlayersToAddPoint != null) {
-                        pathValueMap.put("points.max-players-to-add", maxPlayersToAddPoint);
+                        pathValueMap.put("point.max-players-to-add", maxPlayersToAddPoint);
                     }
                     return pathValueMap;
                 }
