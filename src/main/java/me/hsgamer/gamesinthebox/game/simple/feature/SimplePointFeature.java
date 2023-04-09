@@ -97,12 +97,45 @@ public class SimplePointFeature extends PointFeature {
     /**
      * Apply the point to the player
      *
+     * @param uuid          the uuid of the player
+     * @param pointValue    the point value
+     * @param pointModifier the point modifier
+     */
+    public void applyPoint(@NotNull UUID uuid, @NotNull PointValue pointValue, @NotNull UnaryOperator<Integer> pointModifier) {
+        int point = pointModifier.apply(
+                pointValue.pointOperator.apply(
+                        pointMap.getOrDefault(pointValue, pointValue.defaultPoint)
+                )
+        );
+        applyPoint(uuid, point);
+    }
+
+    /**
+     * Apply the point to the players
+     *
+     * @param uuids         the uuids of the players
+     * @param pointValue    the point value
+     * @param pointModifier the point modifier
+     */
+    public void applyPoint(@NotNull List<@NotNull UUID> uuids, @NotNull PointValue pointValue, @NotNull UnaryOperator<Integer> pointModifier) {
+        int point = pointModifier.apply(
+                pointValue.pointOperator.apply(
+                        pointMap.getOrDefault(pointValue, pointValue.defaultPoint)
+                )
+        );
+        for (UUID uuid : uuids) {
+            applyPoint(uuid, point);
+        }
+    }
+
+    /**
+     * Apply the point to the player
+     *
      * @param uuid       the uuid of the player
      * @param pointValue the point value
      */
     public void applyPoint(@NotNull UUID uuid, @NotNull PointValue pointValue) {
-        int point = pointValue.pointOperator.apply(pointMap.getOrDefault(pointValue, pointValue.defaultPoint));
-        applyPoint(uuid, point);
+        applyPoint(uuid, pointValue, UnaryOperator.identity());
     }
 
     /**
@@ -112,10 +145,7 @@ public class SimplePointFeature extends PointFeature {
      * @param pointValue the point value
      */
     public void applyPoint(@NotNull List<@NotNull UUID> uuids, @NotNull PointValue pointValue) {
-        int point = pointValue.pointOperator.apply(pointMap.getOrDefault(pointValue, pointValue.defaultPoint));
-        for (UUID uuid : uuids) {
-            applyPoint(uuid, point);
-        }
+        applyPoint(uuids, pointValue, UnaryOperator.identity());
     }
 
     /**
