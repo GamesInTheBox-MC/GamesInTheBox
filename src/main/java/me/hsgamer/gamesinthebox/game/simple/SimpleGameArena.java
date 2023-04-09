@@ -145,7 +145,7 @@ public abstract class SimpleGameArena extends GameArena {
         } else if (lowerCase.startsWith("point_")) {
             String pointName = lowerCase.substring(6);
             return Optional.ofNullable(getFeature(SimplePointFeature.class))
-                    .map(simplePointFeature -> simplePointFeature.getPoint(pointName))
+                    .flatMap(simplePointFeature -> simplePointFeature.getPoint(pointName))
                     .map(Objects::toString)
                     .orElse("N/A");
         } else if (lowerCase.startsWith("top_")) {
