@@ -21,6 +21,7 @@ import me.hsgamer.gamesinthebox.game.simple.SimpleGameAction;
 import me.hsgamer.gamesinthebox.game.simple.SimpleGameArena;
 import me.hsgamer.gamesinthebox.game.simple.SimpleGameEditor;
 import me.hsgamer.gamesinthebox.game.simple.action.CurrentLocationAction;
+import me.hsgamer.gamesinthebox.game.simple.action.LookingBlockLocationAction;
 import me.hsgamer.gamesinthebox.util.LocationUtil;
 import me.hsgamer.hscore.bukkit.block.BukkitBlockAdapter;
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
@@ -80,24 +81,26 @@ public class SimpleBoundingFeature extends BoundingFeature {
     /**
      * Create a new {@link SimpleBoundingFeature.Editor} to edit the bounding box
      *
-     * @param path       the path
-     * @param editorName the name of the editor
-     * @param actionName the name of the action
+     * @param lookingLocation whether the editor should take the location that the player is looking at. If {@code false}, it will take the location that the player is standing.
+     * @param path            the path
+     * @param editorName      the name of the editor
+     * @param actionName      the name of the action
      * @return the editor
      */
     @NotNull
-    public static Editor editor(@NotNull String path, @NotNull String editorName, @NotNull String actionName) {
-        return new Editor(path, editorName, actionName);
+    public static Editor editor(boolean lookingLocation, @NotNull String path, @NotNull String editorName, @NotNull String actionName) {
+        return new Editor(lookingLocation, path, editorName, actionName);
     }
 
     /**
      * Create a new {@link SimpleBoundingFeature.Editor} to edit the bounding box in the path "box"
      *
+     * @param lookingLocation whether the editor should take the location that the player is looking at. If {@code false}, it will take the location that the player is standing.
      * @return the editor
      */
     @NotNull
-    public static Editor editor() {
-        return new Editor("box", "Bounding Box", "");
+    public static Editor editor(boolean lookingLocation) {
+        return new Editor(lookingLocation, "box", "Bounding Box", "");
     }
 
     @Override
@@ -123,13 +126,15 @@ public class SimpleBoundingFeature extends BoundingFeature {
      * The editor for {@link SimpleBoundingFeature}
      */
     public static class Editor {
+        private final boolean lookingLocation;
         private final String path;
         private final String editorName;
         private final String actionName;
         private Location pos1;
         private Location pos2;
 
-        private Editor(String path, String editorName, String actionName) {
+        private Editor(boolean lookingLocation, String path, String editorName, String actionName) {
+            this.lookingLocation = lookingLocation;
             this.path = path;
             this.editorName = editorName;
             this.actionName = actionName;
@@ -189,30 +194,57 @@ public class SimpleBoundingFeature extends BoundingFeature {
             String pos1Name = actionName.isEmpty() ? "set-pos1" : actionName + "-set-pos1";
             String pos2Name = actionName.isEmpty() ? "set-pos2" : actionName + "-set-pos2";
 
-            map.put(pos1Name, new CurrentLocationAction() {
-                @Override
-                public @NotNull String getDescription() {
-                    return "Set the position 1 of the " + editorName + " at your current location";
-                }
+            if (lookingLocation) {
+                map.put(pos1Name, new LookingBlockLocationAction() {
+                    @Override
+                    public @NotNull String getDescription() {
+                        return "Set the position 1 of the " + editorName + " at the location you are looking at";
+                    }
 
-                @Override
-                protected boolean performAction(@NotNull CommandSender sender, @NotNull Location location, String... args) {
-                    pos1 = location;
-                    return true;
-                }
-            });
-            map.put(pos2Name, new CurrentLocationAction() {
-                @Override
-                public @NotNull String getDescription() {
-                    return "Set the position 2 of the " + editorName + " at your current location";
-                }
+                    @Override
+                    protected boolean performAction(@NotNull CommandSender sender, @NotNull Location location, String... args) {
+                        pos1 = location;
+                        return true;
+                    }
+                });
+                map.put(pos2Name, new LookingBlockLocationAction() {
+                    @Override
+                    public @NotNull String getDescription() {
+                        return "Set the position 2 of the " + editorName + " at the location you are looking at";
+                    }
 
-                @Override
-                protected boolean performAction(@NotNull CommandSender sender, @NotNull Location location, String... args) {
-                    pos2 = location;
-                    return true;
-                }
-            });
+                    @Override
+                    protected boolean performAction(@NotNull CommandSender sender, @NotNull Location location, String... args) {
+                        pos2 = location;
+                        return true;
+                    }
+                });
+            } else {
+                map.put(pos1Name, new CurrentLocationAction() {
+                    @Override
+                    public @NotNull String getDescription() {
+                        return "Set the position 1 of the " + editorName + " at your current location";
+                    }
+
+                    @Override
+                    protected boolean performAction(@NotNull CommandSender sender, @NotNull Location location, String... args) {
+                        pos1 = location;
+                        return true;
+                    }
+                });
+                map.put(pos2Name, new CurrentLocationAction() {
+                    @Override
+                    public @NotNull String getDescription() {
+                        return "Set the position 2 of the " + editorName + " at your current location";
+                    }
+
+                    @Override
+                    protected boolean performAction(@NotNull CommandSender sender, @NotNull Location location, String... args) {
+                        pos2 = location;
+                        return true;
+                    }
+                });
+            }
 
             return map;
         }
