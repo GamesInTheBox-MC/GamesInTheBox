@@ -87,6 +87,15 @@ public abstract class SimpleGameArena extends GameArena {
     }
 
     /**
+     * Get the point values
+     *
+     * @return the point values
+     */
+    protected List<SimplePointFeature.PointValue> getPointValues() {
+        return Collections.emptyList();
+    }
+
+    /**
      * Get the default hologram lines by the name
      *
      * @param name the name to get
@@ -119,7 +128,7 @@ public abstract class SimpleGameArena extends GameArena {
     protected List<Feature> loadFeatures() {
         List<Feature> features = super.loadFeatures();
         features.add(new TimerFeature());
-        features.add(new SimplePointFeature(this, this::onPointChanged));
+        features.add(new SimplePointFeature(this, this::onPointChanged, this.getPointValues()));
         features.add(new SimpleRewardFeature(this));
         features.add(new TopFeature());
         features.add(new DescriptiveHologramFeature(this));
@@ -141,14 +150,10 @@ public abstract class SimpleGameArena extends GameArena {
                     .filter(integer -> integer >= 0)
                     .map(Objects::toString)
                     .orElse("N/A");
-        } else if (input.equalsIgnoreCase("point_plus")) {
+        } else if (lowerCase.startsWith("point_")) {
+            String pointName = lowerCase.substring(6);
             return Optional.ofNullable(getFeature(SimplePointFeature.class))
-                    .map(SimplePointFeature::getPointPlus)
-                    .map(Objects::toString)
-                    .orElse("N/A");
-        } else if (input.equalsIgnoreCase("point_minus")) {
-            return Optional.ofNullable(getFeature(SimplePointFeature.class))
-                    .map(SimplePointFeature::getPointMinus)
+                    .map(simplePointFeature -> simplePointFeature.getPoint(pointName))
                     .map(Objects::toString)
                     .orElse("N/A");
         } else if (lowerCase.startsWith("top_")) {

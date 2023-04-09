@@ -22,31 +22,28 @@ import me.hsgamer.gamesinthebox.game.simple.SimpleGameArena;
 import me.hsgamer.gamesinthebox.game.simple.SimpleGameEditor;
 import me.hsgamer.gamesinthebox.game.simple.action.NumberAction;
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
+import me.hsgamer.hscore.collections.map.CaseInsensitiveStringHashMap;
 import me.hsgamer.hscore.common.Validate;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * The simple {@link PointFeature}.
  * It will get the settings from {@link GameConfigFeature} in the path {@code point}.
- * The format of the settings should be like this:
+ * The format of the settings should be a list of pairs of point name and point value.
  * <pre>
  *     point:
- *       plus: 1
- *       minus: 0
- *       max-players-to-add: -1
+ *       point-name: 1
+ *       point-name-2: 2
  * </pre>
- * The {@code plus} is the point to add. Default is 1.
- * The {@code minus} is the point to minus. Default is 0.
- * The {@code max-players-to-add} is the maximum players to add the point. Default is -1 (no limit).
  */
 public class SimplePointFeature extends PointFeature {
     private final SimpleGameArena arena;
-    private int pointPlus = 1;
-    private int pointMinus = 0;
-    private int maxPlayersToAdd = -1;
+    private final Map<String, PointValue> pointValuesMap;
+    private final Map<PointValue, Integer> pointMap;
 
     /**
      * Create a new {@link SimplePointFeature}
@@ -54,18 +51,21 @@ public class SimplePointFeature extends PointFeature {
      * @param arena         the arena
      * @param pointConsumer the point consumer
      */
-    public SimplePointFeature(@NotNull SimpleGameArena arena, @NotNull PointConsumer pointConsumer) {
+    public SimplePointFeature(@NotNull SimpleGameArena arena, @NotNull PointConsumer pointConsumer, @NotNull List<PointValue> pointValuesMap) {
         super(pointConsumer);
         this.arena = arena;
+        this.pointValuesMap = pointValuesMap.stream().collect(Collectors.toMap(pointValue -> pointValue.name, pointValue -> pointValue, (o, n) -> o, CaseInsensitiveStringHashMap::new));
+        this.pointMap = new HashMap<>();
     }
 
     /**
      * Get the editor of the feature
      *
+     * @param pointValues the point values
      * @return the editor
      */
-    public static Editor editor() {
-        return new Editor();
+    public static Editor editor(PointValue... pointValues) {
+        return new Editor(pointValues);
     }
 
     @Override
@@ -73,110 +73,114 @@ public class SimplePointFeature extends PointFeature {
         super.postInit();
 
         GameConfigFeature gameConfigFeature = arena.getFeature(GameConfigFeature.class);
-        pointPlus = Optional.ofNullable(gameConfigFeature.getString("point.plus"))
-                .flatMap(Validate::getNumber)
-                .map(Number::intValue)
-                .orElse(pointPlus);
-        pointMinus = Optional.ofNullable(gameConfigFeature.getString("point.minus"))
-                .flatMap(Validate::getNumber)
-                .map(Number::intValue)
-                .orElse(pointMinus);
-        maxPlayersToAdd = Optional.ofNullable(gameConfigFeature.getString("point.max-players-to-add"))
-                .flatMap(Validate::getNumber)
-                .map(Number::intValue)
-                .orElse(maxPlayersToAdd);
+        pointValuesMap.values().forEach(pointValue -> {
+            int point = Optional.ofNullable(gameConfigFeature.getString("point." + pointValue.name))
+                    .flatMap(Validate::getNumber)
+                    .map(Number::intValue)
+                    .orElse(pointValue.defaultPoint);
+            if (pointValue.alwaysPositive) {
+                point = Math.abs(point);
+            }
+            pointMap.put(pointValue, point);
+        });
     }
 
     /**
-     * Add the point to the player
+     * Apply the point to the player
      *
-     * @param uuid the uuid of the player
+     * @param uuid       the uuid of the player
+     * @param pointValue the point value
      */
-    public void addPoint(@NotNull UUID uuid) {
-        applyPoint(uuid, pointPlus);
-    }
-
-    /**
-     * Add the point to the players
-     *
-     * @param uuids the uuids of the players
-     */
-    public void addPoint(@NotNull List<@NotNull UUID> uuids) {
-        uuids.forEach(this::addPoint);
-    }
-
-    /**
-     * Remove the point from the player
-     *
-     * @param uuid the uuid of the player
-     */
-    public void removePoint(@NotNull UUID uuid) {
-        applyPoint(uuid, -pointMinus);
-    }
-
-    /**
-     * Remove the point from the players
-     *
-     * @param uuids the uuids of the players
-     */
-    public void removePoint(@NotNull List<@NotNull UUID> uuids) {
-        uuids.forEach(this::removePoint);
-    }
-
-    /**
-     * Try to add the point to the players.
-     * It will check if the number of players is less than {@link #getMaxPlayersToAdd()}.
-     * If it is, it will add the point to all players.
-     * Otherwise, it will do nothing.
-     *
-     * @param uuids the uuids of the players
-     * @return true if it can add the point to the players
-     */
-    public boolean tryAddPoint(@NotNull List<@NotNull UUID> uuids) {
-        if (maxPlayersToAdd >= 0 && uuids.size() > maxPlayersToAdd) {
-            return false;
+    public void applyPoint(@NotNull UUID uuid, @NotNull PointValue pointValue) {
+        int point = pointMap.getOrDefault(pointValue, pointValue.defaultPoint);
+        if (pointValue.alwaysPositive) {
+            point = Math.abs(point);
         }
-        uuids.forEach(this::addPoint);
-        return true;
+        applyPoint(uuid, point);
     }
 
     /**
-     * Get the point to add
+     * Apply the point to the players
      *
-     * @return the point to add
+     * @param uuids      the uuids of the players
+     * @param pointValue the point value
      */
-    public int getPointPlus() {
-        return pointPlus;
+    public void applyPoint(@NotNull List<@NotNull UUID> uuids, @NotNull PointValue pointValue) {
+        int point = pointMap.getOrDefault(pointValue, pointValue.defaultPoint);
+        if (pointValue.alwaysPositive) {
+            point = Math.abs(point);
+        }
+        for (UUID uuid : uuids) {
+            applyPoint(uuid, point);
+        }
     }
 
     /**
-     * Get the point to minus
+     * Get the point value
      *
-     * @return the point to minus
+     * @param name the name of the point
+     * @return the point value
      */
-    public int getPointMinus() {
-        return pointMinus;
+    public Optional<Integer> getPoint(@NotNull String name) {
+        return Optional.ofNullable(pointValuesMap.get(name)).map(pointValue -> {
+            int point = pointMap.getOrDefault(pointValue, pointValue.defaultPoint);
+            if (pointValue.alwaysPositive) {
+                point = Math.abs(point);
+            }
+            return point;
+        });
     }
 
     /**
-     * Get the maximum players to add the point
-     *
-     * @return the maximum players to add the point
+     * The class to store the point value
      */
-    public int getMaxPlayersToAdd() {
-        return maxPlayersToAdd;
+    public static class PointValue {
+        /**
+         * The name of the point
+         */
+        public final String name;
+        /**
+         * The default point
+         */
+        public final int defaultPoint;
+        /**
+         * Whether the point is always positive
+         */
+        public final boolean alwaysPositive;
+
+        /**
+         * Create a new {@link PointValue}
+         *
+         * @param name           the name of the point
+         * @param defaultPoint   the default point
+         * @param alwaysPositive whether the point is always positive
+         */
+        public PointValue(String name, int defaultPoint, boolean alwaysPositive) {
+            this.name = name;
+            this.defaultPoint = defaultPoint;
+            this.alwaysPositive = alwaysPositive;
+        }
+
+        /**
+         * Create a new {@link PointValue}
+         *
+         * @param name         the name of the point
+         * @param defaultPoint the default point
+         */
+        public PointValue(String name, int defaultPoint) {
+            this(name, defaultPoint, true);
+        }
     }
 
     /**
      * The editor of the feature
      */
     public static class Editor {
-        private Integer pointPlus;
-        private Integer pointMinus;
-        private Integer maxPlayersToAddPoint;
+        private final List<PointValue> pointValues = new ArrayList<>();
+        private final Map<String, Integer> pointMap = new CaseInsensitiveStringHashMap<>();
 
-        private Editor() {
-            // EMPTY
+        private Editor(PointValue... pointValues) {
+            this.pointValues.addAll(Arrays.asList(pointValues));
         }
 
         /**
@@ -187,60 +191,32 @@ public class SimplePointFeature extends PointFeature {
         public Map<String, SimpleGameAction.SimpleAction> getActions() {
             Map<String, SimpleGameAction.SimpleAction> map = new LinkedHashMap<>();
 
-            map.put("set-point-plus", new NumberAction() {
+            map.put("set-point", new NumberAction() {
                 @Override
-                public @NotNull String getDescription() {
-                    return "Set the point to add to the player";
-                }
-
-                @Override
-                protected boolean performAction(@NotNull CommandSender sender, @NotNull Number number, String... args) {
-                    pointPlus = Math.abs(number.intValue());
-                    return true;
-                }
-
-                @Override
-                protected @NotNull List<String> getValueArgs(@NotNull CommandSender sender, String... args) {
-                    return Arrays.asList("1", "2", "3", "4", "5");
-                }
-            });
-            map.put("set-point-minus", new NumberAction() {
-                @Override
-                public @NotNull String getDescription() {
-                    return "Set the point to remove from the player";
-                }
-
-                @Override
-                protected boolean performAction(@NotNull CommandSender sender, @NotNull Number number, String... args) {
-                    pointMinus = Math.abs(number.intValue());
-                    return true;
-                }
-
-                @Override
-                protected @NotNull List<String> getValueArgs(@NotNull CommandSender sender, String... args) {
-                    return Arrays.asList("1", "2", "3", "4", "5");
-                }
-            });
-            map.put("set-max-players-to-add-point", new NumberAction() {
-                @Override
-                public @NotNull String getDescription() {
-                    return "Set the maximum players to add point";
-                }
-
-                @Override
-                protected boolean performAction(@NotNull CommandSender sender, @NotNull Number number, String... args) {
-                    int players = number.intValue();
-                    if (players >= 0) {
-                        maxPlayersToAddPoint = players;
-                    } else {
-                        maxPlayersToAddPoint = null;
+                protected boolean performAction(@NotNull CommandSender sender, @NotNull Number value, String... args) {
+                    if (args.length == 0) {
+                        MessageUtils.sendMessage(sender, "&cPlease specify the point value");
+                        return false;
+                    }
+                    for (String arg : args) {
+                        pointMap.put(arg, value.intValue());
                     }
                     return true;
                 }
 
                 @Override
+                protected @NotNull List<String> getAdditionalArgs(@NotNull CommandSender sender, String... args) {
+                    return pointValues.stream().map(pointValue -> pointValue.name).collect(Collectors.toList());
+                }
+
+                @Override
                 protected @NotNull List<String> getValueArgs(@NotNull CommandSender sender, String... args) {
                     return Arrays.asList("1", "2", "3", "4", "5");
+                }
+
+                @Override
+                public @NotNull String getDescription() {
+                    return "Set the point of the point value";
                 }
             });
 
@@ -257,16 +233,18 @@ public class SimplePointFeature extends PointFeature {
                 @Override
                 public void sendStatus(@NotNull CommandSender sender) {
                     MessageUtils.sendMessage(sender, "&6&lPOINTS");
-                    MessageUtils.sendMessage(sender, "&6Point Plus: &e" + (pointPlus == null ? "Default" : pointPlus));
-                    MessageUtils.sendMessage(sender, "&6Point Minus: &e" + (pointMinus == null ? "Default" : pointMinus));
-                    MessageUtils.sendMessage(sender, "&6Max Players to Add Point: &e" + (maxPlayersToAddPoint == null ? "Default" : maxPlayersToAddPoint));
+                    pointValues.forEach(pointValue -> {
+                        int point = pointMap.getOrDefault(pointValue.name, pointValue.defaultPoint);
+                        if (pointValue.alwaysPositive) {
+                            point = Math.abs(point);
+                        }
+                        MessageUtils.sendMessage(sender, "&6" + pointValue.name + ": &e" + point);
+                    });
                 }
 
                 @Override
                 public void reset(@NotNull CommandSender sender) {
-                    pointPlus = null;
-                    pointMinus = null;
-                    maxPlayersToAddPoint = null;
+                    pointMap.clear();
                 }
 
                 @Override
@@ -277,15 +255,13 @@ public class SimplePointFeature extends PointFeature {
                 @Override
                 public Map<String, Object> toPathValueMap(@NotNull CommandSender sender) {
                     Map<String, Object> pathValueMap = new LinkedHashMap<>();
-                    if (pointPlus != null) {
-                        pathValueMap.put("point.plus", pointPlus);
-                    }
-                    if (pointMinus != null) {
-                        pathValueMap.put("point.minus", pointMinus);
-                    }
-                    if (maxPlayersToAddPoint != null) {
-                        pathValueMap.put("point.max-players-to-add", maxPlayersToAddPoint);
-                    }
+                    pointValues.forEach(pointValue -> {
+                        int point = pointMap.getOrDefault(pointValue.name, pointValue.defaultPoint);
+                        if (pointValue.alwaysPositive) {
+                            point = Math.abs(point);
+                        }
+                        pathValueMap.put("point." + pointValue.name, point);
+                    });
                     return pathValueMap;
                 }
             };
@@ -298,9 +274,9 @@ public class SimplePointFeature extends PointFeature {
          */
         public void migrate(SimpleGameArena arena) {
             SimplePointFeature pointFeature = arena.getFeature(SimplePointFeature.class);
-            pointPlus = pointFeature.getPointPlus();
-            pointMinus = pointFeature.getPointMinus();
-            maxPlayersToAddPoint = pointFeature.getMaxPlayersToAdd();
+            if (pointFeature != null) {
+                pointValues.forEach(pointValue -> pointMap.put(pointValue.name, pointFeature.getPoint(pointValue.name).orElse(pointValue.defaultPoint)));
+            }
         }
     }
 }

@@ -17,6 +17,7 @@ package me.hsgamer.gamesinthebox.game.template;
 
 import me.hsgamer.gamesinthebox.game.simple.SimpleGame;
 import me.hsgamer.gamesinthebox.game.simple.SimpleGameArenaAction;
+import me.hsgamer.gamesinthebox.game.simple.feature.SimplePointFeature;
 import me.hsgamer.gamesinthebox.game.template.config.GameConfig;
 import me.hsgamer.gamesinthebox.game.template.config.GameMessageConfig;
 import me.hsgamer.minigamecore.base.Feature;
@@ -56,6 +57,15 @@ public interface TemplateGameLogic {
      * @return the game message config
      */
     GameMessageConfig getGameMessageConfig();
+
+    /**
+     * Get the point values
+     *
+     * @return the point values
+     */
+    default List<SimplePointFeature.PointValue> getPointValues() {
+        return Collections.emptyList();
+    }
 
     /**
      * Get the default hologram lines by the name
