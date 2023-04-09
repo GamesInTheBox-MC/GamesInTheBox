@@ -18,6 +18,7 @@ package me.hsgamer.gamesinthebox.game.template;
 import me.hsgamer.gamesinthebox.game.simple.SimpleGame;
 import me.hsgamer.gamesinthebox.game.simple.SimpleGameArena;
 import me.hsgamer.gamesinthebox.game.simple.SimpleGameEditor;
+import me.hsgamer.gamesinthebox.game.simple.feature.SimplePointFeature;
 import me.hsgamer.gamesinthebox.game.template.state.EndingState;
 import me.hsgamer.gamesinthebox.game.template.state.IdlingState;
 import me.hsgamer.gamesinthebox.game.template.state.InGameState;
@@ -53,6 +54,11 @@ public class TemplateGame extends SimpleGame {
     @Override
     public @NotNull SimpleGameEditor createEditor() {
         return gameLogic.getEditor(this);
+    }
+
+    @Override
+    protected @NotNull List<SimplePointFeature.PointValue> getPointValues() {
+        return gameLogic.getPointValues();
     }
 
     @Override

@@ -17,11 +17,13 @@ package me.hsgamer.gamesinthebox.game.simple;
 
 import me.hsgamer.gamesinthebox.game.Game;
 import me.hsgamer.gamesinthebox.game.feature.HologramFeature;
+import me.hsgamer.gamesinthebox.game.simple.feature.SimplePointFeature;
 import me.hsgamer.gamesinthebox.planner.Planner;
 import me.hsgamer.minigamecore.base.Feature;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -42,6 +44,16 @@ public abstract class SimpleGame extends Game {
     @NotNull
     protected SimpleGameEditor createEditor() {
         return new SimpleGameEditor(this);
+    }
+
+    /**
+     * Get the point values
+     *
+     * @return the point values
+     */
+    @NotNull
+    protected List<SimplePointFeature.PointValue> getPointValues() {
+        return Collections.emptyList();
     }
 
     @Override

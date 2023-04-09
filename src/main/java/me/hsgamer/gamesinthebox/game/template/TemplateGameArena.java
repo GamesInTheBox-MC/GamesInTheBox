@@ -17,7 +17,6 @@ package me.hsgamer.gamesinthebox.game.template;
 
 import me.hsgamer.gamesinthebox.game.simple.SimpleGameArena;
 import me.hsgamer.gamesinthebox.game.simple.SimpleGameArenaAction;
-import me.hsgamer.gamesinthebox.game.simple.feature.SimplePointFeature;
 import me.hsgamer.gamesinthebox.game.template.feature.ArenaLogicFeature;
 import me.hsgamer.gamesinthebox.game.template.feature.CooldownFeature;
 import me.hsgamer.gamesinthebox.game.template.state.IdlingState;
@@ -63,11 +62,6 @@ public class TemplateGameArena extends SimpleGameArena {
                 .replace("{total}", Integer.toString(totalPoints));
 
         ActionBarUtil.sendActionBar(uuid, finalMessage);
-    }
-
-    @Override
-    protected List<SimplePointFeature.PointValue> getPointValues() {
-        return gameLogic.getPointValues();
     }
 
     @Override

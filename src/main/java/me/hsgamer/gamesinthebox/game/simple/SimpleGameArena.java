@@ -15,7 +15,6 @@
 */
 package me.hsgamer.gamesinthebox.game.simple;
 
-import me.hsgamer.gamesinthebox.game.Game;
 import me.hsgamer.gamesinthebox.game.GameArena;
 import me.hsgamer.gamesinthebox.game.feature.PointFeature;
 import me.hsgamer.gamesinthebox.game.feature.TopFeature;
@@ -62,6 +61,7 @@ import java.util.*;
  * </ul>
  */
 public abstract class SimpleGameArena extends GameArena {
+    private final SimpleGame game;
     private SimpleGameArenaAction gameAction;
 
     /**
@@ -71,8 +71,9 @@ public abstract class SimpleGameArena extends GameArena {
      * @param game    the game that the arena belongs to
      * @param planner the planner that the arena belongs to
      */
-    protected SimpleGameArena(@NotNull String name, @NotNull Game game, @NotNull Planner planner) {
+    protected SimpleGameArena(@NotNull String name, @NotNull SimpleGame game, @NotNull Planner planner) {
         super(name, game, planner);
+        this.game = game;
     }
 
     /**
@@ -84,15 +85,6 @@ public abstract class SimpleGameArena extends GameArena {
      */
     protected void onPointChanged(@NotNull UUID uuid, int point, int totalPoints) {
         // EMPTY
-    }
-
-    /**
-     * Get the point values
-     *
-     * @return the point values
-     */
-    protected List<SimplePointFeature.PointValue> getPointValues() {
-        return Collections.emptyList();
     }
 
     /**
@@ -128,7 +120,7 @@ public abstract class SimpleGameArena extends GameArena {
     protected List<Feature> loadFeatures() {
         List<Feature> features = super.loadFeatures();
         features.add(new TimerFeature());
-        features.add(new SimplePointFeature(this, this::onPointChanged, this.getPointValues()));
+        features.add(new SimplePointFeature(this, this::onPointChanged, game.getPointValues()));
         features.add(new SimpleRewardFeature(this));
         features.add(new TopFeature());
         features.add(new DescriptiveHologramFeature(this));

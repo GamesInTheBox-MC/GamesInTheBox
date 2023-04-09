@@ -28,6 +28,7 @@ import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
 /**
@@ -65,6 +66,16 @@ public class SimplePointFeature extends PointFeature {
      * @return the editor
      */
     public static Editor editor(PointValue... pointValues) {
+        return new Editor(Arrays.asList(pointValues));
+    }
+
+    /**
+     * Get the editor of the feature
+     *
+     * @param pointValues the point values
+     * @return the editor
+     */
+    public static Editor editor(List<PointValue> pointValues) {
         return new Editor(pointValues);
     }
 
@@ -77,10 +88,8 @@ public class SimplePointFeature extends PointFeature {
             int point = Optional.ofNullable(gameConfigFeature.getString("point." + pointValue.name))
                     .flatMap(Validate::getNumber)
                     .map(Number::intValue)
+                    .map(Math::abs)
                     .orElse(pointValue.defaultPoint);
-            if (pointValue.alwaysPositive) {
-                point = Math.abs(point);
-            }
             pointMap.put(pointValue, point);
         });
     }
@@ -92,10 +101,7 @@ public class SimplePointFeature extends PointFeature {
      * @param pointValue the point value
      */
     public void applyPoint(@NotNull UUID uuid, @NotNull PointValue pointValue) {
-        int point = pointMap.getOrDefault(pointValue, pointValue.defaultPoint);
-        if (pointValue.alwaysPositive) {
-            point = Math.abs(point);
-        }
+        int point = pointValue.pointOperator.apply(pointMap.getOrDefault(pointValue, pointValue.defaultPoint));
         applyPoint(uuid, point);
     }
 
@@ -106,10 +112,7 @@ public class SimplePointFeature extends PointFeature {
      * @param pointValue the point value
      */
     public void applyPoint(@NotNull List<@NotNull UUID> uuids, @NotNull PointValue pointValue) {
-        int point = pointMap.getOrDefault(pointValue, pointValue.defaultPoint);
-        if (pointValue.alwaysPositive) {
-            point = Math.abs(point);
-        }
+        int point = pointValue.pointOperator.apply(pointMap.getOrDefault(pointValue, pointValue.defaultPoint));
         for (UUID uuid : uuids) {
             applyPoint(uuid, point);
         }
@@ -122,13 +125,9 @@ public class SimplePointFeature extends PointFeature {
      * @return the point value
      */
     public Optional<Integer> getPoint(@NotNull String name) {
-        return Optional.ofNullable(pointValuesMap.get(name)).map(pointValue -> {
-            int point = pointMap.getOrDefault(pointValue, pointValue.defaultPoint);
-            if (pointValue.alwaysPositive) {
-                point = Math.abs(point);
-            }
-            return point;
-        });
+        return Optional.ofNullable(pointValuesMap.get(name))
+                .map(pointValue -> pointMap.getOrDefault(pointValue, pointValue.defaultPoint))
+                .map(Math::abs);
     }
 
     /**
@@ -144,21 +143,22 @@ public class SimplePointFeature extends PointFeature {
          */
         public final int defaultPoint;
         /**
-         * Whether the point is always positive
+         * The operator to give the final point to apply
          */
-        public final boolean alwaysPositive;
+        private final UnaryOperator<Integer> pointOperator;
 
         /**
          * Create a new {@link PointValue}
          *
-         * @param name           the name of the point
-         * @param defaultPoint   the default point
-         * @param alwaysPositive whether the point is always positive
+         * @param name          the name of the point
+         * @param defaultPoint  the default point
+         * @param pointOperator the operator to give the final point to apply
          */
-        public PointValue(String name, int defaultPoint, boolean alwaysPositive) {
+        public PointValue(String name, int defaultPoint, UnaryOperator<Integer> pointOperator) {
             this.name = name;
             this.defaultPoint = defaultPoint;
-            this.alwaysPositive = alwaysPositive;
+            this.pointOperator = pointOperator;
+
         }
 
         /**
@@ -168,7 +168,21 @@ public class SimplePointFeature extends PointFeature {
          * @param defaultPoint the default point
          */
         public PointValue(String name, int defaultPoint) {
-            this(name, defaultPoint, true);
+            this(name, defaultPoint, UnaryOperator.identity());
+        }
+
+        /**
+         * Create a new {@link PointValue}
+         *
+         * @param name            the name of the point
+         * @param defaultPoint    the default point
+         * @param isFinalNegative whether the final point is negative. Set to {@code false} to make the point always positive.
+         */
+        public PointValue(String name, int defaultPoint, boolean isFinalNegative) {
+            this(name, defaultPoint, integer -> {
+                int abs = Math.abs(integer);
+                return isFinalNegative ? -abs : abs;
+            });
         }
     }
 
@@ -179,8 +193,8 @@ public class SimplePointFeature extends PointFeature {
         private final List<PointValue> pointValues = new ArrayList<>();
         private final Map<String, Integer> pointMap = new CaseInsensitiveStringHashMap<>();
 
-        private Editor(PointValue... pointValues) {
-            this.pointValues.addAll(Arrays.asList(pointValues));
+        private Editor(List<PointValue> pointValues) {
+            this.pointValues.addAll(pointValues);
         }
 
         /**
@@ -234,10 +248,7 @@ public class SimplePointFeature extends PointFeature {
                 public void sendStatus(@NotNull CommandSender sender) {
                     MessageUtils.sendMessage(sender, "&6&lPOINTS");
                     pointValues.forEach(pointValue -> {
-                        int point = pointMap.getOrDefault(pointValue.name, pointValue.defaultPoint);
-                        if (pointValue.alwaysPositive) {
-                            point = Math.abs(point);
-                        }
+                        int point = Math.abs(pointMap.getOrDefault(pointValue.name, pointValue.defaultPoint));
                         MessageUtils.sendMessage(sender, "&6" + pointValue.name + ": &e" + point);
                     });
                 }
@@ -256,10 +267,7 @@ public class SimplePointFeature extends PointFeature {
                 public Map<String, Object> toPathValueMap(@NotNull CommandSender sender) {
                     Map<String, Object> pathValueMap = new LinkedHashMap<>();
                     pointValues.forEach(pointValue -> {
-                        int point = pointMap.getOrDefault(pointValue.name, pointValue.defaultPoint);
-                        if (pointValue.alwaysPositive) {
-                            point = Math.abs(point);
-                        }
+                        int point = Math.abs(pointMap.getOrDefault(pointValue.name, pointValue.defaultPoint));
                         pathValueMap.put("point." + pointValue.name, point);
                     });
                     return pathValueMap;
