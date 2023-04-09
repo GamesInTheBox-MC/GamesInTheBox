@@ -17,6 +17,7 @@ package me.hsgamer.gamesinthebox.game.template;
 
 import me.hsgamer.gamesinthebox.game.simple.SimpleGameArena;
 import me.hsgamer.gamesinthebox.game.simple.SimpleGameArenaAction;
+import me.hsgamer.gamesinthebox.game.simple.feature.SimpleUpdateFeature;
 import me.hsgamer.gamesinthebox.game.template.feature.ArenaLogicFeature;
 import me.hsgamer.gamesinthebox.game.template.feature.CooldownFeature;
 import me.hsgamer.gamesinthebox.game.template.state.IdlingState;
@@ -133,6 +134,7 @@ public class TemplateGameArena extends SimpleGameArena {
     public void end() {
         setNextState(IdlingState.class);
         getFeature(ArenaLogicFeature.class).getArenaLogic().forceEnd();
+        getFeature(SimpleUpdateFeature.class).clearState();
     }
 
     @Override
