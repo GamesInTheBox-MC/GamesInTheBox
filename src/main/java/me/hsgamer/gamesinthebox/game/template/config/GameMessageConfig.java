@@ -21,14 +21,24 @@ import me.hsgamer.hscore.config.annotation.ConfigPath;
  * The message config for a {@link me.hsgamer.gamesinthebox.game.template.TemplateGameArena}
  */
 public interface GameMessageConfig {
-    @ConfigPath("point.plus")
-    default String getPointPlus() {
-        return "&a+{point} point(s) &7({total})";
+    @ConfigPath("point.plus.plural")
+    default String getPointPlusPlural() {
+        return "&a+{point} points &7({total})";
     }
 
-    @ConfigPath("point.minus")
-    default String getPointMinus() {
-        return "&c-{point} point(s) &7({total})";
+    @ConfigPath("point.minus.plural")
+    default String getPointMinusPlural() {
+        return "&c-{point} points &7({total})";
+    }
+
+    @ConfigPath("point.plus.singular")
+    default String getPointPlusSingular() {
+        return "&a+{point} point &7({total})";
+    }
+
+    @ConfigPath("point.minus.singular")
+    default String getPointMinusSingular() {
+        return "&c-{point} point &7({total})";
     }
 
     @ConfigPath("state.waiting")

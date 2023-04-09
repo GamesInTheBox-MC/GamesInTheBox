@@ -54,8 +54,16 @@ public class TemplateGameArena extends SimpleGameArena {
     protected void onPointChanged(@NotNull UUID uuid, int point, int totalPoints) {
         if (point == 0) return;
 
-        String message = point < 0 ? gameLogic.getGameMessageConfig().getPointMinus() : gameLogic.getGameMessageConfig().getPointPlus();
+        boolean isNegative = point < 0;
         int absPoint = Math.abs(point);
+        boolean isSingular = absPoint == 1;
+
+        String message;
+        if (isSingular) {
+            message = isNegative ? gameLogic.getGameMessageConfig().getPointMinusSingular() : gameLogic.getGameMessageConfig().getPointPlusSingular();
+        } else {
+            message = isNegative ? gameLogic.getGameMessageConfig().getPointMinusPlural() : gameLogic.getGameMessageConfig().getPointPlusPlural();
+        }
 
         String finalMessage = message
                 .replace("{point}", Integer.toString(absPoint))
