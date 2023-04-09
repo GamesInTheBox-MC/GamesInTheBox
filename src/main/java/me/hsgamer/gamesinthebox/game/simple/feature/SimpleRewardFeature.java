@@ -30,6 +30,7 @@ import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * The simple {@link RewardFeature}.
@@ -43,15 +44,18 @@ import java.util.*;
  */
 public class SimpleRewardFeature extends RewardFeature {
     private final SimpleGameArena arena;
+    private final Consumer<@NotNull List<@NotNull UUID>> onFailedToReward;
     private int minPlayersToReward = -1;
 
     /**
      * Create a new {@link SimpleRewardFeature}
      *
-     * @param arena the arena
+     * @param arena            the arena
+     * @param onFailedToReward the action to perform when the players are not rewarded, usually because the number of players is less than {@link #getMinPlayersToReward()}
      */
-    public SimpleRewardFeature(@NotNull SimpleGameArena arena) {
+    public SimpleRewardFeature(@NotNull SimpleGameArena arena, @NotNull Consumer<@NotNull List<@NotNull UUID>> onFailedToReward) {
         this.arena = arena;
+        this.onFailedToReward = onFailedToReward;
     }
 
     /**
@@ -99,6 +103,7 @@ public class SimpleRewardFeature extends RewardFeature {
      */
     public boolean tryReward(@NotNull List<@NotNull UUID> uuids) {
         if (minPlayersToReward >= 0 && uuids.size() < minPlayersToReward) {
+            onFailedToReward.accept(uuids);
             return false;
         }
         reward(uuids);

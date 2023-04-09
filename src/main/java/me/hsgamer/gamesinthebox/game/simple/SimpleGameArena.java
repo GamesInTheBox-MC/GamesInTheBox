@@ -88,6 +88,15 @@ public abstract class SimpleGameArena extends GameArena {
     }
 
     /**
+     * Called when the players are not rewarded, usually because the number of players is less than {@link SimpleRewardFeature#getMinPlayersToReward()}
+     *
+     * @param uuids the uuids of the players
+     */
+    protected void onFailedToReward(@NotNull List<UUID> uuids) {
+        // EMPTY
+    }
+
+    /**
      * Get the default hologram lines by the name
      *
      * @param name the name to get
@@ -121,7 +130,7 @@ public abstract class SimpleGameArena extends GameArena {
         List<Feature> features = super.loadFeatures();
         features.add(new TimerFeature());
         features.add(new SimplePointFeature(this, this::onPointChanged, game.getPointValues()));
-        features.add(new SimpleRewardFeature(this));
+        features.add(new SimpleRewardFeature(this, this::onFailedToReward));
         features.add(new TopFeature());
         features.add(new DescriptiveHologramFeature(this));
         features.add(new SimpleUpdateFeature(this));

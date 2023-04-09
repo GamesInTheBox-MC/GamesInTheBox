@@ -22,7 +22,9 @@ import me.hsgamer.gamesinthebox.game.template.feature.ArenaLogicFeature;
 import me.hsgamer.gamesinthebox.game.template.feature.CooldownFeature;
 import me.hsgamer.gamesinthebox.game.template.state.IdlingState;
 import me.hsgamer.gamesinthebox.planner.Planner;
+import me.hsgamer.gamesinthebox.planner.feature.VariableFeature;
 import me.hsgamer.gamesinthebox.util.ActionBarUtil;
+import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import me.hsgamer.minigamecore.base.Feature;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
@@ -71,6 +73,14 @@ public class TemplateGameArena extends SimpleGameArena {
                 .replace("{total}", Integer.toString(totalPoints));
 
         ActionBarUtil.sendActionBar(uuid, finalMessage);
+    }
+
+    @Override
+    protected void onFailedToReward(@NotNull List<UUID> uuids) {
+        String notEnoughPlayerMessage = getFeature(VariableFeature.class).replace(gameLogic.getGameMessageConfig().getNotEnoughPlayerToReward());
+        for (UUID uuid : uuids) {
+            MessageUtils.sendMessage(uuid, notEnoughPlayerMessage);
+        }
     }
 
     @Override
