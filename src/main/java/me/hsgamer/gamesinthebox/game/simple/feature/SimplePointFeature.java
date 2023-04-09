@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
 public class SimplePointFeature extends PointFeature {
     private final SimpleGameArena arena;
     private final Map<String, PointValue> pointValuesMap;
-    private final Map<PointValue, Integer> pointMap;
+    private final Map<String, Integer> pointMap;
 
     /**
      * Create a new {@link SimplePointFeature}
@@ -56,7 +56,7 @@ public class SimplePointFeature extends PointFeature {
         super(pointConsumer);
         this.arena = arena;
         this.pointValuesMap = pointValuesMap.stream().collect(Collectors.toMap(pointValue -> pointValue.name, pointValue -> pointValue, (o, n) -> o, CaseInsensitiveStringHashMap::new));
-        this.pointMap = new HashMap<>();
+        this.pointMap = new CaseInsensitiveStringHashMap<>();
     }
 
     /**
@@ -84,14 +84,11 @@ public class SimplePointFeature extends PointFeature {
         super.postInit();
 
         GameConfigFeature gameConfigFeature = arena.getFeature(GameConfigFeature.class);
-        pointValuesMap.values().forEach(pointValue -> {
-            int point = Optional.ofNullable(gameConfigFeature.getString("point." + pointValue.name))
-                    .flatMap(Validate::getNumber)
-                    .map(Number::intValue)
-                    .map(Math::abs)
-                    .orElse(pointValue.defaultPoint);
-            pointMap.put(pointValue, point);
-        });
+        gameConfigFeature.getValues("point", false).forEach((key, value) -> Optional.of(value)
+                .map(Objects::toString)
+                .flatMap(Validate::getNumber)
+                .map(Number::intValue)
+                .ifPresent(point -> pointMap.put(key, point)));
     }
 
     /**
@@ -104,7 +101,7 @@ public class SimplePointFeature extends PointFeature {
     public void applyPoint(@NotNull UUID uuid, @NotNull PointValue pointValue, @NotNull UnaryOperator<Integer> pointModifier) {
         int point = pointModifier.apply(
                 pointValue.pointOperator.apply(
-                        pointMap.getOrDefault(pointValue, pointValue.defaultPoint)
+                        pointMap.getOrDefault(pointValue.name, pointValue.defaultPoint)
                 )
         );
         applyPoint(uuid, point);
@@ -120,7 +117,7 @@ public class SimplePointFeature extends PointFeature {
     public void applyPoint(@NotNull List<@NotNull UUID> uuids, @NotNull PointValue pointValue, @NotNull UnaryOperator<Integer> pointModifier) {
         int point = pointModifier.apply(
                 pointValue.pointOperator.apply(
-                        pointMap.getOrDefault(pointValue, pointValue.defaultPoint)
+                        pointMap.getOrDefault(pointValue.name, pointValue.defaultPoint)
                 )
         );
         for (UUID uuid : uuids) {
@@ -155,9 +152,11 @@ public class SimplePointFeature extends PointFeature {
      * @return the point value
      */
     public Optional<Integer> getPoint(@NotNull String name) {
-        return Optional.ofNullable(pointValuesMap.get(name))
-                .map(pointValue -> pointMap.getOrDefault(pointValue, pointValue.defaultPoint))
-                .map(Math::abs);
+        PointValue pointValue = pointValuesMap.get(name);
+        if (pointValue != null) {
+            return Optional.of(pointMap.getOrDefault(pointValue.name, pointValue.defaultPoint)).map(pointValue.displayOperator);
+        }
+        return Optional.ofNullable(pointMap.get(name));
     }
 
     /**
@@ -173,6 +172,10 @@ public class SimplePointFeature extends PointFeature {
          */
         public final int defaultPoint;
         /**
+         * The operator to display the point
+         */
+        private final UnaryOperator<Integer> displayOperator;
+        /**
          * The operator to give the final point to apply
          */
         private final UnaryOperator<Integer> pointOperator;
@@ -180,13 +183,15 @@ public class SimplePointFeature extends PointFeature {
         /**
          * Create a new {@link PointValue}
          *
-         * @param name          the name of the point
-         * @param defaultPoint  the default point
-         * @param pointOperator the operator to give the final point to apply
+         * @param name            the name of the point
+         * @param defaultPoint    the default point
+         * @param displayOperator the operator to display the point
+         * @param pointOperator   the operator to give the final point to apply
          */
-        public PointValue(String name, int defaultPoint, UnaryOperator<Integer> pointOperator) {
+        public PointValue(String name, int defaultPoint, UnaryOperator<Integer> displayOperator, UnaryOperator<Integer> pointOperator) {
             this.name = name;
             this.defaultPoint = defaultPoint;
+            this.displayOperator = displayOperator;
             this.pointOperator = pointOperator;
 
         }
@@ -198,18 +203,18 @@ public class SimplePointFeature extends PointFeature {
          * @param defaultPoint the default point
          */
         public PointValue(String name, int defaultPoint) {
-            this(name, defaultPoint, UnaryOperator.identity());
+            this(name, defaultPoint, UnaryOperator.identity(), UnaryOperator.identity());
         }
 
         /**
-         * Create a new {@link PointValue}
+         * Create a new {@link PointValue}, with the display operator being {@link Math#abs(int)}
          *
          * @param name            the name of the point
          * @param defaultPoint    the default point
          * @param isFinalNegative whether the final point is negative. Set to {@code false} to make the point always positive.
          */
         public PointValue(String name, int defaultPoint, boolean isFinalNegative) {
-            this(name, defaultPoint, integer -> {
+            this(name, defaultPoint, Math::abs, integer -> {
                 int abs = Math.abs(integer);
                 return isFinalNegative ? -abs : abs;
             });
@@ -278,7 +283,9 @@ public class SimplePointFeature extends PointFeature {
                 public void sendStatus(@NotNull CommandSender sender) {
                     MessageUtils.sendMessage(sender, "&6&lPOINTS");
                     pointValues.forEach(pointValue -> {
-                        int point = Math.abs(pointMap.getOrDefault(pointValue.name, pointValue.defaultPoint));
+                        int point = pointValue.displayOperator.apply(
+                                pointMap.getOrDefault(pointValue.name, pointValue.defaultPoint)
+                        );
                         MessageUtils.sendMessage(sender, "&6" + pointValue.name + ": &e" + point);
                     });
                 }
@@ -297,7 +304,7 @@ public class SimplePointFeature extends PointFeature {
                 public Map<String, Object> toPathValueMap(@NotNull CommandSender sender) {
                     Map<String, Object> pathValueMap = new LinkedHashMap<>();
                     pointValues.forEach(pointValue -> {
-                        int point = Math.abs(pointMap.getOrDefault(pointValue.name, pointValue.defaultPoint));
+                        int point = pointMap.getOrDefault(pointValue.name, pointValue.defaultPoint);
                         pathValueMap.put("point." + pointValue.name, point);
                     });
                     return pathValueMap;
