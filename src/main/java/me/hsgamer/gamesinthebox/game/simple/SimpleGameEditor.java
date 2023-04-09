@@ -18,7 +18,6 @@ package me.hsgamer.gamesinthebox.game.simple;
 import me.hsgamer.gamesinthebox.game.GameArena;
 import me.hsgamer.gamesinthebox.game.GameEditor;
 import me.hsgamer.gamesinthebox.game.simple.feature.DescriptiveHologramFeature;
-import me.hsgamer.gamesinthebox.game.simple.feature.SimplePointFeature;
 import me.hsgamer.gamesinthebox.game.simple.feature.SimpleRewardFeature;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
@@ -30,7 +29,6 @@ import java.util.*;
  */
 public class SimpleGameEditor extends SimpleGameAction implements GameEditor {
     protected final SimpleGame game;
-    private final SimplePointFeature.Editor simplePointFeatureEditor = SimplePointFeature.editor();
     private final DescriptiveHologramFeature.Editor descriptiveHologramFeatureEditor = DescriptiveHologramFeature.editor();
     private final SimpleRewardFeature.Editor simpleRewardFeatureEditor = SimpleRewardFeature.editor();
 
@@ -75,7 +73,6 @@ public class SimpleGameEditor extends SimpleGameAction implements GameEditor {
     protected @NotNull Map<String, SimpleAction> createActionMap() {
         Map<String, SimpleAction> map = new LinkedHashMap<>();
 
-        map.putAll(simplePointFeatureEditor.getActions());
         map.putAll(simpleRewardFeatureEditor.getActions());
         map.putAll(descriptiveHologramFeatureEditor.getActions());
 
@@ -92,7 +89,6 @@ public class SimpleGameEditor extends SimpleGameAction implements GameEditor {
     protected List<@NotNull SimpleEditorStatus> createEditorStatusList() {
         List<SimpleEditorStatus> list = new ArrayList<>();
 
-        list.add(simplePointFeatureEditor.getStatus());
         list.add(simpleRewardFeatureEditor.getStatus());
         list.add(descriptiveHologramFeatureEditor.getStatus());
 
@@ -113,7 +109,6 @@ public class SimpleGameEditor extends SimpleGameAction implements GameEditor {
         }
         SimpleGameArena simpleGameArena = (SimpleGameArena) gameArena;
 
-        simplePointFeatureEditor.migrate(simpleGameArena);
         simpleRewardFeatureEditor.migrate(simpleGameArena);
         descriptiveHologramFeatureEditor.migrate(simpleGameArena);
 
