@@ -26,8 +26,6 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.concurrent.ThreadLocalRandom;
-
 /**
  * The {@link Feature} that handles the bounding box
  */
@@ -98,89 +96,5 @@ public abstract class BoundingFeature implements Feature {
             return false;
         }
         return blockBox.contains(BukkitBlockAdapter.adapt(location));
-    }
-
-    /**
-     * Get a random location in the bounding box
-     *
-     * @param vectorOffsetSetting the offset setting
-     * @return the random location
-     */
-    @NotNull
-    public Location getRandomLocation(@NotNull OffsetSetting vectorOffsetSetting) {
-        int minX = blockBox.minX + vectorOffsetSetting.minXOffset;
-        int maxX = blockBox.maxX - vectorOffsetSetting.maxXOffset;
-        int minY = blockBox.minY + vectorOffsetSetting.minYOffset;
-        int maxY = blockBox.maxY - vectorOffsetSetting.maxYOffset;
-        int minZ = blockBox.minZ + vectorOffsetSetting.minZOffset;
-        int maxZ = blockBox.maxZ - vectorOffsetSetting.maxZOffset;
-        int x = ThreadLocalRandom.current().nextInt(minX, maxX + 1);
-        int y = ThreadLocalRandom.current().nextInt(minY, maxY + 1);
-        int z = ThreadLocalRandom.current().nextInt(minZ, maxZ + 1);
-        return new Location(world, x, y, z);
-    }
-
-    /**
-     * Get a random location in the bounding box
-     *
-     * @return the random location
-     */
-    @NotNull
-    public Location getRandomLocation() {
-        return getRandomLocation(OffsetSetting.DEFAULT);
-    }
-
-    /**
-     * The offset setting
-     */
-    public static class OffsetSetting {
-        /**
-         * The default offset setting, which is 0 for all
-         */
-        public static final OffsetSetting DEFAULT = new OffsetSetting(0, 0, 0, 0, 0, 0);
-
-        /**
-         * The min X offset
-         */
-        public final int minXOffset;
-        /**
-         * The max X offset
-         */
-        public final int maxXOffset;
-        /**
-         * The min Y offset
-         */
-        public final int minYOffset;
-        /**
-         * The max Y offset
-         */
-        public final int maxYOffset;
-        /**
-         * The min Z offset
-         */
-        public final int minZOffset;
-        /**
-         * The max Z offset
-         */
-        public final int maxZOffset;
-
-        /**
-         * Create a new offset setting
-         *
-         * @param minXOffset the min X offset
-         * @param maxXOffset the max X offset
-         * @param minYOffset the min Y offset
-         * @param maxYOffset the max Y offset
-         * @param minZOffset the min Z offset
-         * @param maxZOffset the max Z offset
-         */
-        public OffsetSetting(int minXOffset, int maxXOffset, int minYOffset, int maxYOffset, int minZOffset, int maxZOffset) {
-            this.minXOffset = minXOffset;
-            this.maxXOffset = maxXOffset;
-            this.minYOffset = minYOffset;
-            this.maxYOffset = maxYOffset;
-            this.minZOffset = minZOffset;
-            this.maxZOffset = maxZOffset;
-        }
     }
 }
