@@ -23,8 +23,11 @@ import me.hsgamer.minigamecore.base.Feature;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Collection;
 
 /**
  * The {@link Feature} that handles the bounding box
@@ -96,5 +99,23 @@ public abstract class BoundingFeature implements Feature {
             return false;
         }
         return blockBox.contains(BukkitBlockAdapter.adapt(location));
+    }
+
+    /**
+     * Get the entities in the bounding box
+     *
+     * @return the entities
+     */
+    public Collection<Entity> getEntities() {
+        Location center = new Location(
+                world,
+                (blockBox.minX + blockBox.maxX) / 2.0,
+                (blockBox.minY + blockBox.maxY) / 2.0,
+                (blockBox.minZ + blockBox.maxZ) / 2.0
+        );
+        double xRadius = (blockBox.maxX - blockBox.minX) / 2.0;
+        double yRadius = (blockBox.maxY - blockBox.minY) / 2.0;
+        double zRadius = (blockBox.maxZ - blockBox.minZ) / 2.0;
+        return world.getNearbyEntities(center, xRadius, yRadius, zRadius);
     }
 }
