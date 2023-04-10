@@ -82,6 +82,16 @@ public class PointFeature implements Feature {
     }
 
     /**
+     * Get the points of the players
+     *
+     * @return the points of the players
+     */
+    @NotNull
+    public Map<UUID, Integer> getPoints() {
+        return Collections.unmodifiableMap(points);
+    }
+
+    /**
      * Get the top, sorted by the point
      *
      * @return the top
