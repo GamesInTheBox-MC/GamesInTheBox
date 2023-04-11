@@ -27,7 +27,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -38,7 +38,7 @@ import java.util.stream.Stream;
  */
 public abstract class EntityFeature implements Feature {
     private final Set<Entity> entities = ConcurrentHashMap.newKeySet();
-    private final Queue<Entity> entityQueue = new LinkedBlockingQueue<>();
+    private final Queue<Entity> entityQueue = new ConcurrentLinkedQueue<>();
     private final AtomicReference<Task> currentEntityTaskRef = new AtomicReference<>(null);
     private final AtomicReference<List<Predicate<Entity>>> entityClearCheckRef = new AtomicReference<>(Collections.emptyList());
 
