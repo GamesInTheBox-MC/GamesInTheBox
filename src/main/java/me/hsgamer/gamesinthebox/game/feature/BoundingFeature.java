@@ -109,13 +109,13 @@ public abstract class BoundingFeature implements Feature {
     public Collection<Entity> getEntities() {
         Location center = new Location(
                 world,
-                (blockBox.minX + blockBox.maxX) / 2.0,
-                (blockBox.minY + blockBox.maxY) / 2.0,
-                (blockBox.minZ + blockBox.maxZ) / 2.0
+                (blockBox.minX + blockBox.maxX + (blockBox.maxInclusive ? 0 : 1)) / 2.0,
+                (blockBox.minY + blockBox.maxY + (blockBox.maxInclusive ? 0 : 1)) / 2.0,
+                (blockBox.minZ + blockBox.maxZ + (blockBox.maxInclusive ? 0 : 1)) / 2.0
         );
-        double xRadius = (blockBox.maxX - blockBox.minX) / 2.0;
-        double yRadius = (blockBox.maxY - blockBox.minY) / 2.0;
-        double zRadius = (blockBox.maxZ - blockBox.minZ) / 2.0;
+        double xRadius = (blockBox.maxX - blockBox.minX + (blockBox.maxInclusive ? 0 : 1)) / 2.0;
+        double yRadius = (blockBox.maxY - blockBox.minY + (blockBox.maxInclusive ? 0 : 1)) / 2.0;
+        double zRadius = (blockBox.maxZ - blockBox.minZ + (blockBox.maxInclusive ? 0 : 1)) / 2.0;
         return world.getNearbyEntities(center, xRadius, yRadius, zRadius);
     }
 }
