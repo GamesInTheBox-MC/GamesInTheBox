@@ -65,7 +65,6 @@ public abstract class BoundingOffsetFeature implements Feature {
      * Get a random location in the bounding box
      *
      * @param normalize whether to normalize the location by setting to the nearest block
-     *
      * @return the random location
      */
     @NotNull
