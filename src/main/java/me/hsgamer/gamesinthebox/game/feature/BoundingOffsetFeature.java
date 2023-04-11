@@ -64,23 +64,37 @@ public abstract class BoundingOffsetFeature implements Feature {
     /**
      * Get a random location in the bounding box
      *
+     * @param normalize whether to normalize the location by setting to the nearest block
+     *
+     * @return the random location
+     */
+    @NotNull
+    public Location getRandomLocation(boolean normalize) {
+        BlockBox blockBox = boundingFeature.getBlockBox();
+        World world = boundingFeature.getWorld();
+
+        double minX = blockBox.minX + offsetSetting.minXOffset;
+        double maxX = blockBox.maxX - offsetSetting.maxXOffset;
+        double minY = blockBox.minY + offsetSetting.minYOffset;
+        double maxY = blockBox.maxY - offsetSetting.maxYOffset;
+        double minZ = blockBox.minZ + offsetSetting.minZOffset;
+        double maxZ = blockBox.maxZ - offsetSetting.maxZOffset;
+        double x = ThreadLocalRandom.current().nextDouble(minX, maxX + 1);
+        double y = ThreadLocalRandom.current().nextDouble(minY, maxY + 1);
+        double z = ThreadLocalRandom.current().nextDouble(minZ, maxZ + 1);
+        Location location = new Location(world, x, y, z);
+
+        return normalize ? location.getBlock().getLocation() : location;
+    }
+
+    /**
+     * Get a random location in the bounding box
+     *
      * @return the random location
      */
     @NotNull
     public Location getRandomLocation() {
-        BlockBox blockBox = boundingFeature.getBlockBox();
-        World world = boundingFeature.getWorld();
-
-        int minX = blockBox.minX + offsetSetting.minXOffset;
-        int maxX = blockBox.maxX - offsetSetting.maxXOffset;
-        int minY = blockBox.minY + offsetSetting.minYOffset;
-        int maxY = blockBox.maxY - offsetSetting.maxYOffset;
-        int minZ = blockBox.minZ + offsetSetting.minZOffset;
-        int maxZ = blockBox.maxZ - offsetSetting.maxZOffset;
-        int x = ThreadLocalRandom.current().nextInt(minX, maxX + 1);
-        int y = ThreadLocalRandom.current().nextInt(minY, maxY + 1);
-        int z = ThreadLocalRandom.current().nextInt(minZ, maxZ + 1);
-        return new Location(world, x, y, z);
+        return getRandomLocation(true);
     }
 
     /**
@@ -95,27 +109,27 @@ public abstract class BoundingOffsetFeature implements Feature {
         /**
          * The min X offset
          */
-        public final int minXOffset;
+        public final double minXOffset;
         /**
          * The max X offset
          */
-        public final int maxXOffset;
+        public final double maxXOffset;
         /**
          * The min Y offset
          */
-        public final int minYOffset;
+        public final double minYOffset;
         /**
          * The max Y offset
          */
-        public final int maxYOffset;
+        public final double maxYOffset;
         /**
          * The min Z offset
          */
-        public final int minZOffset;
+        public final double minZOffset;
         /**
          * The max Z offset
          */
-        public final int maxZOffset;
+        public final double maxZOffset;
 
         /**
          * Create a new offset setting
@@ -127,7 +141,7 @@ public abstract class BoundingOffsetFeature implements Feature {
          * @param minZOffset the min Z offset
          * @param maxZOffset the max Z offset
          */
-        public OffsetSetting(int minXOffset, int maxXOffset, int minYOffset, int maxYOffset, int minZOffset, int maxZOffset) {
+        public OffsetSetting(double minXOffset, double maxXOffset, double minYOffset, double maxYOffset, double minZOffset, double maxZOffset) {
             this.minXOffset = minXOffset;
             this.maxXOffset = maxXOffset;
             this.minYOffset = minYOffset;
@@ -142,7 +156,7 @@ public abstract class BoundingOffsetFeature implements Feature {
          * @param minXOffset the min X offset
          * @return the new offset setting
          */
-        public OffsetSetting withMinXOffset(int minXOffset) {
+        public OffsetSetting withMinXOffset(double minXOffset) {
             return new OffsetSetting(minXOffset, maxXOffset, minYOffset, maxYOffset, minZOffset, maxZOffset);
         }
 
@@ -152,7 +166,7 @@ public abstract class BoundingOffsetFeature implements Feature {
          * @param maxXOffset the max X offset
          * @return the new offset setting
          */
-        public OffsetSetting withMaxXOffset(int maxXOffset) {
+        public OffsetSetting withMaxXOffset(double maxXOffset) {
             return new OffsetSetting(minXOffset, maxXOffset, minYOffset, maxYOffset, minZOffset, maxZOffset);
         }
 
@@ -162,7 +176,7 @@ public abstract class BoundingOffsetFeature implements Feature {
          * @param minYOffset the min Y offset
          * @return the new offset setting
          */
-        public OffsetSetting withMinYOffset(int minYOffset) {
+        public OffsetSetting withMinYOffset(double minYOffset) {
             return new OffsetSetting(minXOffset, maxXOffset, minYOffset, maxYOffset, minZOffset, maxZOffset);
         }
 
@@ -172,7 +186,7 @@ public abstract class BoundingOffsetFeature implements Feature {
          * @param maxYOffset the max Y offset
          * @return the new offset setting
          */
-        public OffsetSetting withMaxYOffset(int maxYOffset) {
+        public OffsetSetting withMaxYOffset(double maxYOffset) {
             return new OffsetSetting(minXOffset, maxXOffset, minYOffset, maxYOffset, minZOffset, maxZOffset);
         }
 
@@ -182,7 +196,7 @@ public abstract class BoundingOffsetFeature implements Feature {
          * @param minZOffset the min Z offset
          * @return the new offset setting
          */
-        public OffsetSetting withMinZOffset(int minZOffset) {
+        public OffsetSetting withMinZOffset(double minZOffset) {
             return new OffsetSetting(minXOffset, maxXOffset, minYOffset, maxYOffset, minZOffset, maxZOffset);
         }
 
@@ -192,7 +206,7 @@ public abstract class BoundingOffsetFeature implements Feature {
          * @param maxZOffset the max Z offset
          * @return the new offset setting
          */
-        public OffsetSetting withMaxZOffset(int maxZOffset) {
+        public OffsetSetting withMaxZOffset(double maxZOffset) {
             return new OffsetSetting(minXOffset, maxXOffset, minYOffset, maxYOffset, minZOffset, maxZOffset);
         }
     }
