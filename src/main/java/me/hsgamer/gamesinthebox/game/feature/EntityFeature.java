@@ -111,21 +111,21 @@ public abstract class EntityFeature implements Feature {
     }
 
     /**
-     * Count the {@link Entity#isValid()} entities
-     *
-     * @return the count
-     */
-    public long countValid() {
-        return entities.stream().filter(Entity::isValid).count();
-    }
-
-    /**
      * Get the stream of {@link Entity#isValid()} entities
      *
      * @return the stream
      */
     public Stream<Entity> streamValid() {
         return entities.stream().filter(Entity::isValid);
+    }
+
+    /**
+     * Count the {@link Entity#isValid()} entities
+     *
+     * @return the count
+     */
+    public long countValid() {
+        return streamValid().count();
     }
 
     /**
