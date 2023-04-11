@@ -98,7 +98,7 @@ public abstract class BoundingFeature implements Feature {
         if (location.getWorld() != world) {
             return false;
         }
-        return blockBox.contains(BukkitBlockAdapter.adapt(location));
+        return blockBox.contains(BukkitBlockAdapter.adapt(location, false));
     }
 
     /**
