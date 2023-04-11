@@ -22,6 +22,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * The {@link Feature} that handles points of the players
@@ -87,8 +88,14 @@ public class PointFeature implements Feature {
      * @return the points of the players
      */
     @NotNull
-    public Map<UUID, Integer> getPoints() {
-        return Collections.unmodifiableMap(points);
+    public Stream<Pair<UUID, Integer>> getPoints() {
+        if (points.isEmpty()) {
+            return Stream.empty();
+        }
+        return points.entrySet()
+                .stream()
+                .filter(entry -> entry.getValue() > 0)
+                .map(entry -> Pair.of(entry.getKey(), entry.getValue()));
     }
 
     /**
@@ -97,20 +104,10 @@ public class PointFeature implements Feature {
      * @return the top
      */
     @NotNull
-    public List<Pair<UUID, Integer>> getTop() {
-        List<Pair<UUID, Integer>> list;
-        if (points.isEmpty()) {
-            list = Collections.emptyList();
-        } else {
-            list = new ArrayList<>();
-            points.forEach((uuid, point) -> {
-                if (point > 0) {
-                    list.add(Pair.of(uuid, point));
-                }
-            });
-            list.sort(Comparator.<Pair<UUID, Integer>>comparingInt(Pair::getValue).reversed());
-        }
-        return list;
+    public Stream<Pair<UUID, Integer>> getTop() {
+        return getPoints()
+                .sorted(Comparator.<Pair<UUID, Integer>>comparingInt(Pair::getValue).reversed())
+                .map(entry -> Pair.of(entry.getKey(), entry.getValue()));
     }
 
     /**
@@ -119,8 +116,8 @@ public class PointFeature implements Feature {
      * @return the uuid part of the top
      */
     @NotNull
-    public List<UUID> getTopUUID() {
-        return getTop().stream().map(Pair::getKey).collect(Collectors.toList());
+    public Stream<UUID> getTopUUID() {
+        return getTop().map(Pair::getKey);
     }
 
     /**
@@ -131,7 +128,6 @@ public class PointFeature implements Feature {
     @NotNull
     public List<Pair<UUID, String>> getTopAsStringPair() {
         return getTop()
-                .stream()
                 .map(point -> Pair.of(point.getKey(), Integer.toString(point.getValue())))
                 .collect(Collectors.toList());
     }
