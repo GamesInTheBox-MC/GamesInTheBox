@@ -28,6 +28,7 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -41,6 +42,7 @@ public abstract class EntityFeature implements Feature {
     private final Queue<Entity> entityQueue = new ConcurrentLinkedQueue<>();
     private final AtomicReference<Task> currentEntityTaskRef = new AtomicReference<>(null);
     private final AtomicReference<List<Predicate<Entity>>> entityClearCheckRef = new AtomicReference<>(Collections.emptyList());
+    private final AtomicBoolean clearAllEntities = new AtomicBoolean(false);
 
     /**
      * Create the entity at the location
@@ -165,13 +167,18 @@ public abstract class EntityFeature implements Feature {
                 return;
             }
 
-            boolean toRemove = false;
-            List<Predicate<Entity>> list = entityClearCheckRef.get();
-            if (list != null && !list.isEmpty()) {
-                for (Predicate<Entity> predicate : list) {
-                    if (predicate.test(entity)) {
-                        toRemove = true;
-                        break;
+            boolean toRemove;
+            if (clearAllEntities.get()) {
+                toRemove = true;
+            } else {
+                toRemove = false;
+                List<Predicate<Entity>> list = entityClearCheckRef.get();
+                if (list != null && !list.isEmpty()) {
+                    for (Predicate<Entity> predicate : list) {
+                        if (predicate.test(entity)) {
+                            toRemove = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -199,11 +206,12 @@ public abstract class EntityFeature implements Feature {
     }
 
     /**
-     * Schedule to clear all the entities
+     * Set the value to clear all the entities when the task is running
+     *
+     * @param clearAllEntities true to clear all the entities
      */
-    public void scheduleClearAllEntities() {
-        addEntityClearCheck(entity -> true);
-        startClearEntities();
+    public void setClearAllEntities(boolean clearAllEntities) {
+        this.clearAllEntities.set(clearAllEntities);
     }
 
     /**
@@ -229,5 +237,6 @@ public abstract class EntityFeature implements Feature {
         stopClearEntities();
         clearAllEntityClearChecks();
         clearAllEntities();
+        clearAllEntities.set(false);
     }
 }
