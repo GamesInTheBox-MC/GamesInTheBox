@@ -52,7 +52,7 @@ public class SimpleBoundingOffsetFeature extends BoundingOffsetFeature {
     private final String path;
 
     /**
-     * Create a new bounding offset feature
+     * Create a new {@link SimpleBoundingOffsetFeature}
      *
      * @param arena           the arena
      * @param boundingFeature the bounding feature
@@ -62,6 +62,16 @@ public class SimpleBoundingOffsetFeature extends BoundingOffsetFeature {
         super(boundingFeature);
         this.arena = arena;
         this.path = path;
+    }
+
+    /**
+     * Create a new {@link SimpleBoundingOffsetFeature} that will get the offset setting from the config in the path "box-offset"
+     *
+     * @param arena           the arena
+     * @param boundingFeature the bounding feature
+     */
+    public SimpleBoundingOffsetFeature(SimpleGameArena arena, BoundingFeature boundingFeature) {
+        this(arena, boundingFeature, "box-offset");
     }
 
     /**
