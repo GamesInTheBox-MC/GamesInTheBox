@@ -16,7 +16,9 @@
 package me.hsgamer.gamesinthebox.game.feature;
 
 import me.hsgamer.gamesinthebox.util.EntityUtil;
+import me.hsgamer.gamesinthebox.util.TaskUtil;
 import me.hsgamer.hscore.bukkit.scheduler.Scheduler;
+import me.hsgamer.hscore.bukkit.scheduler.Task;
 import me.hsgamer.minigamecore.base.Feature;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -26,8 +28,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
@@ -36,7 +39,8 @@ import java.util.stream.Stream;
  */
 public abstract class EntityFeature implements Feature {
     private final List<Entity> entities = new ArrayList<>();
-    private final AtomicBoolean isClearing = new AtomicBoolean(false);
+    private final AtomicReference<CompletableFuture<Void>> clearFutureRef = new AtomicReference<>(CompletableFuture.completedFuture(null));
+    private final AtomicReference<List<Task>> tasksRef = new AtomicReference<>(Collections.emptyList());
 
     /**
      * Create the entity at the location
@@ -117,32 +121,46 @@ public abstract class EntityFeature implements Feature {
         return entities.stream().filter(Entity::isValid);
     }
 
-    private void clearEntitiesSync() {
-        if (isClearing.get()) {
-            return;
-        }
-        isClearing.set(true);
-        entities.forEach(EntityUtil::despawnSafe);
-        entities.clear();
-        isClearing.set(false);
-    }
-
     /**
      * Clear the entities
      *
      * @return the completable future of the task
      */
     public CompletableFuture<Void> clearEntities() {
-        CompletableFuture<Void> completableFuture = new CompletableFuture<>();
-        Scheduler.CURRENT.runTask(JavaPlugin.getProvidingPlugin(EntityFeature.class), () -> {
-            clearEntitiesSync();
-            completableFuture.complete(null);
-        }, false);
-        return completableFuture;
+        CompletableFuture<Void> currentFuture = clearFutureRef.get();
+        if (currentFuture != null && !currentFuture.isDone()) {
+            return currentFuture;
+        }
+
+        List<CompletableFuture<Void>> entityFutures = new ArrayList<>();
+        List<Task> tasks = new ArrayList<>();
+        entities.forEach(entity -> {
+            CompletableFuture<Void> completableFuture = new CompletableFuture<>();
+            Task task = Scheduler.CURRENT.runEntityTaskWithFinalizer(JavaPlugin.getProvidingPlugin(EntityFeature.class), entity, () -> EntityUtil.despawnSafe(entity), () -> completableFuture.complete(null), false);
+            entityFutures.add(completableFuture);
+            tasks.add(task);
+        });
+
+        CompletableFuture<Void> entityFuture = CompletableFuture.allOf(entityFutures.toArray(new CompletableFuture[0]));
+        CompletableFuture<Void> listFuture = entityFuture.thenRun(entities::clear);
+
+        CompletableFuture<Void> future = CompletableFuture.allOf(entityFuture, listFuture);
+        clearFutureRef.set(future);
+        tasksRef.set(tasks);
+        return future;
     }
 
     @Override
     public void clear() {
-        clearEntitiesSync();
+        Optional.ofNullable(tasksRef.getAndSet(Collections.emptyList())).ifPresent(tasks -> tasks.forEach(TaskUtil::cancelSafe));
+
+        CompletableFuture<Void> future = clearFutureRef.getAndSet(CompletableFuture.completedFuture(null));
+        if (future == null || future.isDone()) {
+            return;
+        }
+        future.cancel(true);
+
+        entities.forEach(EntityUtil::despawnSafe);
+        entities.clear();
     }
 }
