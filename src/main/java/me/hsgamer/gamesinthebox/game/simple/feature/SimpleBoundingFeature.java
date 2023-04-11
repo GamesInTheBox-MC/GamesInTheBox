@@ -173,7 +173,7 @@ public class SimpleBoundingFeature extends BoundingFeature {
 
                 @Override
                 public Map<String, Object> toPathValueMap(@NotNull CommandSender sender) {
-                    Map<String, Object> map = new HashMap<>();
+                    Map<String, Object> map = new LinkedHashMap<>();
                     World world = pos1.getWorld();
                     assert world != null;
                     map.put(path + ".world", world.getName());
