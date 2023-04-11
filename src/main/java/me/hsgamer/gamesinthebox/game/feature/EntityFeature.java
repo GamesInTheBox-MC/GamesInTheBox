@@ -215,12 +215,19 @@ public abstract class EntityFeature implements Feature {
         return entityQueue.isEmpty();
     }
 
+    /**
+     * Clear all the entities
+     */
+    public void clearAllEntities() {
+        entities.forEach(EntityUtil::despawnSafe);
+        entities.clear();
+        entityQueue.clear();
+    }
+
     @Override
     public void clear() {
         stopClearEntities();
         clearAllEntityClearChecks();
-        entities.forEach(EntityUtil::despawnSafe);
-        entities.clear();
-        entityQueue.clear();
+        clearAllEntities();
     }
 }
