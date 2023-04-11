@@ -25,11 +25,9 @@ import org.bukkit.entity.Entity;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
@@ -38,7 +36,7 @@ import java.util.stream.Stream;
  * The {@link Feature} for {@link Entity}
  */
 public abstract class EntityFeature implements Feature {
-    private final List<Entity> entities = new ArrayList<>();
+    private final Set<Entity> entities = ConcurrentHashMap.newKeySet();
     private final AtomicReference<CompletableFuture<Void>> clearFutureRef = new AtomicReference<>(CompletableFuture.completedFuture(null));
     private final AtomicReference<List<Task>> tasksRef = new AtomicReference<>(Collections.emptyList());
 
@@ -59,6 +57,15 @@ public abstract class EntityFeature implements Feature {
      * @return the completable future of the entity, can be completed exceptionally if the entity cannot be created
      */
     public CompletableFuture<Entity> spawn(Location location, Consumer<Entity> onSpawnConsumer) {
+        CompletableFuture<Void> currentFuture = clearFutureRef.get();
+        if (currentFuture != null && !currentFuture.isDone()) {
+            return CompletableFuture.completedFuture(null);
+        }
+
+        if (!location.getChunk().isLoaded()) {
+            return CompletableFuture.completedFuture(null);
+        }
+
         CompletableFuture<Entity> completableFuture = new CompletableFuture<>();
         Scheduler.CURRENT.runLocationTask(JavaPlugin.getProvidingPlugin(EntityFeature.class), location, () -> {
             Entity entity = createEntity(location);
@@ -99,8 +106,8 @@ public abstract class EntityFeature implements Feature {
      *
      * @return the list of entities
      */
-    public List<Entity> getEntities() {
-        return Collections.unmodifiableList(entities);
+    public Collection<Entity> getEntities() {
+        return Collections.unmodifiableSet(entities);
     }
 
     /**
