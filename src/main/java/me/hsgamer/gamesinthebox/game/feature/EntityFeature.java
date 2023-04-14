@@ -21,6 +21,7 @@ import me.hsgamer.hscore.bukkit.scheduler.Task;
 import me.hsgamer.minigamecore.base.Feature;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.Nullable;
 
@@ -32,6 +33,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.logging.Level;
 import java.util.stream.Stream;
 
 /**
@@ -65,9 +67,17 @@ public abstract class EntityFeature implements Feature {
             return CompletableFuture.completedFuture(null);
         }
 
+        Plugin plugin = JavaPlugin.getProvidingPlugin(EntityFeature.class);
         CompletableFuture<Entity> completableFuture = new CompletableFuture<>();
-        Scheduler.CURRENT.runLocationTask(JavaPlugin.getProvidingPlugin(EntityFeature.class), location, () -> {
-            Entity entity = createEntity(location);
+        Scheduler.CURRENT.runLocationTask(plugin, location, () -> {
+            Entity entity;
+            try {
+                entity = createEntity(location);
+            } catch (Throwable throwable) {
+                plugin.getLogger().log(Level.WARNING, "Cannot create entity", throwable);
+                completableFuture.completeExceptionally(throwable);
+                return;
+            }
             if (entity == null) {
                 completableFuture.completeExceptionally(new NullPointerException("Entity is null"));
                 return;
