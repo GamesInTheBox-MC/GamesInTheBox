@@ -44,6 +44,7 @@ public abstract class EntityFeature implements Feature {
     private final AtomicReference<Task> currentEntityTaskRef = new AtomicReference<>(null);
     private final AtomicReference<List<Predicate<Entity>>> entityClearCheckRef = new AtomicReference<>(Collections.emptyList());
     private final AtomicBoolean clearAllEntities = new AtomicBoolean(false);
+    private final AtomicBoolean clearInvalidEntities = new AtomicBoolean(false);
 
     /**
      * Create the entity at the location
@@ -171,7 +172,9 @@ public abstract class EntityFeature implements Feature {
             }
 
             if (!entity.isValid()) {
-                entities.remove(entity);
+                if (clearInvalidEntities.get() || clearAllEntities.get()) {
+                    entities.remove(entity);
+                }
                 return;
             }
 
@@ -220,6 +223,16 @@ public abstract class EntityFeature implements Feature {
      */
     public void setClearAllEntities(boolean clearAllEntities) {
         this.clearAllEntities.set(clearAllEntities);
+    }
+
+    /**
+     * Set the value to clear the invalid entities when the task is running.
+     * Set to false if you want to keep the invalid entities in the list.
+     *
+     * @param clearInvalidEntities true to clear the invalid entities
+     */
+    public void setClearInvalidEntities(boolean clearInvalidEntities) {
+        this.clearInvalidEntities.set(clearInvalidEntities);
     }
 
     /**
