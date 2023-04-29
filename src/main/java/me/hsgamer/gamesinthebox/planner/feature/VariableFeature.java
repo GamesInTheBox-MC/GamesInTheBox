@@ -16,10 +16,12 @@
 package me.hsgamer.gamesinthebox.planner.feature;
 
 import me.hsgamer.gamesinthebox.planner.Planner;
-import me.hsgamer.hscore.variable.InstanceVariableManager;
+import me.hsgamer.hscore.common.StringReplacer;
+import me.hsgamer.hscore.variable.VariableManager;
 import me.hsgamer.minigamecore.base.Feature;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -28,8 +30,7 @@ import java.util.UUID;
  * The {@link Feature} for replacing variables
  */
 public class VariableFeature implements Feature {
-    private static final UUID DUMMY_UUID = UUID.randomUUID();
-    private final InstanceVariableManager variableManager;
+    private final VariableManager variableManager;
 
     /**
      * Create a new {@link VariableFeature}
@@ -37,10 +38,11 @@ public class VariableFeature implements Feature {
      * @param planner the {@link Planner}
      */
     public VariableFeature(@NotNull Planner planner) {
-        this.variableManager = new InstanceVariableManager();
-        variableManager.register("", (original, uuid) -> Optional.ofNullable(planner.getFeature(ReplacementFeature.class))
-                .map(replacementFeature -> uuid.equals(DUMMY_UUID) ? replacementFeature.replace(original) : replacementFeature.replace(Bukkit.getOfflinePlayer(uuid), original))
-                .orElse(null));
+        this.variableManager = new VariableManager();
+        variableManager.register("", Optional.ofNullable(planner.getFeature(ReplacementFeature.class))
+                .map(feature -> StringReplacer.of(feature::replace, (original, uuid) -> feature.replace(Bukkit.getOfflinePlayer(uuid), original)))
+                .orElse(StringReplacer.DUMMY)
+        );
         variableManager.setReplaceAll(true);
     }
 
@@ -52,7 +54,7 @@ public class VariableFeature implements Feature {
      * @return the replaced string
      */
     @NotNull
-    public String replace(@NotNull String input, @NotNull UUID uuid) {
+    public String replace(@NotNull String input, @Nullable UUID uuid) {
         return variableManager.setVariables(input, uuid);
     }
 
@@ -64,6 +66,6 @@ public class VariableFeature implements Feature {
      */
     @NotNull
     public String replace(@NotNull String input) {
-        return replace(input, DUMMY_UUID);
+        return replace(input, null);
     }
 }

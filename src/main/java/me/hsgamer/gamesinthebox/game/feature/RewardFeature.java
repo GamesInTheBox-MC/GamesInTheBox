@@ -21,7 +21,6 @@ import me.hsgamer.hscore.common.Pair;
 import me.hsgamer.minigamecore.base.Feature;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -87,7 +86,7 @@ public abstract class RewardFeature implements Feature {
         if (name == null) return;
         List<String> commands = new ArrayList<>(topCommands.getOrDefault(topPosition, defaultCommands));
         commands.replaceAll(s -> s.replace("{name}", name).replace("{top}", Integer.toString(topPosition)));
-        Scheduler.CURRENT.runTask(JavaPlugin.getProvidingPlugin(getClass()), () -> commands.forEach(c -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), c)), false);
+        Scheduler.providingPlugin(getClass()).sync().runTask(() -> commands.forEach(c -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), c)));
     }
 
     /**

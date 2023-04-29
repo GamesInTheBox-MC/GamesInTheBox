@@ -27,7 +27,7 @@ public interface MainConfig {
      *
      * @return the interval
      */
-    @ConfigPath("planner.interval")
+    @ConfigPath({"planner", "interval"})
     default long getPlannerInterval() {
         return 20L;
     }
@@ -37,7 +37,7 @@ public interface MainConfig {
      *
      * @return true if it should
      */
-    @ConfigPath("planner.async")
+    @ConfigPath({"planner", "async"})
     default boolean isPlannerAsync() {
         return true;
     }
@@ -47,7 +47,7 @@ public interface MainConfig {
      *
      * @return true if it should
      */
-    @ConfigPath("block-util.use-fawe")
+    @ConfigPath({"block-util", "use-fawe"})
     default boolean isBlockUtilUseFawe() {
         return BlockHandlerSettings.USE_FAWE.get();
     }
@@ -57,7 +57,7 @@ public interface MainConfig {
      *
      * @return true if it should
      */
-    @ConfigPath("block-util.use-we")
+    @ConfigPath({"block-util", "use-we"})
     default boolean isBlockUtilUseWe() {
         return BlockHandlerSettings.USE_WE.get();
     }
@@ -67,7 +67,7 @@ public interface MainConfig {
      *
      * @return the max blocks
      */
-    @ConfigPath("block-util.max-blocks")
+    @ConfigPath({"block-util", "max-blocks"})
     default int getBlockUtilMaxBlocks() {
         return BlockHandlerSettings.MAX_BLOCKS.get();
     }
@@ -77,7 +77,7 @@ public interface MainConfig {
      *
      * @return the blocks per tick
      */
-    @ConfigPath("block-util.blocks-per-tick")
+    @ConfigPath({"block-util", "blocks-per-tick"})
     default int getBlockUtilBlocksPerTick() {
         return BlockHandlerSettings.BLOCKS_PER_TICK.get();
     }
@@ -87,7 +87,7 @@ public interface MainConfig {
      *
      * @return the delay
      */
-    @ConfigPath("block-util.block-delay")
+    @ConfigPath({"block-util", "block-delay"})
     default long getBlockUtilDelay() {
         return BlockHandlerSettings.BLOCK_DELAY.get();
     }

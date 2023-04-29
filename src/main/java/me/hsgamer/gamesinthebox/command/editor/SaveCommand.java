@@ -20,6 +20,7 @@ import me.hsgamer.gamesinthebox.game.GameEditor;
 import me.hsgamer.gamesinthebox.planner.feature.GlobalPlannerConfigFeature;
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import me.hsgamer.hscore.config.Config;
+import me.hsgamer.hscore.config.PathString;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
@@ -40,23 +41,23 @@ public class SaveCommand extends GameEditorCommand {
 
         Config plannerConfig = plugin.getPlannerManager().getFeature(GlobalPlannerConfigFeature.class).getPlannerFeature(plannerName, true).getConfig();
 
-        String path = "settings." + arenaName;
+        PathString path = new PathString("settings", arenaName);
         boolean override = args.length >= 3 && Boolean.parseBoolean(args[2]);
         if (plannerConfig.contains(path) && !override) {
             MessageUtils.sendMessage(sender, plugin.getMessageConfig().getEditorArenaAlreadyExists());
             return;
         }
 
-        Optional<Map<String, Object>> optionalMap = gameEditor.exportPathValueMap(sender);
+        Optional<Map<PathString, Object>> optionalMap = gameEditor.exportPathValueMap(sender).map(map -> PathString.toPathStringMap(".", map));
         if (!optionalMap.isPresent()) {
             MessageUtils.sendMessage(sender, plugin.getMessageConfig().getEditorCannotSave());
             return;
         }
 
         plannerConfig.set(path, null);
-        plannerConfig.set(path + ".type", gameType);
-        for (Map.Entry<String, Object> entry : optionalMap.get().entrySet()) {
-            plannerConfig.set(path + "." + entry.getKey(), entry.getValue());
+        plannerConfig.set(path.append(new PathString("type")), gameType);
+        for (Map.Entry<PathString, Object> entry : optionalMap.get().entrySet()) {
+            plannerConfig.set(path.append(entry.getKey()), entry.getValue());
         }
         plannerConfig.save();
 

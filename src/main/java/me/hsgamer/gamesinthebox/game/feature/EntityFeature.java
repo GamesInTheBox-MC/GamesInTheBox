@@ -21,7 +21,6 @@ import me.hsgamer.hscore.bukkit.scheduler.Task;
 import me.hsgamer.minigamecore.base.Feature;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.Nullable;
 
@@ -67,14 +66,13 @@ public abstract class EntityFeature implements Feature {
             return CompletableFuture.completedFuture(null);
         }
 
-        Plugin plugin = JavaPlugin.getProvidingPlugin(EntityFeature.class);
         CompletableFuture<Entity> completableFuture = new CompletableFuture<>();
-        Scheduler.CURRENT.runLocationTask(plugin, location, () -> {
+        Scheduler.providingPlugin(EntityFeature.class).sync().runLocationTask(location, () -> {
             Entity entity;
             try {
                 entity = createEntity(location);
             } catch (Throwable throwable) {
-                plugin.getLogger().log(Level.WARNING, "Cannot create entity", throwable);
+                JavaPlugin.getProvidingPlugin(EntityFeature.class).getLogger().log(Level.WARNING, "There is an error when creating the entity", throwable);
                 completableFuture.completeExceptionally(throwable);
                 return;
             }
@@ -166,7 +164,7 @@ public abstract class EntityFeature implements Feature {
             return;
         }
 
-        Task task = Scheduler.CURRENT.runTaskTimer(JavaPlugin.getProvidingPlugin(EntityFeature.class), () -> {
+        Task task = Scheduler.providingPlugin(EntityFeature.class).async().runTaskTimer(() -> {
             Entity entity = entityQueue.poll();
             if (entity == null) {
                 return;
@@ -195,12 +193,12 @@ public abstract class EntityFeature implements Feature {
 
             if (toRemove) {
                 entities.remove(entity);
-                Scheduler.CURRENT.runEntityTask(JavaPlugin.getProvidingPlugin(EntityFeature.class), entity, () -> EntityUtil.despawnSafe(entity), () -> {
-                }, false);
+                Scheduler.providingPlugin(EntityFeature.class).sync().runEntityTask(entity, () -> EntityUtil.despawnSafe(entity), () -> {
+                });
             } else {
                 entityQueue.add(entity);
             }
-        }, 0L, 0L, true);
+        }, 0L, 0L);
 
         currentEntityTaskRef.set(task);
     }

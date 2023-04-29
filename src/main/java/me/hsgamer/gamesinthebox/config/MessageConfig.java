@@ -46,7 +46,7 @@ public interface MessageConfig {
      *
      * @return the message
      */
-    @ConfigPath("planner.not-found")
+    @ConfigPath({"planner", "not-found"})
     default String getPlannerNotFound() {
         return "&cPlanner not found";
     }
@@ -56,7 +56,7 @@ public interface MessageConfig {
      *
      * @return the message
      */
-    @ConfigPath("planner.cannot-force-pick")
+    @ConfigPath({"planner", "cannot-force-pick"})
     default String getPlannerCannotForcePick() {
         return "&cCannot make planner pick the next game";
     }
@@ -66,7 +66,7 @@ public interface MessageConfig {
      *
      * @return the message
      */
-    @ConfigPath("game.cannot-set")
+    @ConfigPath({"game", "cannot-set"})
     default String getGameCannotSet() {
         return "&cCannot set game for planner";
     }
@@ -76,7 +76,7 @@ public interface MessageConfig {
      *
      * @return the message
      */
-    @ConfigPath("game.cannot-perform-action")
+    @ConfigPath({"game", "cannot-perform-action"})
     default String getGameCannotPerformAction() {
         return "&cCannot perform action for planner";
     }
@@ -86,7 +86,7 @@ public interface MessageConfig {
      *
      * @return the message
      */
-    @ConfigPath("editor.game-not-found")
+    @ConfigPath({"editor", "game-not-found"})
     default String getEditorGameNotFound() {
         return "&cGame not found";
     }
@@ -96,7 +96,7 @@ public interface MessageConfig {
      *
      * @return the message
      */
-    @ConfigPath("editor.cannot-perform-action")
+    @ConfigPath({"editor", "cannot-perform-action"})
     default String getEditorCannotPerformAction() {
         return "&cCannot perform action";
     }
@@ -106,7 +106,7 @@ public interface MessageConfig {
      *
      * @return the message
      */
-    @ConfigPath("editor.arena-already-exists")
+    @ConfigPath({"editor", "arena-already-exists"})
     default String getEditorArenaAlreadyExists() {
         return "&cArena already exists";
     }
@@ -116,7 +116,7 @@ public interface MessageConfig {
      *
      * @return the message
      */
-    @ConfigPath("editor.cannot-save")
+    @ConfigPath({"editor", "cannot-save"})
     default String getEditorCannotSave() {
         return "&cCannot save the settings of the arena";
     }
@@ -126,7 +126,7 @@ public interface MessageConfig {
      *
      * @return the message
      */
-    @ConfigPath("editor.arena-not-found")
+    @ConfigPath({"editor", "arena-not-found"})
     default String getEditorArenaNotFound() {
         return "&cArena not found";
     }
@@ -136,7 +136,7 @@ public interface MessageConfig {
      *
      * @return the message
      */
-    @ConfigPath("editor.cannot-migrate")
+    @ConfigPath({"editor", "cannot-migrate"})
     default String getEditorCannotMigrate() {
         return "&cCannot migrate the arena";
     }
@@ -146,7 +146,7 @@ public interface MessageConfig {
      *
      * @return the display name
      */
-    @ConfigPath("planner.state.idling")
+    @ConfigPath({"planner", "state", "idling"})
     default String getPlannerStateIdling() {
         return "Idling";
     }
@@ -156,7 +156,7 @@ public interface MessageConfig {
      *
      * @return the display name
      */
-    @ConfigPath("planner.state.listening")
+    @ConfigPath({"planner", "state", "listening"})
     default String getPlannerStateListening() {
         return "Listening";
     }

@@ -49,7 +49,7 @@ public class SimpleUpdateFeature implements Feature {
      */
     public void initState() {
         arena.getFeature(DescriptiveHologramFeature.class).initHologram();
-        task = Scheduler.CURRENT.runTaskTimer(plugin, this::updateState, 0L, 20L, true);
+        task = Scheduler.plugin(plugin).async().runTaskTimer(this::updateState, 0L, 20L);
     }
 
     /**

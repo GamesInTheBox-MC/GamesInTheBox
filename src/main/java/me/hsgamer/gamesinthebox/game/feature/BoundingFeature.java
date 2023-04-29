@@ -76,21 +76,23 @@ public abstract class BoundingFeature implements Feature {
     /**
      * Check if the player is in the bounding box
      *
-     * @param player the player
+     * @param player    the player
+     * @param normalize whether to normalize the location to the nearest block
      * @return true if the player is in the bounding box
      */
-    public boolean checkBounding(@NotNull OfflinePlayer player) {
+    public boolean checkBounding(@NotNull OfflinePlayer player, boolean normalize) {
         Player onlinePlayer = player.getPlayer();
-        return onlinePlayer != null && checkBounding(onlinePlayer.getLocation());
+        return onlinePlayer != null && checkBounding(onlinePlayer.getLocation(), normalize);
     }
 
     /**
      * Check if the location is in the bounding box
      *
-     * @param location the location
+     * @param location  the location
+     * @param normalize whether to normalize the location to the nearest block
      * @return true if the location is in the bounding box
      */
-    public boolean checkBounding(@NotNull Location location) {
+    public boolean checkBounding(@NotNull Location location, boolean normalize) {
         if (blockBox == null) {
             return false;
         }
@@ -98,17 +100,18 @@ public abstract class BoundingFeature implements Feature {
         if (location.getWorld() != world) {
             return false;
         }
-        return blockBox.contains(BukkitBlockAdapter.adapt(location, false));
+        return blockBox.contains(BukkitBlockAdapter.adapt(location, normalize));
     }
 
     /**
      * Get the entities in the bounding box
      *
+     * @param normalize whether to normalize the entity location to the nearest block
      * @return the entities
      */
-    public Stream<Entity> getEntities() {
+    public Stream<Entity> getEntities(boolean normalize) {
         return world.getEntities()
                 .stream()
-                .filter(entity -> checkBounding(entity.getLocation()));
+                .filter(entity -> checkBounding(entity.getLocation(), normalize));
     }
 }

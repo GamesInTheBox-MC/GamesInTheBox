@@ -21,42 +21,42 @@ import me.hsgamer.hscore.config.annotation.ConfigPath;
  * The message config for a {@link me.hsgamer.gamesinthebox.game.template.TemplateGameArena}
  */
 public interface GameMessageConfig {
-    @ConfigPath("point.plus.plural")
+    @ConfigPath({"point", "plus", "plural"})
     default String getPointPlusPlural() {
         return "&a+{point} points &7({total})";
     }
 
-    @ConfigPath("point.minus.plural")
+    @ConfigPath({"point", "minus", "plural"})
     default String getPointMinusPlural() {
         return "&c-{point} points &7({total})";
     }
 
-    @ConfigPath("point.plus.singular")
+    @ConfigPath({"point", "plus", "singular"})
     default String getPointPlusSingular() {
         return "&a+{point} point &7({total})";
     }
 
-    @ConfigPath("point.minus.singular")
+    @ConfigPath({"point", "minus", "singular"})
     default String getPointMinusSingular() {
         return "&c-{point} point &7({total})";
     }
 
-    @ConfigPath("state.waiting")
+    @ConfigPath({"state", "waiting"})
     default String getStateWaiting() {
         return "Waiting";
     }
 
-    @ConfigPath("state.in-game")
+    @ConfigPath({"state", "starting"})
     default String getStateInGame() {
         return "In Game";
     }
 
-    @ConfigPath("state.ending")
+    @ConfigPath({"state", "ending"})
     default String getStateEnding() {
         return "Ending";
     }
 
-    @ConfigPath("state.idle")
+    @ConfigPath({"state", "idle"})
     default String getStateIdle() {
         return "Idle";
     }

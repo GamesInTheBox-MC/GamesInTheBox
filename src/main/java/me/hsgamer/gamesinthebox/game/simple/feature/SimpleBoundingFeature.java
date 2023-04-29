@@ -52,29 +52,25 @@ import java.util.Map;
 public class SimpleBoundingFeature extends BoundingFeature {
     private final SimpleGameArena arena;
     private final String path;
-    private final boolean maxInclusive;
 
     /**
      * Create a new {@link SimpleBoundingFeature}
      *
-     * @param arena        the arena
-     * @param path         the path
-     * @param maxInclusive whether the box should include the maximum position
+     * @param arena the arena
+     * @param path  the path
      */
-    public SimpleBoundingFeature(@NotNull SimpleGameArena arena, @NotNull String path, boolean maxInclusive) {
+    public SimpleBoundingFeature(@NotNull SimpleGameArena arena, @NotNull String path) {
         this.arena = arena;
         this.path = path;
-        this.maxInclusive = maxInclusive;
     }
 
     /**
      * Create a new {@link SimpleBoundingFeature} that will get the bounding box from the config in the path "box"
      *
-     * @param arena        the arena
-     * @param maxInclusive whether the box should include the maximum position
+     * @param arena the arena
      */
-    public SimpleBoundingFeature(@NotNull SimpleGameArena arena, boolean maxInclusive) {
-        this(arena, "box", maxInclusive);
+    public SimpleBoundingFeature(@NotNull SimpleGameArena arena) {
+        this(arena, "box");
     }
 
     /**
@@ -118,7 +114,7 @@ public class SimpleBoundingFeature extends BoundingFeature {
         if (pos2 == null) {
             throw new IllegalStateException(arena.getName() + " has invalid position 2");
         }
-        return Pair.of(world, new BlockBox(BukkitBlockAdapter.adapt(pos1), BukkitBlockAdapter.adapt(pos2), maxInclusive));
+        return Pair.of(world, new BlockBox(BukkitBlockAdapter.adapt(pos1), BukkitBlockAdapter.adapt(pos2)));
     }
 
     /**
@@ -257,11 +253,7 @@ public class SimpleBoundingFeature extends BoundingFeature {
             World world = feature.getWorld();
             BlockBox box = feature.getBlockBox();
             pos1 = BukkitBlockAdapter.adapt(world, new Position(box.minX, box.minY, box.minZ));
-            if (box.maxInclusive) {
-                pos2 = BukkitBlockAdapter.adapt(world, new Position(box.maxX - 1D, box.maxY - 1D, box.maxZ - 1D));
-            } else {
-                pos2 = BukkitBlockAdapter.adapt(world, new Position(box.maxX, box.maxY, box.maxZ));
-            }
+            pos2 = BukkitBlockAdapter.adapt(world, new Position(box.maxX, box.maxY, box.maxZ));
         }
     }
 }

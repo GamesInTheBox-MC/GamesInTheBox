@@ -17,6 +17,7 @@ package me.hsgamer.gamesinthebox.planner.feature;
 
 import me.hsgamer.gamesinthebox.planner.Planner;
 import me.hsgamer.hscore.config.Config;
+import me.hsgamer.hscore.config.PathString;
 import me.hsgamer.minigamecore.base.Feature;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -61,7 +62,7 @@ public class PlannerConfigFeature implements Feature {
      */
     @Contract("_, !null, _ -> !null")
     public <T> T getInstance(@NotNull String path, @Nullable T def, @NotNull Class<T> clazz) {
-        return config.getInstance(path, def, clazz);
+        return config.getInstance(PathString.toPathString(".", path), def, clazz);
     }
 
     /**
@@ -73,7 +74,7 @@ public class PlannerConfigFeature implements Feature {
      */
     @Contract("_, !null -> !null")
     public String getString(@NotNull String path, @Nullable String def) {
-        return Objects.toString(config.getNormalized(path), def);
+        return Objects.toString(config.getNormalized(PathString.toPathString(".", path)), def);
     }
 
     /**
@@ -84,7 +85,7 @@ public class PlannerConfigFeature implements Feature {
      */
     @Nullable
     public Object get(@NotNull String path) {
-        return config.get(path);
+        return config.getNormalized(PathString.toPathString(".", path));
     }
 
     /**
@@ -96,7 +97,7 @@ public class PlannerConfigFeature implements Feature {
      */
     @NotNull
     public Map<String, Object> getValues(@NotNull String path, boolean deep) {
-        return config.getNormalizedValues(path, deep);
+        return PathString.toPathMap(".", config.getValues(PathString.toPathString(".", path), deep));
     }
 
     /**
@@ -106,7 +107,7 @@ public class PlannerConfigFeature implements Feature {
      * @return true if the path exists
      */
     public boolean contains(@NotNull String path) {
-        return config.contains(path);
+        return config.contains(PathString.toPathString(".", path));
     }
 
     /**
@@ -116,7 +117,7 @@ public class PlannerConfigFeature implements Feature {
      * @param value the value
      */
     public void set(@NotNull String path, @Nullable Object value) {
-        config.set(path, value);
+        config.set(PathString.toPathString(".", path), value);
         config.save();
     }
 }
