@@ -56,10 +56,11 @@ public class SimpleBoundingOffsetFeature extends BoundingOffsetFeature {
      *
      * @param arena           the arena
      * @param boundingFeature the bounding feature
+     * @param maxInclusive    whether the max position of the bounding box is inclusive
      * @param path            the path to the offset setting
      */
-    public SimpleBoundingOffsetFeature(SimpleGameArena arena, BoundingFeature boundingFeature, String path) {
-        super(boundingFeature);
+    public SimpleBoundingOffsetFeature(SimpleGameArena arena, BoundingFeature boundingFeature, boolean maxInclusive, String path) {
+        super(boundingFeature, maxInclusive);
         this.arena = arena;
         this.path = path;
     }
@@ -69,9 +70,10 @@ public class SimpleBoundingOffsetFeature extends BoundingOffsetFeature {
      *
      * @param arena           the arena
      * @param boundingFeature the bounding feature
+     * @param maxInclusive    whether the max position of the bounding box is inclusive
      */
-    public SimpleBoundingOffsetFeature(SimpleGameArena arena, BoundingFeature boundingFeature) {
-        this(arena, boundingFeature, "box-offset");
+    public SimpleBoundingOffsetFeature(SimpleGameArena arena, BoundingFeature boundingFeature, boolean maxInclusive) {
+        this(arena, boundingFeature, maxInclusive, "box-offset");
     }
 
     /**

@@ -28,15 +28,18 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public abstract class BoundingOffsetFeature implements Feature {
     private final BoundingFeature boundingFeature;
+    private final boolean maxInclusive;
     private OffsetSetting offsetSetting = OffsetSetting.DEFAULT;
 
     /**
      * Create a new bounding offset feature
      *
      * @param boundingFeature the bounding feature
+     * @param maxInclusive    whether the max position of the bounding box is inclusive
      */
-    public BoundingOffsetFeature(BoundingFeature boundingFeature) {
+    public BoundingOffsetFeature(BoundingFeature boundingFeature, boolean maxInclusive) {
         this.boundingFeature = boundingFeature;
+        this.maxInclusive = maxInclusive;
     }
 
     /**
@@ -62,6 +65,15 @@ public abstract class BoundingOffsetFeature implements Feature {
     }
 
     /**
+     * Whether the max position of the bounding box is inclusive
+     *
+     * @return true if it is inclusive
+     */
+    public boolean isMaxInclusive() {
+        return maxInclusive;
+    }
+
+    /**
      * Get a random location in the bounding box
      *
      * @param normalize whether to normalize the location by setting to the nearest block
@@ -70,6 +82,9 @@ public abstract class BoundingOffsetFeature implements Feature {
     @NotNull
     public Location getRandomLocation(boolean normalize) {
         BlockBox blockBox = boundingFeature.getBlockBox();
+        if (maxInclusive) {
+            blockBox = blockBox.maxInclusive();
+        }
         World world = boundingFeature.getWorld();
 
         double minX = blockBox.minX + offsetSetting.minXOffset;
