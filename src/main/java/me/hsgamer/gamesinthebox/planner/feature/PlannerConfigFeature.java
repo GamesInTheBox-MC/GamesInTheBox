@@ -97,7 +97,7 @@ public class PlannerConfigFeature implements Feature {
      */
     @NotNull
     public Map<String, Object> getValues(@NotNull String path, boolean deep) {
-        return PathString.toPathMap(".", config.getValues(PathString.toPathString(".", path), deep));
+        return PathString.toPathMap(".", config.getNormalizedValues(PathString.toPathString(".", path), deep));
     }
 
     /**
