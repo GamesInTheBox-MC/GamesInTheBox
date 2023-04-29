@@ -23,13 +23,13 @@ import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Optional;
 import java.util.UUID;
 
 /**
  * The {@link Feature} for replacing variables
  */
 public class VariableFeature implements Feature {
+    private final Planner planner;
     private final VariableManager variableManager;
 
     /**
@@ -38,12 +38,15 @@ public class VariableFeature implements Feature {
      * @param planner the {@link Planner}
      */
     public VariableFeature(@NotNull Planner planner) {
+        this.planner = planner;
         this.variableManager = new VariableManager();
-        variableManager.register("", Optional.ofNullable(planner.getFeature(ReplacementFeature.class))
-                .map(feature -> StringReplacer.of(feature::replace, (original, uuid) -> feature.replace(Bukkit.getOfflinePlayer(uuid), original)))
-                .orElse(StringReplacer.DUMMY)
-        );
         variableManager.setReplaceAll(true);
+    }
+
+    @Override
+    public void postInit() {
+        ReplacementFeature replacementFeature = planner.getFeature(ReplacementFeature.class);
+        variableManager.register("", StringReplacer.of(replacementFeature::replace, (original, uuid) -> replacementFeature.replace(Bukkit.getOfflinePlayer(uuid), original)));
     }
 
     /**
