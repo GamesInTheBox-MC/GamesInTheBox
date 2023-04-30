@@ -28,6 +28,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -39,10 +40,11 @@ import java.util.stream.Stream;
 public abstract class EntityFeature implements Feature {
     private final Set<Entity> entities = ConcurrentHashMap.newKeySet();
     private final Queue<Entity> entityQueue = new ArrayDeque<>();
-    private final Queue<SpawnRequest> spawnQueue = new ConcurrentLinkedQueue<>();
+    private final Queue<SpawnRequest> spawnRequestQueue = new ConcurrentLinkedQueue<>();
     private final AtomicReference<Task> currentEntityTaskRef = new AtomicReference<>(null);
     private final AtomicReference<List<Predicate<Entity>>> entityClearCheckRef = new AtomicReference<>(Collections.emptyList());
     private final AtomicBoolean clearAllEntities = new AtomicBoolean(false);
+    private final AtomicInteger spawnRequestPerTick = new AtomicInteger(1);
 
     /**
      * Create the entity at the location
@@ -68,7 +70,7 @@ public abstract class EntityFeature implements Feature {
         if (!isTaskRunning()) {
             completableFuture.completeExceptionally(new IllegalStateException("The task is not running"));
         } else {
-            spawnQueue.add(new SpawnRequest(completableFuture, onSpawnConsumer, location));
+            spawnRequestQueue.add(new SpawnRequest(completableFuture, onSpawnConsumer, location));
         }
         return completableFuture;
     }
@@ -126,8 +128,8 @@ public abstract class EntityFeature implements Feature {
      *
      * @return the count
      */
-    public long countEntityRequests() {
-        return spawnQueue.size();
+    public long countSpawnRequests() {
+        return spawnRequestQueue.size();
     }
 
     /**
@@ -169,15 +171,22 @@ public abstract class EntityFeature implements Feature {
         Task task = Scheduler.providingPlugin(EntityFeature.class).async().runTaskTimer(() -> {
             if (clearAllEntities.get()) {
                 while (true) {
-                    SpawnRequest spawnRequest = spawnQueue.poll();
+                    SpawnRequest spawnRequest = spawnRequestQueue.poll();
                     if (spawnRequest == null) {
                         break;
                     }
                     spawnRequest.completableFuture.completeExceptionally(new IllegalStateException("The task is cleared"));
                 }
             } else {
-                SpawnRequest spawnRequest = spawnQueue.poll();
-                if (spawnRequest != null) {
+                int spawnAmount = spawnRequestPerTick.get();
+                if (spawnAmount <= 0) {
+                    spawnAmount = 1;
+                }
+                for (int i = 0; i < spawnAmount; i++) {
+                    SpawnRequest spawnRequest = spawnRequestQueue.poll();
+                    if (spawnRequest == null) {
+                        break;
+                    }
                     Scheduler.providingPlugin(EntityFeature.class).sync().runLocationTask(spawnRequest.location, () -> {
                         Entity entity = createEntity(spawnRequest.location);
                         if (entity == null) {
@@ -214,7 +223,6 @@ public abstract class EntityFeature implements Feature {
             }
 
             if (toRemove) {
-                entities.remove(entity);
                 Scheduler.providingPlugin(EntityFeature.class).sync().runEntityTask(entity, () -> EntityUtil.despawnSafe(entity), () -> {
                 });
             } else {
@@ -245,12 +253,21 @@ public abstract class EntityFeature implements Feature {
     }
 
     /**
+     * Set how many entities to spawn per tick
+     *
+     * @param spawnRequestPerTick the amount
+     */
+    public void setSpawnRequestPerTick(int spawnRequestPerTick) {
+        this.spawnRequestPerTick.set(spawnRequestPerTick);
+    }
+
+    /**
      * Check if all the entities are cleared
      *
      * @return true if all the entities are cleared
      */
     public boolean isAllEntityCleared() {
-        return entityQueue.isEmpty() && spawnQueue.isEmpty();
+        return entityQueue.isEmpty() && spawnRequestQueue.isEmpty();
     }
 
     /**
@@ -260,8 +277,8 @@ public abstract class EntityFeature implements Feature {
         entities.forEach(EntityUtil::despawnSafe);
         entities.clear();
         entityQueue.clear();
-        spawnQueue.forEach(spawnRequest -> spawnRequest.completableFuture.completeExceptionally(new IllegalStateException("The task is cleared")));
-        spawnQueue.clear();
+        spawnRequestQueue.forEach(spawnRequest -> spawnRequest.completableFuture.completeExceptionally(new IllegalStateException("The task is cleared")));
+        spawnRequestQueue.clear();
     }
 
     @Override
