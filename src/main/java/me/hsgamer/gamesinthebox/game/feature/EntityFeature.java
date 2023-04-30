@@ -21,30 +21,27 @@ import me.hsgamer.hscore.bukkit.scheduler.Task;
 import me.hsgamer.minigamecore.base.Feature;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
-import java.util.logging.Level;
 import java.util.stream.Stream;
 
 /**
  * The {@link Feature} for {@link Entity}
  */
 public abstract class EntityFeature implements Feature {
-    private final Set<Entity> entities = ConcurrentHashMap.newKeySet();
-    private final Queue<Entity> entityQueue = new ConcurrentLinkedQueue<>();
+    private final Set<Entity> entities = new HashSet<>();
+    private final Queue<Entity> entityQueue = new ArrayDeque<>();
+    private final Queue<SpawnRequest> spawnQueue = new ConcurrentLinkedQueue<>();
     private final AtomicReference<Task> currentEntityTaskRef = new AtomicReference<>(null);
     private final AtomicReference<List<Predicate<Entity>>> entityClearCheckRef = new AtomicReference<>(Collections.emptyList());
     private final AtomicBoolean clearAllEntities = new AtomicBoolean(false);
-    private final AtomicBoolean clearInvalidEntities = new AtomicBoolean(false);
 
     /**
      * Create the entity at the location
@@ -56,41 +53,27 @@ public abstract class EntityFeature implements Feature {
     protected abstract Entity createEntity(Location location);
 
     /**
-     * Spawn the entity
+     * Request to spawn the entity
      *
      * @param location        the location
      * @param onSpawnConsumer the consumer when the entity is spawned
      * @return the completable future of the entity, can be completed exceptionally if the entity cannot be created
      */
     public CompletableFuture<Entity> spawn(Location location, Consumer<Entity> onSpawnConsumer) {
-        if (!location.getChunk().isLoaded()) {
+        if (location.getWorld() == null) {
             return CompletableFuture.completedFuture(null);
         }
-
         CompletableFuture<Entity> completableFuture = new CompletableFuture<>();
-        Scheduler.providingPlugin(EntityFeature.class).sync().runLocationTask(location, () -> {
-            Entity entity;
-            try {
-                entity = createEntity(location);
-            } catch (Throwable throwable) {
-                JavaPlugin.getProvidingPlugin(EntityFeature.class).getLogger().log(Level.WARNING, "There is an error when creating the entity", throwable);
-                completableFuture.completeExceptionally(throwable);
-                return;
-            }
-            if (entity == null) {
-                completableFuture.completeExceptionally(new NullPointerException("Entity is null"));
-                return;
-            }
-            entities.add(entity);
-            entityQueue.add(entity);
-            onSpawnConsumer.accept(entity);
-            completableFuture.complete(entity);
-        });
+        if (!isTaskRunning()) {
+            completableFuture.completeExceptionally(new IllegalStateException("The task is not running"));
+        } else {
+            spawnQueue.add(new SpawnRequest(completableFuture, onSpawnConsumer, location));
+        }
         return completableFuture;
     }
 
     /**
-     * Spawn the entity
+     * Request to spawn the entity
      *
      * @param location the location
      * @return the completable future of the entity, can be completed exceptionally if the entity cannot be created
@@ -138,6 +121,15 @@ public abstract class EntityFeature implements Feature {
     }
 
     /**
+     * Count the spawn requests
+     *
+     * @return the count
+     */
+    public long countEntityRequests() {
+        return spawnQueue.size();
+    }
+
+    /**
      * Add a predicate to clear the entity if it returns true
      *
      * @param predicate the predicate
@@ -156,25 +148,51 @@ public abstract class EntityFeature implements Feature {
     }
 
     /**
-     * Start the task to clear the entities
+     * Check if the task is running
+     *
+     * @return true if it is running
      */
-    public void startClearEntities() {
+    public boolean isTaskRunning() {
         Task currentTask = currentEntityTaskRef.get();
+        return currentTask != null && !currentTask.isCancelled();
+    }
 
-        if (currentEntityTaskRef.get() != null && !currentTask.isCancelled()) {
+    /**
+     * Start the task
+     */
+    public void startTask() {
+        if (isTaskRunning()) {
             return;
         }
 
         Task task = Scheduler.providingPlugin(EntityFeature.class).async().runTaskTimer(() -> {
-            Entity entity = entityQueue.poll();
-            if (entity == null) {
-                return;
+            if (clearAllEntities.get()) {
+                while (true) {
+                    SpawnRequest spawnRequest = spawnQueue.poll();
+                    if (spawnRequest == null) {
+                        break;
+                    }
+                    spawnRequest.completableFuture.completeExceptionally(new IllegalStateException("The task is cleared"));
+                }
+            } else {
+                SpawnRequest spawnRequest = spawnQueue.poll();
+                if (spawnRequest != null) {
+                    Scheduler.providingPlugin(EntityFeature.class).sync().runLocationTask(spawnRequest.location, () -> {
+                        Entity entity = createEntity(spawnRequest.location);
+                        if (entity == null) {
+                            spawnRequest.completableFuture.completeExceptionally(new IllegalStateException("Cannot create the entity"));
+                        } else {
+                            spawnRequest.onSpawnConsumer.accept(entity);
+                            entities.add(entity);
+                            entityQueue.add(entity);
+                            spawnRequest.completableFuture.complete(entity);
+                        }
+                    });
+                }
             }
 
-            if (!entity.isValid()) {
-                if (clearInvalidEntities.get() || clearAllEntities.get()) {
-                    entities.remove(entity);
-                }
+            Entity entity = entityQueue.poll();
+            if (entity == null || !entity.isValid()) {
                 return;
             }
 
@@ -209,30 +227,11 @@ public abstract class EntityFeature implements Feature {
     /**
      * Stop the task to clear the entities
      */
-    public void stopClearEntities() {
+    public void stopTask() {
         Task currentTask = currentEntityTaskRef.getAndSet(null);
         if (currentTask != null && !currentTask.isCancelled()) {
             currentTask.cancel();
         }
-    }
-
-    /**
-     * Set the value to clear all the entities when the task is running
-     *
-     * @param clearAllEntities true to clear all the entities
-     */
-    public void setClearAllEntities(boolean clearAllEntities) {
-        this.clearAllEntities.set(clearAllEntities);
-    }
-
-    /**
-     * Set the value to clear the invalid entities when the task is running.
-     * Set to false if you want to keep the invalid entities in the list.
-     *
-     * @param clearInvalidEntities true to clear the invalid entities
-     */
-    public void setClearInvalidEntities(boolean clearInvalidEntities) {
-        this.clearInvalidEntities.set(clearInvalidEntities);
     }
 
     /**
@@ -241,7 +240,7 @@ public abstract class EntityFeature implements Feature {
      * @return true if all the entities are cleared
      */
     public boolean isAllEntityCleared() {
-        return entityQueue.isEmpty();
+        return entityQueue.isEmpty() && spawnQueue.isEmpty();
     }
 
     /**
@@ -251,13 +250,27 @@ public abstract class EntityFeature implements Feature {
         entities.forEach(EntityUtil::despawnSafe);
         entities.clear();
         entityQueue.clear();
+        spawnQueue.forEach(spawnRequest -> spawnRequest.completableFuture.completeExceptionally(new IllegalStateException("The task is cleared")));
+        spawnQueue.clear();
     }
 
     @Override
     public void clear() {
-        stopClearEntities();
+        stopTask();
         clearAllEntityClearChecks();
         clearAllEntities();
         clearAllEntities.set(false);
+    }
+
+    private static class SpawnRequest {
+        final CompletableFuture<Entity> completableFuture;
+        final Consumer<Entity> onSpawnConsumer;
+        final Location location;
+
+        private SpawnRequest(CompletableFuture<Entity> completableFuture, Consumer<Entity> onSpawnConsumer, Location location) {
+            this.completableFuture = completableFuture;
+            this.onSpawnConsumer = onSpawnConsumer;
+            this.location = location;
+        }
     }
 }
