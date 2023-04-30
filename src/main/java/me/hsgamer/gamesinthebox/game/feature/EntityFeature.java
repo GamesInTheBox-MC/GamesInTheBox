@@ -60,28 +60,29 @@ public abstract class EntityFeature implements Feature {
      *
      * @param location        the location
      * @param onSpawnConsumer the consumer when the entity is spawned
-     * @return the completable future of the entity, can be completed exceptionally if the entity cannot be created
+     * @return the request
      */
-    public CompletableFuture<Entity> spawn(Location location, Consumer<Entity> onSpawnConsumer) {
+    public SpawnRequest spawn(Location location, Consumer<Entity> onSpawnConsumer) {
         if (location.getWorld() == null) {
-            return CompletableFuture.completedFuture(null);
+            return new SpawnRequest(CompletableFuture.completedFuture(null), onSpawnConsumer, location);
         }
         CompletableFuture<Entity> completableFuture = new CompletableFuture<>();
+        SpawnRequest spawnRequest = new SpawnRequest(completableFuture, onSpawnConsumer, location);
         if (!isTaskRunning()) {
             completableFuture.completeExceptionally(new IllegalStateException("The task is not running"));
         } else {
-            spawnRequestQueue.add(new SpawnRequest(completableFuture, onSpawnConsumer, location));
+            spawnRequestQueue.add(spawnRequest);
         }
-        return completableFuture;
+        return spawnRequest;
     }
 
     /**
      * Request to spawn the entity
      *
      * @param location the location
-     * @return the completable future of the entity, can be completed exceptionally if the entity cannot be created
+     * @return the request
      */
-    public CompletableFuture<Entity> spawn(Location location) {
+    public SpawnRequest spawn(Location location) {
         return spawn(location, entity -> {
         });
     }
@@ -178,10 +179,7 @@ public abstract class EntityFeature implements Feature {
                     spawnRequest.completableFuture.completeExceptionally(new IllegalStateException("The task is cleared"));
                 }
             } else {
-                int spawnAmount = spawnRequestPerTick.get();
-                if (spawnAmount <= 0) {
-                    spawnAmount = 1;
-                }
+                int spawnAmount = Math.max(spawnRequestPerTick.get(), 1);
                 for (int i = 0; i < spawnAmount; i++) {
                     SpawnRequest spawnRequest = spawnRequestQueue.poll();
                     if (spawnRequest == null) {
@@ -289,10 +287,22 @@ public abstract class EntityFeature implements Feature {
         clearAllEntities.set(false);
     }
 
-    private static class SpawnRequest {
-        final CompletableFuture<Entity> completableFuture;
-        final Consumer<Entity> onSpawnConsumer;
-        final Location location;
+    /**
+     * The spawn request for the {@link Entity}
+     */
+    public static class SpawnRequest {
+        /**
+         * The completable future to complete the {@link Entity}
+         */
+        public final CompletableFuture<Entity> completableFuture;
+        /**
+         * The consumer to accept the {@link Entity} when it is spawned
+         */
+        public final Consumer<Entity> onSpawnConsumer;
+        /**
+         * The location to spawn the {@link Entity}
+         */
+        public final Location location;
 
         private SpawnRequest(CompletableFuture<Entity> completableFuture, Consumer<Entity> onSpawnConsumer, Location location) {
             this.completableFuture = completableFuture;
