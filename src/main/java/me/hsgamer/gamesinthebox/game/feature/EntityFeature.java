@@ -25,6 +25,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
@@ -36,7 +37,7 @@ import java.util.stream.Stream;
  * The {@link Feature} for {@link Entity}
  */
 public abstract class EntityFeature implements Feature {
-    private final Set<Entity> entities = new HashSet<>();
+    private final Set<Entity> entities = ConcurrentHashMap.newKeySet();
     private final Queue<Entity> entityQueue = new ArrayDeque<>();
     private final Queue<SpawnRequest> spawnQueue = new ConcurrentLinkedQueue<>();
     private final AtomicReference<Task> currentEntityTaskRef = new AtomicReference<>(null);
@@ -232,6 +233,15 @@ public abstract class EntityFeature implements Feature {
         if (currentTask != null && !currentTask.isCancelled()) {
             currentTask.cancel();
         }
+    }
+
+    /**
+     * Set the value to clear all the entities when the task is running
+     *
+     * @param clearAllEntities true to clear all the entities
+     */
+    public void setClearAllEntities(boolean clearAllEntities) {
+        this.clearAllEntities.set(clearAllEntities);
     }
 
     /**
