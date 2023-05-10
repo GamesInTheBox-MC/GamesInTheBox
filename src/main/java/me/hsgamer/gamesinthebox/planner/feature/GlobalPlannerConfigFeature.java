@@ -18,7 +18,6 @@ package me.hsgamer.gamesinthebox.planner.feature;
 import me.hsgamer.gamesinthebox.planner.Planner;
 import me.hsgamer.hscore.bukkit.config.BukkitConfig;
 import me.hsgamer.hscore.config.Config;
-import me.hsgamer.hscore.config.PathString;
 import me.hsgamer.minigamecore.base.Feature;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -106,7 +105,6 @@ public class GlobalPlannerConfigFeature implements Feature {
             if (createIfNotExists) {
                 config = new BukkitConfig(new File(plannerFolder, plannerName + ".yml"));
                 config.setup();
-                config.set(new PathString("picker-type"), "random");
                 configMap.put(plannerName, config);
             } else {
                 return null;
