@@ -40,7 +40,6 @@ public class VariableFeature implements Feature {
     public VariableFeature(@NotNull Planner planner) {
         this.planner = planner;
         this.variableManager = new VariableManager();
-        variableManager.setReplaceAll(true);
     }
 
     @Override
