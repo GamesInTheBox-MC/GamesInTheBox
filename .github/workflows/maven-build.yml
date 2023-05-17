@@ -19,6 +19,8 @@ jobs:
         run: git fetch --unshallow --quiet
       - name: Build with Maven
         run: mvn -B deploy
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
