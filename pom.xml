@@ -300,6 +300,9 @@
                 <repository>
                     <id>github</id>
                     <url>https://maven.pkg.github.com/GamesInTheBox-MC/GamesInTheBox</url>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
                 </repository>
             </distributionManagement>
         </profile>
