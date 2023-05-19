@@ -37,7 +37,7 @@ public final class SetGameCommand extends SubCommand {
     private final GamesInTheBox plugin;
 
     public SetGameCommand(GamesInTheBox plugin) {
-        super("setgame", "Set the next game in the planner", "/<label> setgame <planner> <game>", Permissions.SET_GAME.getName(), true);
+        super("setgame", "Set the next arena in the planner", "/<label> setgame <planner> <arena>", Permissions.SET_GAME.getName(), true);
         this.plugin = plugin;
     }
 

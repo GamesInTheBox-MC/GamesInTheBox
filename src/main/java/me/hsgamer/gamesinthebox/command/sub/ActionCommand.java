@@ -32,13 +32,13 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- * The command to perform actions in the game
+ * The command to perform actions in the arena
  */
 public final class ActionCommand extends SubCommand {
     private final GamesInTheBox plugin;
 
     public ActionCommand(GamesInTheBox plugin) {
-        super("action", "Perform actions in the current game of the planner", "/<label> action <planner> <action> [args]", Permissions.ACTION.getName(), true);
+        super("action", "Perform actions in the current arena of the planner", "/<label> action <planner> <action> [args]", Permissions.ACTION.getName(), true);
         this.plugin = plugin;
     }
 

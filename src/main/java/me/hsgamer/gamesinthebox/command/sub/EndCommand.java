@@ -30,13 +30,13 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- * The command to end the game
+ * The command to end the arena
  */
 public final class EndCommand extends SubCommand {
     private final GamesInTheBox plugin;
 
     public EndCommand(GamesInTheBox plugin) {
-        super("end", "Force the planner to end the current game", "/<label> end <planner>", Permissions.END.getName(), true);
+        super("end", "Force the planner to end the current arena", "/<label> end <planner>", Permissions.END.getName(), true);
         this.plugin = plugin;
     }
 

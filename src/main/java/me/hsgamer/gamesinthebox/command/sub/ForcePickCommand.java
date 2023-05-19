@@ -30,13 +30,13 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- * The command to force the planner to pick the next game
+ * The command to force the planner to pick the next arena
  */
 public final class ForcePickCommand extends SubCommand {
     private final GamesInTheBox plugin;
 
     public ForcePickCommand(GamesInTheBox plugin) {
-        super("forcepick", "Force the planner to pick the next game", "/<label> forcepick <planner>", Permissions.FORCE_PICK.getName(), true);
+        super("forcepick", "Force the planner to pick the next arena", "/<label> forcepick <planner>", Permissions.FORCE_PICK.getName(), true);
         this.plugin = plugin;
     }
 
