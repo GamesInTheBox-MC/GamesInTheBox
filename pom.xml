@@ -13,7 +13,7 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <core.version>4.3.4</core.version>
+        <core.version>4.3.5</core.version>
         <minigamecore.version>2.2.2</minigamecore.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
