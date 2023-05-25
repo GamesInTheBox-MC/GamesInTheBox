@@ -264,6 +264,11 @@ public class SimplePointFeature extends PointFeature {
                 }
 
                 @Override
+                public @NotNull String getArgsUsage() {
+                    return "<number> <value>";
+                }
+
+                @Override
                 public @NotNull String getDescription() {
                     return "Set the point of the point value";
                 }
