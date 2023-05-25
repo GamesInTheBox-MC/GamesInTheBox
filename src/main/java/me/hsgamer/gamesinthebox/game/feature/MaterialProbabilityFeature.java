@@ -59,7 +59,9 @@ public abstract class MaterialProbabilityFeature implements Feature {
     }
 
     /**
-     * Check if the initial collection is empty
+     * Check if the initial collection is empty.
+     * Normally the collection would not be empty. Even if it is, it will be filled with {@link XMaterial#STONE}.
+     * This method is used to check if the collection is empty before the game starts.
      *
      * @return true if it is
      */
