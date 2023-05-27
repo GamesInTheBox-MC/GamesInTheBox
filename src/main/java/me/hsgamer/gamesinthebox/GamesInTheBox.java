@@ -31,6 +31,7 @@ import me.hsgamer.gamesinthebox.manager.PluginExpansionManager;
 import me.hsgamer.hscore.bukkit.baseplugin.BasePlugin;
 import me.hsgamer.hscore.bukkit.config.BukkitConfig;
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
+import me.hsgamer.hscore.checker.github.GithubReleaseChecker;
 import me.hsgamer.hscore.config.annotation.converter.manager.DefaultConverterManager;
 import me.hsgamer.hscore.config.proxy.ConfigGenerator;
 import org.bukkit.Bukkit;
@@ -87,6 +88,24 @@ public final class GamesInTheBox extends BasePlugin {
     public void postEnable() {
         expansionManager.enableExpansions();
         plannerManager.postInit();
+
+        if (getDescription().getVersion().contains("SNAPSHOT")) {
+            getLogger().warning("You are using the development version");
+            getLogger().warning("This is not ready for production");
+            getLogger().warning("Use in your own risk");
+        } else {
+            new GithubReleaseChecker("GamesInTheBox-MC/GamesInTheBox").getVersion().thenAccept(output -> {
+                if (output.startsWith("Error when getting version:")) {
+                    getLogger().warning(output);
+                } else if (this.getDescription().getVersion().equalsIgnoreCase(output)) {
+                    getLogger().info("You are using the latest version");
+                } else {
+                    getLogger().warning("There is an available update");
+                    getLogger().warning("New Version: " + output);
+                    getLogger().warning("Download it at: https://github.com/GamesInTheBox-MC/GamesInTheBox/releases/tag/" + output);
+                }
+            });
+        }
     }
 
     @Override
