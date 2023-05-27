@@ -40,6 +40,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
 /**
  * The main class of the plugin
@@ -94,8 +95,10 @@ public final class GamesInTheBox extends BasePlugin {
             getLogger().warning("This is not ready for production");
             getLogger().warning("Use in your own risk");
         } else {
-            new GithubReleaseChecker("GamesInTheBox-MC/GamesInTheBox").getVersion().thenAccept(output -> {
-                if (output.startsWith("Error when getting version:")) {
+            new GithubReleaseChecker("GamesInTheBox-MC/GamesInTheBox").getVersion().whenComplete((output, throwable) -> {
+                if (throwable != null) {
+                    getLogger().log(Level.WARNING, "Cannot check for updates", throwable);
+                } else if (output.startsWith("Error when getting version:")) {
                     getLogger().warning(output);
                 } else if (this.getDescription().getVersion().equalsIgnoreCase(output)) {
                     getLogger().info("You are using the latest version");
