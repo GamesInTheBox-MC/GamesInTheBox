@@ -78,6 +78,10 @@
                                     <pattern>com.cryptomorin.xseries</pattern>
                                     <shadedPattern>me.hsgamer.gamesinthebox.xseries</shadedPattern>
                                 </relocation>
+                                <relocation>
+                                    <pattern>org.bstats</pattern>
+                                    <shadedPattern>me.hsgamer.gamesinthebox.bstats</shadedPattern>
+                                </relocation>
                             </relocations>
                         </configuration>
                     </execution>
@@ -282,6 +286,11 @@
             <groupId>com.lewdev</groupId>
             <artifactId>probability-lib</artifactId>
             <version>0.10</version>
+        </dependency>
+        <dependency>
+            <groupId>org.bstats</groupId>
+            <artifactId>bstats-bukkit</artifactId>
+            <version>3.0.2</version>
         </dependency>
 
         <dependency>

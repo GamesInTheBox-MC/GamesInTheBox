@@ -34,10 +34,13 @@ import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import me.hsgamer.hscore.checker.github.GithubReleaseChecker;
 import me.hsgamer.hscore.config.annotation.converter.manager.DefaultConverterManager;
 import me.hsgamer.hscore.config.proxy.ConfigGenerator;
+import org.bstats.bukkit.Metrics;
+import org.bstats.charts.AdvancedPie;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -83,6 +86,13 @@ public final class GamesInTheBox extends BasePlugin {
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             new PlaceholderHook(this).register();
         }
+
+        Metrics metrics = new Metrics(this, 18581);
+        metrics.addCustomChart(new AdvancedPie("expansion", () -> {
+            Map<String, Integer> map = new HashMap<>();
+            expansionManager.getEnabledExpansions().forEach((name, expansion) -> map.put(name, 1));
+            return map;
+        }));
     }
 
     @Override
