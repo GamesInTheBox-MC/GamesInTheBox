@@ -52,7 +52,7 @@ public final class UpdateUtil {
                 if (throwable != null) {
                     logger.log(LogLevel.WARN, "Cannot check for updates", throwable);
                 } else if (!version.equalsIgnoreCase(output)) {
-                    logger.log(LogLevel.WARN, "There is an available update. Download it at: https://github.com/GamesInTheBox-MC/GamesInTheBox/releases/tag/" + output);
+                    logger.log(LogLevel.WARN, "There is an available update. New version: " + output);
                 }
             });
         }
