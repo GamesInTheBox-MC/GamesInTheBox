@@ -54,7 +54,7 @@ public class SaveCommand extends GameEditorCommand {
             return;
         }
 
-        plannerConfig.addDefault(new PathString("picker-type"), "random");
+        plannerConfig.setIfAbsent(new PathString("picker-type"), "random");
 
         plannerConfig.set(path, null);
         plannerConfig.set(path.append(new PathString("type")), gameType);
