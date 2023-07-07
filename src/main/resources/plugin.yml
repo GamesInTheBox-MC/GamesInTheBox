@@ -7,7 +7,6 @@ authors: [ HSGamer ]
 softdepend:
   - DecentHolograms
   - HolographicDisplays
-  - CMI
   - PlaceholderAPI
   - WorldEdit
   - FastAsyncWorldEdit

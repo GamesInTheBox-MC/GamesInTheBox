@@ -15,6 +15,7 @@
         <java.version>1.8</java.version>
         <core.version>4.3.10</core.version>
         <minigamecore.version>2.2.2</minigamecore.version>
+        <unihologram.version>2.1.0</unihologram.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -269,9 +270,20 @@
 
         <dependency>
             <groupId>me.hsgamer</groupId>
-            <artifactId>uni-hologram-spigot-bundle</artifactId>
-            <version>1.6.0</version>
+            <artifactId>uni-hologram-spigot-common</artifactId>
+            <version>${unihologram.version}</version>
         </dependency>
+        <dependency>
+            <groupId>me.hsgamer</groupId>
+            <artifactId>uni-hologram-spigot-holographicdisplays</artifactId>
+            <version>${unihologram.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>me.hsgamer</groupId>
+            <artifactId>uni-hologram-spigot-decentholograms</artifactId>
+            <version>${unihologram.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>me.hsgamer</groupId>
             <artifactId>block-util</artifactId>
@@ -325,6 +337,16 @@
                     </snapshots>
                 </repository>
             </distributionManagement>
+        </profile>
+        <profile>
+            <id>local-hologram</id>
+            <dependencies>
+                <dependency>
+                    <groupId>me.hsgamer</groupId>
+                    <artifactId>uni-hologram-spigot-vanilla</artifactId>
+                    <version>${unihologram.version}</version>
+                </dependency>
+            </dependencies>
         </profile>
     </profiles>
 </project>
