@@ -16,6 +16,7 @@
 package me.hsgamer.gamesinthebox;
 
 import com.google.common.reflect.TypeToken;
+import me.hsgamer.blockutil.abstraction.BlockHandlerSettings;
 import me.hsgamer.gamesinthebox.command.EditorCommand;
 import me.hsgamer.gamesinthebox.command.MainCommand;
 import me.hsgamer.gamesinthebox.config.MainConfig;
@@ -69,7 +70,7 @@ public final class GamesInTheBox extends BasePlugin {
 
     @Override
     public void load() {
-        mainConfig.updateBlockUtilSettings();
+        BlockHandlerSettings.addAll(mainConfig.getBlockUtilSettings());
 
         MessageUtils.setPrefix(messageConfig::getPrefix);
     }

@@ -15,8 +15,10 @@
 */
 package me.hsgamer.gamesinthebox.config;
 
-import me.hsgamer.blockutil.abstraction.BlockHandlerSettings;
 import me.hsgamer.hscore.config.annotation.ConfigPath;
+
+import java.util.Collections;
+import java.util.Map;
 
 /**
  * The main config
@@ -43,64 +45,13 @@ public interface MainConfig {
     }
 
     /**
-     * Should BlockUtil use FastAsyncWorldEdit if found?
+     * Get the settings for BlockUtil
      *
-     * @return true if it should
+     * @return the map of the settings
      */
-    @ConfigPath({"block-util", "use-fawe"})
-    default boolean isBlockUtilUseFawe() {
-        return BlockHandlerSettings.USE_FAWE.get();
-    }
-
-    /**
-     * Should BlockUtil use WorldEdit if found?
-     *
-     * @return true if it should
-     */
-    @ConfigPath({"block-util", "use-we"})
-    default boolean isBlockUtilUseWe() {
-        return BlockHandlerSettings.USE_WE.get();
-    }
-
-    /**
-     * Get the max blocks that BlockUtil can handle
-     *
-     * @return the max blocks
-     */
-    @ConfigPath({"block-util", "max-blocks"})
-    default int getBlockUtilMaxBlocks() {
-        return BlockHandlerSettings.MAX_BLOCKS.get();
-    }
-
-    /**
-     * Get the blocks per tick for BlockUtil
-     *
-     * @return the blocks per tick
-     */
-    @ConfigPath({"block-util", "blocks-per-tick"})
-    default int getBlockUtilBlocksPerTick() {
-        return BlockHandlerSettings.BLOCKS_PER_TICK.get();
-    }
-
-    /**
-     * Get the delay between each block placed by BlockUtil
-     *
-     * @return the delay
-     */
-    @ConfigPath({"block-util", "block-delay"})
-    default long getBlockUtilDelay() {
-        return BlockHandlerSettings.BLOCK_DELAY.get();
-    }
-
-    /**
-     * Update the BlockUtil settings
-     */
-    default void updateBlockUtilSettings() {
-        BlockHandlerSettings.USE_FAWE.set(isBlockUtilUseFawe());
-        BlockHandlerSettings.USE_WE.set(isBlockUtilUseWe());
-        BlockHandlerSettings.MAX_BLOCKS.set(getBlockUtilMaxBlocks());
-        BlockHandlerSettings.BLOCKS_PER_TICK.set(getBlockUtilBlocksPerTick());
-        BlockHandlerSettings.BLOCK_DELAY.set(getBlockUtilDelay());
+    @ConfigPath("block-util")
+    default Map<String, String> getBlockUtilSettings() {
+        return Collections.emptyMap();
     }
 
     /**
