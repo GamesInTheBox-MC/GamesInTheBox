@@ -16,12 +16,12 @@
 package me.hsgamer.gamesinthebox.planner.feature;
 
 import me.hsgamer.gamesinthebox.planner.Planner;
-import me.hsgamer.gamesinthebox.replacement.ReplacementHandler;
+import me.hsgamer.hscore.common.StringReplacer;
 import me.hsgamer.minigamecore.base.Feature;
-import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.UUID;
 import java.util.function.BiFunction;
 
 /**
@@ -29,7 +29,7 @@ import java.util.function.BiFunction;
  * The replacement query will be in the format of {@code [prefix]_[name]}.
  * The prefix can be {@code game}, {@code picker} or {@code planner}.
  */
-public class ReplacementFeature implements Feature, ReplacementHandler {
+public class ReplacementFeature implements Feature, StringReplacer {
     private final Planner planner;
 
     /**
@@ -41,39 +41,39 @@ public class ReplacementFeature implements Feature, ReplacementHandler {
         this.planner = planner;
     }
 
-    private String query(String query, BiFunction<ReplacementHandler, String, String> function) {
+    private String query(String query, BiFunction<StringReplacer, String, String> function) {
         String name = null;
-        ReplacementHandler replacementHandler = null;
+        StringReplacer replacer = null;
 
         String lowerCaseQuery = query.toLowerCase();
         if (lowerCaseQuery.startsWith("game_")) {
             name = query.substring(5);
-            replacementHandler = planner.getFeature(GameRunnerFeature.class).getCurrentGameArena();
+            replacer = planner.getFeature(GameRunnerFeature.class).getCurrentGameArena();
         } else if (lowerCaseQuery.startsWith("picker_")) {
             name = query.substring(7);
-            replacementHandler = planner.getFeature(GamePickerFeature.class).getGamePicker();
+            replacer = planner.getFeature(GamePickerFeature.class).getGamePicker();
         } else if (lowerCaseQuery.startsWith("planner_")) {
             name = query.substring(8);
-            replacementHandler = planner;
+            replacer = planner;
         }
 
         if (name == null) {
             name = "";
         }
-        if (replacementHandler == null) {
-            replacementHandler = ReplacementHandler.EMPTY;
+        if (replacer == null) {
+            replacer = StringReplacer.DUMMY;
         }
 
-        return function.apply(replacementHandler, name);
+        return function.apply(replacer, name);
     }
 
     @Override
     public @Nullable String replace(@NotNull String query) {
-        return query(query, ReplacementHandler::replace);
+        return query(query, StringReplacer::replace);
     }
 
     @Override
-    public @Nullable String replace(@NotNull OfflinePlayer player, @NotNull String query) {
-        return query(query, (replacementHandler, name) -> replacementHandler.replace(player, name));
+    public @Nullable String replace(@NotNull String original, @NotNull UUID uuid) {
+        return query(original, (replacementHandler, name) -> replacementHandler.replace(original, uuid));
     }
 }

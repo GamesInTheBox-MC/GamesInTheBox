@@ -86,6 +86,6 @@ public class PlaceholderHook extends PlaceholderExpansion {
             return null;
         }
 
-        return player == null ? feature.replace(query) : feature.replace(player, query);
+        return feature.tryReplace(query, player != null ? player.getUniqueId() : null);
     }
 }

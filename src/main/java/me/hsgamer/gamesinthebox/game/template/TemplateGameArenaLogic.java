@@ -19,7 +19,7 @@ import me.hsgamer.gamesinthebox.game.template.state.EndingState;
 import me.hsgamer.gamesinthebox.game.template.state.IdlingState;
 import me.hsgamer.gamesinthebox.game.template.state.InGameState;
 import me.hsgamer.gamesinthebox.game.template.state.WaitingState;
-import me.hsgamer.gamesinthebox.replacement.ReplacementHandler;
+import me.hsgamer.hscore.common.StringReplacer;
 import me.hsgamer.minigamecore.base.Feature;
 import me.hsgamer.minigamecore.base.Initializer;
 import me.hsgamer.minigamecore.implementation.feature.TimerFeature;
@@ -32,7 +32,7 @@ import java.util.List;
 /**
  * The logic of a {@link TemplateGameArena}
  */
-public abstract class TemplateGameArenaLogic implements Initializer, ReplacementHandler {
+public abstract class TemplateGameArenaLogic implements Initializer, StringReplacer {
     /**
      * The arena
      */

@@ -19,16 +19,14 @@ import me.hsgamer.gamesinthebox.planner.Planner;
 import me.hsgamer.hscore.common.StringReplacer;
 import me.hsgamer.hscore.variable.VariableManager;
 import me.hsgamer.minigamecore.base.Feature;
-import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
 /**
  * The {@link Feature} for replacing variables
  */
-public class VariableFeature implements Feature {
+public class VariableFeature implements Feature, StringReplacer {
     private final Planner planner;
     private final VariableManager variableManager;
 
@@ -45,29 +43,16 @@ public class VariableFeature implements Feature {
     @Override
     public void postInit() {
         ReplacementFeature replacementFeature = planner.getFeature(ReplacementFeature.class);
-        variableManager.register("", StringReplacer.of(replacementFeature::replace, (original, uuid) -> replacementFeature.replace(Bukkit.getOfflinePlayer(uuid), original)));
+        variableManager.register("", replacementFeature);
     }
 
-    /**
-     * Replace the variables
-     *
-     * @param input the input
-     * @param uuid  the uuid
-     * @return the replaced string
-     */
-    @NotNull
-    public String replace(@NotNull String input, @Nullable UUID uuid) {
-        return variableManager.setVariables(input, uuid);
+    @Override
+    public @NotNull String replace(@NotNull String original) {
+        return variableManager.setVariables(original, null);
     }
 
-    /**
-     * Replace the variables
-     *
-     * @param input the input
-     * @return the replaced string
-     */
-    @NotNull
-    public String replace(@NotNull String input) {
-        return replace(input, null);
+    @Override
+    public @NotNull String replace(@NotNull String original, @NotNull UUID uuid) {
+        return variableManager.setVariables(original, uuid);
     }
 }

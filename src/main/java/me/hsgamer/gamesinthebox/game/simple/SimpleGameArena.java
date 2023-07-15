@@ -175,18 +175,18 @@ public abstract class SimpleGameArena extends GameArena {
     }
 
     @Override
-    public @Nullable String replace(@NotNull OfflinePlayer player, @NotNull String input) {
+    public @Nullable String replace(@NotNull String input, @NotNull UUID uuid) {
         if (input.equalsIgnoreCase("point")) {
             return Optional.ofNullable(getFeature(PointFeature.class))
-                    .map(pointFeature -> pointFeature.getPoint(player.getUniqueId()))
+                    .map(pointFeature -> pointFeature.getPoint(uuid))
                     .map(Objects::toString)
                     .orElse("N/A");
         } else if (input.equalsIgnoreCase("top")) {
             return Optional.ofNullable(getFeature(TopFeature.class))
-                    .map(pointFeature -> pointFeature.getTopIndex(player.getUniqueId()) + 1)
+                    .map(pointFeature -> pointFeature.getTopIndex(uuid) + 1)
                     .map(Objects::toString)
                     .orElse("N/A");
         }
-        return super.replace(player, input);
+        return super.replace(input, uuid);
     }
 }

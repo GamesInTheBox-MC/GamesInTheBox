@@ -16,7 +16,7 @@
 package me.hsgamer.gamesinthebox.picker;
 
 import me.hsgamer.gamesinthebox.game.GameArena;
-import me.hsgamer.gamesinthebox.replacement.ReplacementHandler;
+import me.hsgamer.hscore.common.StringReplacer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -25,7 +25,7 @@ import java.util.Map;
 /**
  * The game picker that picks a {@link GameArena}
  */
-public interface GamePicker extends ReplacementHandler {
+public interface GamePicker extends StringReplacer {
     /**
      * The game picker that does nothing
      */

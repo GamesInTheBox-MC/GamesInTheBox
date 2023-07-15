@@ -26,7 +26,6 @@ import me.hsgamer.gamesinthebox.planner.feature.VariableFeature;
 import me.hsgamer.gamesinthebox.util.ActionBarUtil;
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import me.hsgamer.minigamecore.base.Feature;
-import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -114,12 +113,12 @@ public class TemplateGameArena extends SimpleGameArena {
     }
 
     @Override
-    public @Nullable String replace(@NotNull OfflinePlayer player, @NotNull String input) {
-        String output = super.replace(player, input);
+    public @Nullable String replace(@NotNull String input, @NotNull UUID uuid) {
+        String output = super.replace(input, uuid);
         if (output == null) {
             output = Optional.ofNullable(getFeature(ArenaLogicFeature.class))
                     .map(ArenaLogicFeature::getArenaLogic)
-                    .map(arenaLogic -> arenaLogic.replace(player, input))
+                    .map(arenaLogic -> arenaLogic.replace(input, uuid))
                     .orElse(null);
         }
         return output;
