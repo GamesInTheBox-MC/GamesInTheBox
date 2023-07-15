@@ -8,5 +8,4 @@ softdepend:
   - DecentHolograms
   - HolographicDisplays
   - PlaceholderAPI
-  - WorldEdit
   - FastAsyncWorldEdit
