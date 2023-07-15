@@ -351,7 +351,7 @@
             </distributionManagement>
         </profile>
         <profile>
-            <id>local-hologram</id>
+            <id>local</id>
             <dependencies>
                 <dependency>
                     <groupId>me.hsgamer</groupId>
