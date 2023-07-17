@@ -15,6 +15,7 @@
 */
 package me.hsgamer.gamesinthebox.config;
 
+import me.hsgamer.hscore.config.annotation.Comment;
 import me.hsgamer.hscore.config.annotation.ConfigPath;
 
 import java.util.Collections;
@@ -30,6 +31,7 @@ public interface MainConfig {
      * @return the interval
      */
     @ConfigPath({"planner", "interval"})
+    @Comment("The delay between Planner's tick")
     default long getPlannerInterval() {
         return 20L;
     }
@@ -40,6 +42,7 @@ public interface MainConfig {
      * @return true if it should
      */
     @ConfigPath({"planner", "async"})
+    @Comment("Should the planner run asynchronously ?")
     default boolean isPlannerAsync() {
         return true;
     }
@@ -50,6 +53,7 @@ public interface MainConfig {
      * @return the map of the settings
      */
     @ConfigPath("block-util")
+    @Comment("Settings for games that involve blocks")
     default Map<String, String> getBlockUtilSettings() {
         return Collections.emptyMap();
     }
