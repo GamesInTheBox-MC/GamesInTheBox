@@ -15,7 +15,7 @@
         <java.version>1.8</java.version>
         <core.version>4.3.10</core.version>
         <minigamecore.version>2.2.2</minigamecore.version>
-        <unihologram.version>2.1.1</unihologram.version>
+        <unihologram.version>2.2.0</unihologram.version>
         <blockutil.version>3.0.1</blockutil.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
