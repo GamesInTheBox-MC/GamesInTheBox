@@ -271,7 +271,7 @@
 
         <dependency>
             <groupId>me.hsgamer</groupId>
-            <artifactId>uni-hologram-spigot-common</artifactId>
+            <artifactId>uni-hologram-spigot-bundle</artifactId>
             <version>${unihologram.version}</version>
         </dependency>
         <dependency>
@@ -349,16 +349,6 @@
                     </snapshots>
                 </repository>
             </distributionManagement>
-        </profile>
-        <profile>
-            <id>local</id>
-            <dependencies>
-                <dependency>
-                    <groupId>me.hsgamer</groupId>
-                    <artifactId>uni-hologram-spigot-vanilla</artifactId>
-                    <version>${unihologram.version}</version>
-                </dependency>
-            </dependencies>
         </profile>
     </profiles>
 </project>
