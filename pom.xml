@@ -284,6 +284,11 @@
             <artifactId>uni-hologram-spigot-decentholograms</artifactId>
             <version>${unihologram.version}</version>
         </dependency>
+        <dependency>
+            <groupId>me.hsgamer</groupId>
+            <artifactId>uni-hologram-spigot-vanilla</artifactId>
+            <version>${unihologram.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>me.hsgamer</groupId>
