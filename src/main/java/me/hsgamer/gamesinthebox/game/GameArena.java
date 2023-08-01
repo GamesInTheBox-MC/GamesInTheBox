@@ -48,7 +48,7 @@ public abstract class GameArena extends HSCoreBukkitArena implements StringRepla
      * @param planner the planner that the arena belongs to
      */
     protected GameArena(@NotNull String name, @NotNull Game game, @NotNull Planner planner) {
-        super(planner.getName() + "-" + name, game);
+        super(planner.getName() + "-" + name, game, planner);
         this.localName = name;
         this.game = game;
         this.planner = planner;
@@ -113,22 +113,5 @@ public abstract class GameArena extends HSCoreBukkitArena implements StringRepla
         List<Feature> features = new ArrayList<>();
         features.add(new GameConfigFeature(this));
         return features;
-    }
-
-    /**
-     * {@inheritDoc}
-     * If the feature is not found in the {@link GameArena}, it will get from the {@link Planner} that the arena belongs to.
-     *
-     * @param featureClass the class of the feature
-     * @param <T>          the type of the feature
-     * @return the feature
-     */
-    @Override
-    public <T extends Feature> T getFeature(Class<T> featureClass) {
-        T feature = super.getFeature(featureClass);
-        if (feature == null) {
-            feature = planner.getFeature(featureClass);
-        }
-        return feature;
     }
 }

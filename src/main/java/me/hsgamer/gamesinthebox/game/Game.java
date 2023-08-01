@@ -16,7 +16,7 @@
 package me.hsgamer.gamesinthebox.game;
 
 import me.hsgamer.gamesinthebox.planner.Planner;
-import me.hsgamer.minigamecore.base.ArenaManager;
+import me.hsgamer.minigamecore.manager.ArenaManager;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
