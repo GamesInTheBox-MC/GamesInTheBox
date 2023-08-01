@@ -16,8 +16,8 @@
 package me.hsgamer.gamesinthebox.util;
 
 import me.hsgamer.minigamecore.base.Arena;
-import me.hsgamer.minigamecore.base.extra.DisplayName;
 import me.hsgamer.minigamecore.bukkit.extra.ColoredDisplayName;
+import me.hsgamer.minigamecore.extra.DisplayName;
 import org.jetbrains.annotations.NotNull;
 
 /**
