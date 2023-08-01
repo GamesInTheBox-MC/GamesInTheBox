@@ -74,6 +74,6 @@ public class ReplacementFeature implements Feature, StringReplacer {
 
     @Override
     public @Nullable String replace(@NotNull String original, @NotNull UUID uuid) {
-        return query(original, (replacementHandler, name) -> replacementHandler.replace(original, uuid));
+        return query(original, (replacementHandler, name) -> replacementHandler.replace(name, uuid));
     }
 }
