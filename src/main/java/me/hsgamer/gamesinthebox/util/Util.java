@@ -25,6 +25,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 /**
  * The common utilities
@@ -54,6 +55,18 @@ public final class Util {
         MemoryConfiguration section = new MemoryConfiguration();
         section.addDefaults(values);
         return section;
+    }
+
+    /**
+     * Handle a section and return the values of it
+     *
+     * @param consumer the consumer
+     * @return the values of the section
+     */
+    public static Map<String, Object> handleSection(Consumer<ConfigurationSection> consumer) {
+        ConfigurationSection section = new MemoryConfiguration();
+        consumer.accept(section);
+        return section.getValues(false);
     }
 
     /**

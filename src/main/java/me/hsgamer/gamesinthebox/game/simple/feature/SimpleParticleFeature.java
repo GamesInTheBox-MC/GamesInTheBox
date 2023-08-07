@@ -28,7 +28,6 @@ import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import org.bukkit.Particle;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
@@ -144,9 +143,9 @@ public class SimpleParticleFeature extends ParticleFeature {
 
                 @Override
                 public Map<String, Object> toPathValueMap(@NotNull CommandSender sender) {
-                    ConfigurationSection section = new MemoryConfiguration();
-                    ParticleDisplay.serialize(display, section);
-                    return section.getValues(false).entrySet().stream()
+                    return Util.handleSection(section -> ParticleDisplay.serialize(display, section))
+                            .entrySet()
+                            .stream()
                             .collect(Collectors.toMap(entry -> path + "." + entry.getKey(), Map.Entry::getValue));
                 }
             };
