@@ -28,10 +28,10 @@ import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import org.bukkit.Particle;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.reflect.Field;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -108,12 +108,7 @@ public class SimpleParticleFeature extends ParticleFeature {
         private final String path;
         private final String editorName;
         private final String actionName;
-        private Particle particle;
-        private Integer count;
-        private Double offsetX;
-        private Double offsetY;
-        private Double offsetZ;
-        private Double extra;
+        private ParticleDisplay display = new ParticleDisplay();
 
         private Editor(String path, String editorName, String actionName) {
             this.path = path;
@@ -131,22 +126,15 @@ public class SimpleParticleFeature extends ParticleFeature {
                 @Override
                 public void sendStatus(@NotNull CommandSender sender) {
                     MessageUtils.sendMessage(sender, "&6&l" + editorName.toUpperCase(Locale.ROOT));
-                    MessageUtils.sendMessage(sender, "&eParticle: &f" + (particle == null ? "Default" : particle.name()));
-                    MessageUtils.sendMessage(sender, "&eCount: &f" + (count == null ? "Default" : count));
-                    MessageUtils.sendMessage(sender, "&eOffset X: &f" + (offsetX == null ? "Default" : offsetX));
-                    MessageUtils.sendMessage(sender, "&eOffset Y: &f" + (offsetY == null ? "Default" : offsetY));
-                    MessageUtils.sendMessage(sender, "&eOffset Z: &f" + (offsetZ == null ? "Default" : offsetZ));
-                    MessageUtils.sendMessage(sender, "&eExtra: &f" + (extra == null ? "Default" : extra));
+                    MessageUtils.sendMessage(sender, "&eParticle: &f" + display.getParticle().name());
+                    MessageUtils.sendMessage(sender, "&eCount: &f" + display.count);
+                    MessageUtils.sendMessage(sender, "&eOffset: &f" + Optional.ofNullable(display.getOffset()).map(vector -> vector.getX() + "," + vector.getY() + "," + vector.getZ()).orElse("DEFAULT"));
+                    MessageUtils.sendMessage(sender, "&eExtra: &f" + display.extra);
                 }
 
                 @Override
                 public void reset(@NotNull CommandSender sender) {
-                    particle = null;
-                    count = null;
-                    offsetX = null;
-                    offsetY = null;
-                    offsetZ = null;
-                    extra = null;
+                    display = new ParticleDisplay();
                 }
 
                 @Override
@@ -156,26 +144,10 @@ public class SimpleParticleFeature extends ParticleFeature {
 
                 @Override
                 public Map<String, Object> toPathValueMap(@NotNull CommandSender sender) {
-                    Map<String, Object> map = new LinkedHashMap<>();
-                    if (particle != null) {
-                        map.put(path + ".particle", particle.name());
-                    }
-                    if (count != null) {
-                        map.put(path + ".count", count);
-                    }
-                    if (offsetX != null || offsetY != null || offsetZ != null) {
-                        map.put(path + ".offset",
-                                String.join(",",
-                                        offsetX == null ? "0" : offsetX.toString(),
-                                        offsetY == null ? "0" : offsetY.toString(),
-                                        offsetZ == null ? "0" : offsetZ.toString()
-                                )
-                        );
-                    }
-                    if (extra != null) {
-                        map.put(path + ".extra", extra);
-                    }
-                    return map;
+                    ConfigurationSection section = new MemoryConfiguration();
+                    ParticleDisplay.serialize(display, section);
+                    return section.getValues(false).entrySet().stream()
+                            .collect(Collectors.toMap(entry -> path + "." + entry.getKey(), Map.Entry::getValue));
                 }
             };
         }
@@ -190,15 +162,13 @@ public class SimpleParticleFeature extends ParticleFeature {
 
             String particleName = actionName.isEmpty() ? "set-particle" : actionName + "-set-particle";
             String countName = actionName.isEmpty() ? "set-particle-count" : actionName + "-set-particle-count";
-            String offsetXName = actionName.isEmpty() ? "set-particle-offset-x" : actionName + "-set-particle-offset-x";
-            String offsetYName = actionName.isEmpty() ? "set-particle-offset-y" : actionName + "-set-particle-offset-y";
-            String offsetZName = actionName.isEmpty() ? "set-particle-offset-z" : actionName + "-set-particle-offset-z";
+            String offsetName = actionName.isEmpty() ? "set-particle-offset" : actionName + "-set-particle-offset";
             String extraName = actionName.isEmpty() ? "set-particle-extra" : actionName + "-set-particle-extra";
 
             map.put(particleName, new ValueAction<Particle>() {
                 @Override
                 protected boolean performAction(@NotNull CommandSender sender, @NotNull Particle value, String... args) {
-                    particle = value;
+                    display.withParticle(value);
                     return true;
                 }
 
@@ -234,7 +204,7 @@ public class SimpleParticleFeature extends ParticleFeature {
             map.put(countName, new NumberAction() {
                 @Override
                 protected boolean performAction(@NotNull CommandSender sender, @NotNull Number value, String... args) {
-                    count = value.intValue();
+                    display.withCount(value.intValue());
                     return true;
                 }
 
@@ -248,61 +218,46 @@ public class SimpleParticleFeature extends ParticleFeature {
                     return Arrays.asList("1", "2", "3", "4", "5", "6", "7", "8", "9", "10");
                 }
             });
-            map.put(offsetXName, new NumberAction() {
+            map.put(offsetName, new ValueAction<Vector>() {
                 @Override
-                protected boolean performAction(@NotNull CommandSender sender, @NotNull Number value, String... args) {
-                    offsetX = value.doubleValue();
+                protected boolean performAction(@NotNull CommandSender sender, @NotNull Vector value, String... args) {
+                    display.offset(value);
                     return true;
                 }
 
                 @Override
-                public @NotNull String getDescription() {
-                    return "Set the particle offset X of the " + editorName;
+                protected int getValueArgCount() {
+                    return 3;
+                }
+
+                @Override
+                protected Optional<Vector> parseValue(@NotNull CommandSender sender, String... args) {
+                    try {
+                        return Optional.of(new Vector(Double.parseDouble(args[0]), Double.parseDouble(args[1]), Double.parseDouble(args[2])));
+                    } catch (Exception e) {
+                        return Optional.empty();
+                    }
                 }
 
                 @Override
                 protected @NotNull List<String> getValueArgs(@NotNull CommandSender sender, String... args) {
-                    return Arrays.asList("0", "0.1", "0.2", "0.3", "0.4", "0.5");
-                }
-            });
-            map.put(offsetYName, new NumberAction() {
-                @Override
-                protected boolean performAction(@NotNull CommandSender sender, @NotNull Number value, String... args) {
-                    offsetY = value.doubleValue();
-                    return true;
+                    return Arrays.asList("0", "0.5", "1", "1.5", "2", "2.5", "3");
                 }
 
                 @Override
                 public @NotNull String getDescription() {
-                    return "Set the particle offset Y of the " + editorName;
+                    return "Set the particle offset of the " + editorName;
                 }
 
                 @Override
-                protected @NotNull List<String> getValueArgs(@NotNull CommandSender sender, String... args) {
-                    return Arrays.asList("0", "0.1", "0.2", "0.3", "0.4", "0.5");
-                }
-            });
-            map.put(offsetZName, new NumberAction() {
-                @Override
-                protected boolean performAction(@NotNull CommandSender sender, @NotNull Number value, String... args) {
-                    offsetZ = value.doubleValue();
-                    return true;
-                }
-
-                @Override
-                public @NotNull String getDescription() {
-                    return "Set the particle offset Z of the " + editorName;
-                }
-
-                @Override
-                protected @NotNull List<String> getValueArgs(@NotNull CommandSender sender, String... args) {
-                    return Arrays.asList("0", "0.1", "0.2", "0.3", "0.4", "0.5");
+                public @NotNull String getArgsUsage() {
+                    return "<x> <y> <z>";
                 }
             });
             map.put(extraName, new NumberAction() {
                 @Override
                 protected boolean performAction(@NotNull CommandSender sender, @NotNull Number value, String... args) {
-                    extra = value.doubleValue();
+                    display.withExtra(value.doubleValue());
                     return true;
                 }
 
@@ -326,31 +281,7 @@ public class SimpleParticleFeature extends ParticleFeature {
          * @param particleFeature the feature
          */
         public void migrate(ParticleFeature particleFeature) {
-            ParticleDisplay display = particleFeature.getParticleDisplay();
-
-            try {
-                Class<ParticleDisplay> clazz = ParticleDisplay.class;
-
-                Field particleField = clazz.getDeclaredField("particle");
-                particleField.setAccessible(true);
-                particle = (Particle) particleField.get(display);
-
-                Field countField = clazz.getDeclaredField("count");
-                countField.setAccessible(true);
-                count = (Integer) countField.get(display);
-
-                Field extraField = clazz.getDeclaredField("extra");
-                extraField.setAccessible(true);
-                extra = (Double) extraField.get(display);
-            } catch (Exception ignored) {
-            }
-
-            Vector offset = display.getOffset();
-            if (offset != null) {
-                offsetX = offset.getX();
-                offsetY = offset.getY();
-                offsetZ = offset.getZ();
-            }
+            display = particleFeature.getParticleDisplay().clone();
         }
     }
 }
