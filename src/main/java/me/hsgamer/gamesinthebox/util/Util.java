@@ -20,12 +20,12 @@ import me.hsgamer.hscore.common.CollectionUtils;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemoryConfiguration;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.function.BiPredicate;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 /**
  * The common utilities
@@ -80,5 +80,49 @@ public final class Util {
     public static String getRandomColorizedString(@NotNull Collection<@NotNull String> collection, @NotNull String defaultValue) {
         String s = Optional.ofNullable(CollectionUtils.pickRandom(collection)).orElse(defaultValue);
         return ColorUtils.colorize(s);
+    }
+
+    /**
+     * Get a filtered list from a list
+     *
+     * @param list      the list
+     * @param filter    the filter
+     * @param predicate the predicate with 2 parameters: the element and the filter
+     * @param <T>       the type of the element in the list
+     * @return the filtered list
+     */
+    @NotNull
+    public static <T> List<T> getFilteredList(@NotNull List<T> list, @Nullable T filter, @NotNull BiPredicate<T, T> predicate) {
+        return filter == null
+                ? Collections.unmodifiableList(list)
+                : list.stream().filter(element -> predicate.test(element, filter)).collect(Collectors.toList());
+    }
+
+    /**
+     * Get a filtered string list from a list
+     *
+     * @param list      the list
+     * @param filter    the filter
+     * @param predicate the predicate with 2 parameters: the element and the filter
+     * @return the filtered list
+     */
+    @NotNull
+    public static List<String> getFilteredList(@NotNull List<String> list, @Nullable String filter, @NotNull BiPredicate<String, String> predicate) {
+        return filter == null || filter.isEmpty()
+                ? Collections.unmodifiableList(list)
+                : list.stream().filter(element -> predicate.test(element, filter)).collect(Collectors.toList());
+    }
+
+    /**
+     * Get a filtered string list from a list.
+     * The filter is case-insensitive.
+     *
+     * @param list   the list
+     * @param filter the filter
+     * @return the filtered list
+     */
+    @NotNull
+    public static List<String> getFilteredList(@NotNull List<String> list, @Nullable String filter) {
+        return getFilteredList(list, filter, (s, s2) -> s.toLowerCase(Locale.ROOT).contains(s2.toLowerCase(Locale.ROOT)));
     }
 }
