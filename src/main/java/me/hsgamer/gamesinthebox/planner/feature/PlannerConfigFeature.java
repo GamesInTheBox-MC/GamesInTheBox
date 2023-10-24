@@ -62,7 +62,7 @@ public class PlannerConfigFeature implements Feature {
      */
     @Contract("_, !null, _ -> !null")
     public <T> T getInstance(@NotNull String path, @Nullable T def, @NotNull Class<T> clazz) {
-        return config.getInstance(PathString.toPathString(".", path), def, clazz);
+        return config.getInstance(PathString.toPathString(path), def, clazz);
     }
 
     /**
@@ -74,7 +74,7 @@ public class PlannerConfigFeature implements Feature {
      */
     @Contract("_, !null -> !null")
     public String getString(@NotNull String path, @Nullable String def) {
-        return Objects.toString(config.getNormalized(PathString.toPathString(".", path)), def);
+        return Objects.toString(config.getNormalized(PathString.toPathString(path)), def);
     }
 
     /**
@@ -85,7 +85,7 @@ public class PlannerConfigFeature implements Feature {
      */
     @Nullable
     public Object get(@NotNull String path) {
-        return config.getNormalized(PathString.toPathString(".", path));
+        return config.getNormalized(PathString.toPathString(path));
     }
 
     /**
@@ -97,7 +97,7 @@ public class PlannerConfigFeature implements Feature {
      */
     @NotNull
     public Map<String, Object> getValues(@NotNull String path, boolean deep) {
-        return PathString.toPathMap(".", config.getNormalizedValues(PathString.toPathString(".", path), deep));
+        return PathString.toPathMap(config.getNormalizedValues(PathString.toPathString(path), deep));
     }
 
     /**
@@ -107,7 +107,7 @@ public class PlannerConfigFeature implements Feature {
      * @return true if the path exists
      */
     public boolean contains(@NotNull String path) {
-        return config.contains(PathString.toPathString(".", path));
+        return config.contains(PathString.toPathString(path));
     }
 
     /**
@@ -117,7 +117,7 @@ public class PlannerConfigFeature implements Feature {
      * @param value the value
      */
     public void set(@NotNull String path, @Nullable Object value) {
-        config.set(PathString.toPathString(".", path), value);
+        config.set(PathString.toPathString(path), value);
         config.save();
     }
 }
