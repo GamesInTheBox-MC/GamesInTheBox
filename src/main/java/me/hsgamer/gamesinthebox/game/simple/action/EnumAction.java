@@ -78,4 +78,9 @@ public abstract class EnumAction<T extends Enum<T>> extends ValueAction<T> {
                 .map(Enum::name)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public @NotNull String getArgsUsage() {
+        return "<value>";
+    }
 }

@@ -18,6 +18,8 @@ package me.hsgamer.gamesinthebox.game.simple.action;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -32,6 +34,11 @@ public abstract class BooleanAction extends ValueAction<Boolean> {
     @Override
     protected Optional<Boolean> parseValue(@NotNull CommandSender sender, String... args) {
         return Optional.of(Boolean.parseBoolean(args[0]));
+    }
+
+    @Override
+    protected @NotNull List<String> getValueArgs(@NotNull CommandSender sender, String... args) {
+        return Arrays.asList("true", "false");
     }
 
     @Override
