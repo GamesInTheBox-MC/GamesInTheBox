@@ -61,10 +61,7 @@ public final class SoundUtil {
      * @param player the player
      */
     public static void playSound(@NotNull String sound, @NotNull Player player) {
-        doSoundAction(sound, soundRecord -> {
-            soundRecord.forPlayer(player);
-            soundRecord.play();
-        });
+        doSoundAction(sound, soundRecord -> soundRecord.soundPlayer().forPlayers(player).play());
     }
 
     /**
@@ -74,10 +71,7 @@ public final class SoundUtil {
      * @param location the location
      */
     public static void playSound(@NotNull String sound, @NotNull Location location) {
-        doSoundAction(sound, soundRecord -> {
-            soundRecord.atLocation(location);
-            soundRecord.play();
-        });
+        doSoundAction(sound, soundRecord -> soundRecord.soundPlayer().atLocation(location).play());
     }
 
     /**
@@ -88,9 +82,6 @@ public final class SoundUtil {
      * @param location the location
      */
     public static void playSound(@NotNull String sound, @NotNull Player player, @NotNull Location location) {
-        doSoundAction(sound, soundRecord -> {
-            soundRecord.forPlayerAtLocation(player, location);
-            soundRecord.play();
-        });
+        doSoundAction(sound, soundRecord -> soundRecord.soundPlayer().forPlayers(player).atLocation(location).play());
     }
 }
