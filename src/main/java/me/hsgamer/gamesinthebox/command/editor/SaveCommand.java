@@ -48,7 +48,14 @@ public class SaveCommand extends GameEditorCommand {
             return;
         }
 
-        Optional<Map<PathString, Object>> optionalMap = gameEditor.exportPathValueMap(sender).map(map -> PathString.toPathStringMap(".", map));
+        Optional<Map<PathString, Object>> optionalMap = gameEditor.exportPathValueMap(sender).map(map -> {
+            // TODO: Remove this when the config system is fixed
+            LinkedHashMap<PathString, Object> result = new LinkedHashMap<>();
+            for (Map.Entry<String, Object> entry : map.entrySet()) {
+                result.put(PathString.toPathString(entry.getKey()), entry.getValue());
+            }
+            return result;
+        });
         if (!optionalMap.isPresent()) {
             MessageUtils.sendMessage(sender, plugin.getMessageConfig().getEditorCannotSave());
             return;
