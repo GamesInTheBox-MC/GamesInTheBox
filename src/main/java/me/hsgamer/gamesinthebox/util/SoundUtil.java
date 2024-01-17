@@ -55,13 +55,33 @@ public final class SoundUtil {
     }
 
     /**
+     * Do the sound player action
+     *
+     * @param sound               the sound
+     * @param soundPlayerConsumer the sound player consumer
+     */
+    public static void doSoundPlayerAction(@NotNull String sound, @NotNull Consumer<XSound.SoundPlayer> soundPlayerConsumer) {
+        if (sound.isEmpty()) {
+            return;
+        }
+
+        XSound.Record soundRecord = recordMap.computeIfAbsent(sound, XSound::parse);
+        if (soundRecord == null) {
+            return;
+        }
+
+        XSound.SoundPlayer soundPlayer = soundRecord.soundPlayer();
+        soundPlayerConsumer.accept(soundPlayer);
+    }
+
+    /**
      * Play the sound
      *
      * @param sound  the sound
      * @param player the player
      */
     public static void playSound(@NotNull String sound, @NotNull Player player) {
-        doSoundAction(sound, soundRecord -> soundRecord.soundPlayer().forPlayers(player).play());
+        doSoundPlayerAction(sound, soundPlayer -> soundPlayer.forPlayers(player).play());
     }
 
     /**
@@ -71,7 +91,7 @@ public final class SoundUtil {
      * @param location the location
      */
     public static void playSound(@NotNull String sound, @NotNull Location location) {
-        doSoundAction(sound, soundRecord -> soundRecord.soundPlayer().atLocation(location).play());
+        doSoundPlayerAction(sound, soundPlayer -> soundPlayer.atLocation(location).play());
     }
 
     /**
@@ -82,6 +102,6 @@ public final class SoundUtil {
      * @param location the location
      */
     public static void playSound(@NotNull String sound, @NotNull Player player, @NotNull Location location) {
-        doSoundAction(sound, soundRecord -> soundRecord.soundPlayer().forPlayers(player).atLocation(location).play());
+        doSoundPlayerAction(sound, soundPlayer -> soundPlayer.forPlayers(player).atLocation(location).play());
     }
 }
