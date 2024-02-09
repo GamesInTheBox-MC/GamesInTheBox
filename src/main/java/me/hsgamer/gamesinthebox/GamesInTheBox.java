@@ -32,9 +32,14 @@ import me.hsgamer.gamesinthebox.manager.PluginExpansionManager;
 import me.hsgamer.gamesinthebox.util.UpdateUtil;
 import me.hsgamer.hscore.bukkit.baseplugin.BasePlugin;
 import me.hsgamer.hscore.bukkit.config.BukkitConfig;
+import me.hsgamer.hscore.bukkit.scheduler.Scheduler;
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import me.hsgamer.hscore.config.annotation.converter.manager.DefaultConverterManager;
 import me.hsgamer.hscore.config.proxy.ConfigGenerator;
+import me.hsgamer.hscore.license.common.LicenseChecker;
+import me.hsgamer.hscore.license.common.LicenseResult;
+import me.hsgamer.hscore.license.polymart.PolymartLicenseChecker;
+import me.hsgamer.hscore.license.spigotmc.SpigotLicenseChecker;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.AdvancedPie;
 import org.bukkit.Bukkit;
@@ -101,6 +106,35 @@ public final class GamesInTheBox extends BasePlugin {
         plannerManager.postInit();
 
         UpdateUtil.notifyUpdate(this, "GamesInTheBox-MC/GamesInTheBox");
+
+        LicenseChecker licenseChecker = PolymartLicenseChecker.isAvailable()
+                ? new PolymartLicenseChecker("4462", true, true)
+                : new SpigotLicenseChecker("111325");
+        Scheduler.current().async().runTask(() -> {
+            LicenseResult result = licenseChecker.checkLicense();
+            switch (result.getStatus()) {
+                case VALID:
+                    getLogger().info("Thank you for supporting GamesInTheBox. Your support is greatly appreciated");
+                    break;
+                case INVALID:
+                    getLogger().warning("Thank you for using GamesInTheBox");
+                    getLogger().warning("If you like this plugin, please consider supporting it by purchasing from one of these platforms:");
+                    getLogger().warning("- SpigotMC: https://www.spigotmc.org/resources/games-in-the-box.111325/");
+                    getLogger().warning("- Polymart: https://polymart.org/resource/games-in-the-box.4462");
+                    break;
+                case OFFLINE:
+                    getLogger().warning("Cannot check your license for GamesInTheBox. Please check your internet connection");
+                    getLogger().warning("Note: You can still use this plugin without a license, and there is no limit on the features");
+                    getLogger().warning("However, if you like this plugin, please consider supporting it by purchasing it from one of these platforms:");
+                    getLogger().warning("- SpigotMC: https://www.spigotmc.org/resources/games-in-the-box.111325/");
+                    getLogger().warning("- Polymart: https://polymart.org/resource/games-in-the-box.4462");
+                    break;
+                case UNKNOWN:
+                    getLogger().warning("Cannot check your license for GamesInTheBox. Please try again later");
+                    getLogger().warning("Note: You can still use this plugin without a license, and there is no limit on the features");
+                    break;
+            }
+        });
     }
 
     @Override
