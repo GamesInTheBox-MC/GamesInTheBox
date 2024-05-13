@@ -1,2 +1,5 @@
 jdk:
   - openjdk17
+install:
+  - sdk install maven
+  - sdk use maven
