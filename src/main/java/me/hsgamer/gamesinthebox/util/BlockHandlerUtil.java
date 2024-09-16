@@ -15,8 +15,12 @@
 */
 package me.hsgamer.gamesinthebox.util;
 
-import me.hsgamer.blockutil.abstraction.BlockHandler;
-import me.hsgamer.blockutil.api.BlockUtil;
+import io.github.projectunified.blockutil.api.BlockHandler;
+import io.github.projectunified.blockutil.fawe.FaweBlockHandler;
+import io.github.projectunified.blockutil.folia.FoliaBlockHandler;
+import io.github.projectunified.blockutil.vanilla.VanillaBlockHandler;
+import me.hsgamer.gamesinthebox.GamesInTheBox;
+import me.hsgamer.gamesinthebox.config.MainConfig;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -26,7 +30,21 @@ public final class BlockHandlerUtil {
     private static final BlockHandler blockHandler;
 
     static {
-        blockHandler = BlockUtil.getHandler(JavaPlugin.getProvidingPlugin(BlockHandlerUtil.class));
+        GamesInTheBox plugin = JavaPlugin.getPlugin(GamesInTheBox.class);
+        MainConfig mainConfig = plugin.getMainConfig();
+
+        if (mainConfig.isBlockUtilUseFawe() && FaweBlockHandler.isAvailable()) {
+            blockHandler = new FaweBlockHandler()
+                    .setMaxBlocks(mainConfig.getBlockUtilMaxBlocks());
+        } else if (FoliaBlockHandler.isAvailable()) {
+            blockHandler = new FoliaBlockHandler(plugin)
+                    .setBlocksPerTick(mainConfig.getBlockUtilBlocksPerTick())
+                    .setBlockDelay(mainConfig.getBlockUtilBlockDelay());
+        } else {
+            blockHandler = new VanillaBlockHandler(plugin)
+                    .setBlocksPerTick(mainConfig.getBlockUtilBlocksPerTick())
+                    .setBlockDelay(mainConfig.getBlockUtilBlockDelay());
+        }
     }
 
     private BlockHandlerUtil() {

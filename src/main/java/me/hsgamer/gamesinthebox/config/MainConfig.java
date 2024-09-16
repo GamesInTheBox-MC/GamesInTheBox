@@ -18,9 +18,6 @@ package me.hsgamer.gamesinthebox.config;
 import me.hsgamer.hscore.config.annotation.Comment;
 import me.hsgamer.hscore.config.annotation.ConfigPath;
 
-import java.util.Collections;
-import java.util.Map;
-
 /**
  * The main config
  */
@@ -48,14 +45,47 @@ public interface MainConfig {
     }
 
     /**
-     * Get the settings for BlockUtil
+     * Get the blocks-per-tick for BlockUtil
      *
-     * @return the map of the settings
+     * @return the blocks-per-tick
      */
-    @ConfigPath("block-util")
-    @Comment("Settings for games that involve blocks")
-    default Map<String, String> getBlockUtilSettings() {
-        return Collections.emptyMap();
+    @ConfigPath({"block-util", "blocks-per-tick"})
+    @Comment("The amount of blocks to process per tick")
+    default int getBlockUtilBlocksPerTick() {
+        return 50;
+    }
+
+    /**
+     * Get the block-delay for BlockUtil
+     *
+     * @return the block-delay
+     */
+    @ConfigPath({"block-util", "block-delay"})
+    @Comment("The delay between each block process")
+    default long getBlockUtilBlockDelay() {
+        return 0L;
+    }
+
+    /**
+     * Get the max-blocks for BlockUtil
+     *
+     * @return the max-blocks
+     */
+    @ConfigPath({"block-util", "max-blocks"})
+    @Comment("The maximum amount of blocks to process (-1 for unlimited)")
+    default int getBlockUtilMaxBlocks() {
+        return 1000;
+    }
+
+    /**
+     * Check if BlockUtil should use FAWE if available
+     *
+     * @return true if it should
+     */
+    @ConfigPath({"block-util", "use-fawe"})
+    @Comment("Should the plugin use FastAsyncWorldEdit if available ?")
+    default boolean isBlockUtilUseFawe() {
+        return true;
     }
 
     /**
