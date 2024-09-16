@@ -15,7 +15,7 @@
         <java.version>1.8</java.version>
         <core.version>4.3.30</core.version>
         <minigamecore.version>3.4.2</minigamecore.version>
-        <unihologram.version>2.5.0</unihologram.version>
+        <unihologram.version>3.0.2</unihologram.version>
         <blockutil.version>3.0.1</blockutil.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -65,7 +65,7 @@
                                     <shadedPattern>me.hsgamer.gamesinthebox.minigamecore</shadedPattern>
                                 </relocation>
                                 <relocation>
-                                    <pattern>me.hsgamer.unihologram</pattern>
+                                    <pattern>io.github.projectunified.unihologram</pattern>
                                     <shadedPattern>me.hsgamer.gamesinthebox.unihologram</shadedPattern>
                                 </relocation>
                                 <relocation>
@@ -105,7 +105,7 @@
                     <links>
                         <link>https://hsgamer.github.io/HSCore/</link>
                         <link>https://hsgamer.github.io/MinigameCore/</link>
-                        <link>https://hsgamer.github.io/UniHologram/</link>
+                        <link>https://projectunified.github.io/UniHologram/</link>
                     </links>
                 </configuration>
                 <executions>
@@ -293,22 +293,27 @@
         </dependency>
 
         <dependency>
-            <groupId>me.hsgamer</groupId>
-            <artifactId>uni-hologram-spigot-bundle</artifactId>
+            <groupId>io.github.projectunified</groupId>
+            <artifactId>uni-hologram-picker</artifactId>
             <version>${unihologram.version}</version>
         </dependency>
         <dependency>
-            <groupId>me.hsgamer</groupId>
+            <groupId>io.github.projectunified</groupId>
             <artifactId>uni-hologram-spigot-holographicdisplays</artifactId>
             <version>${unihologram.version}</version>
         </dependency>
         <dependency>
-            <groupId>me.hsgamer</groupId>
+            <groupId>io.github.projectunified</groupId>
             <artifactId>uni-hologram-spigot-decentholograms</artifactId>
             <version>${unihologram.version}</version>
         </dependency>
         <dependency>
-            <groupId>me.hsgamer</groupId>
+            <groupId>io.github.projectunified</groupId>
+            <artifactId>uni-hologram-spigot-folia</artifactId>
+            <version>${unihologram.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.projectunified</groupId>
             <artifactId>uni-hologram-spigot-vanilla</artifactId>
             <version>${unihologram.version}</version>
         </dependency>

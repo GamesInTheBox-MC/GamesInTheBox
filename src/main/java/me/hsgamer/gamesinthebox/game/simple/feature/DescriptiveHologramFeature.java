@@ -15,6 +15,9 @@
 */
 package me.hsgamer.gamesinthebox.game.simple.feature;
 
+import io.github.projectunified.unihologram.api.Hologram;
+import io.github.projectunified.unihologram.api.HologramLine;
+import io.github.projectunified.unihologram.spigot.line.TextHologramLine;
 import me.hsgamer.gamesinthebox.game.feature.GameConfigFeature;
 import me.hsgamer.gamesinthebox.game.feature.HologramFeature;
 import me.hsgamer.gamesinthebox.game.simple.SimpleGameAction;
@@ -30,9 +33,6 @@ import me.hsgamer.hscore.common.CollectionUtils;
 import me.hsgamer.hscore.common.MapUtils;
 import me.hsgamer.hscore.common.Pair;
 import me.hsgamer.minigamecore.base.Feature;
-import me.hsgamer.unihologram.common.api.Hologram;
-import me.hsgamer.unihologram.common.api.HologramLine;
-import me.hsgamer.unihologram.common.line.TextHologramLine;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;

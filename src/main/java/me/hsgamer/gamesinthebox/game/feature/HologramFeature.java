@@ -15,11 +15,18 @@
 */
 package me.hsgamer.gamesinthebox.game.feature;
 
+import io.github.projectunified.unihologram.api.Hologram;
+import io.github.projectunified.unihologram.api.HologramProvider;
+import io.github.projectunified.unihologram.picker.HologramProviderPicker;
+import io.github.projectunified.unihologram.spigot.decentholograms.DHHologramProvider;
+import io.github.projectunified.unihologram.spigot.folia.FoliaHologramProvider;
+import io.github.projectunified.unihologram.spigot.holographicdisplays.HDHologramProvider;
+import io.github.projectunified.unihologram.spigot.plugin.vanilla.VanillaHologramProvider;
 import me.hsgamer.minigamecore.base.Arena;
 import me.hsgamer.minigamecore.base.Feature;
-import me.hsgamer.unihologram.common.api.Hologram;
-import me.hsgamer.unihologram.spigot.SpigotHologramProvider;
 import org.bukkit.Location;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -30,10 +37,15 @@ import java.util.UUID;
  * The {@link Feature} that handles {@link Hologram}
  */
 public class HologramFeature implements Feature {
-    private static final SpigotHologramProvider spigotHologramProvider;
+    private static final HologramProvider<Location> hologramProvider;
 
     static {
-        spigotHologramProvider = new SpigotHologramProvider();
+        hologramProvider = new HologramProviderPicker<Plugin, Location>(JavaPlugin.getProvidingPlugin(HologramProvider.class))
+                .add(DHHologramProvider::isAvailable, DHHologramProvider::new)
+                .add(HDHologramProvider::isAvailable, HDHologramProvider::new)
+                .add(FoliaHologramProvider::isAvailable, FoliaHologramProvider::new)
+                .add(() -> true, VanillaHologramProvider::new)
+                .pick();
     }
 
     private final String baseName;
@@ -86,7 +98,7 @@ public class HologramFeature implements Feature {
      */
     @NotNull
     public Hologram<Location> createHologram(@NotNull Location location) {
-        return spigotHologramProvider.createHologram(baseName + "-" + UUID.randomUUID(), location);
+        return hologramProvider.createHologram(baseName + "-" + UUID.randomUUID(), location);
     }
 
     @Override
