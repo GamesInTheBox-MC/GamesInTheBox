@@ -107,6 +107,8 @@
                         <link>https://hsgamer.github.io/MinigameCore/</link>
                         <link>https://projectunified.github.io/UniHologram/</link>
                     </links>
+                    <source>${java.version}</source>
+                    <outputDirectory>${project.build.directory}/reports</outputDirectory>
                 </configuration>
                 <executions>
                     <execution>
