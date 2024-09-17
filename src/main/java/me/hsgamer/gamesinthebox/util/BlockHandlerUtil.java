@@ -15,13 +15,17 @@
 */
 package me.hsgamer.gamesinthebox.util;
 
+import com.cryptomorin.xseries.XMaterial;
+import io.github.projectunified.blockutil.api.BlockData;
 import io.github.projectunified.blockutil.api.BlockHandler;
 import io.github.projectunified.blockutil.fawe.FaweBlockHandler;
 import io.github.projectunified.blockutil.folia.FoliaBlockHandler;
 import io.github.projectunified.blockutil.vanilla.VanillaBlockHandler;
 import me.hsgamer.gamesinthebox.GamesInTheBox;
 import me.hsgamer.gamesinthebox.config.MainConfig;
+import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * The utility to get {@link BlockHandler}
@@ -58,5 +62,18 @@ public final class BlockHandlerUtil {
      */
     public static BlockHandler getBlockHandler() {
         return blockHandler;
+    }
+
+    /**
+     * Get the {@link BlockData} from {@link XMaterial}
+     *
+     * @param material the {@link XMaterial}
+     * @return the {@link BlockData}
+     */
+    @Nullable
+    public static BlockData getBlockData(XMaterial material) {
+        Material bukkitMaterial = material.parseMaterial();
+        if (bukkitMaterial == null) return null;
+        return new BlockData(bukkitMaterial, material.getData());
     }
 }

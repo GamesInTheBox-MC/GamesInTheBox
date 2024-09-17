@@ -17,15 +17,20 @@ package me.hsgamer.gamesinthebox.game.feature;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.lewdev.probabilitylib.ProbabilityCollection;
+import io.github.projectunified.blockutil.api.BlockData;
+import me.hsgamer.gamesinthebox.util.BlockHandlerUtil;
 import me.hsgamer.minigamecore.base.Feature;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Iterator;
 
 /**
  * The {@link Feature} that contains {@link ProbabilityCollection} of {@link XMaterial}
  */
 public abstract class MaterialProbabilityFeature implements Feature {
     private ProbabilityCollection<XMaterial> materialCollection;
+    private ProbabilityCollection<BlockData> blockDataCollection;
     private boolean isInitialEmpty = false;
 
     /**
@@ -77,5 +82,25 @@ public abstract class MaterialProbabilityFeature implements Feature {
     @NotNull
     public ProbabilityCollection<XMaterial> getMaterialCollection() {
         return materialCollection;
+    }
+
+    /**
+     * Get the {@link ProbabilityCollection} of {@link BlockData}
+     *
+     * @return the collection
+     */
+    public ProbabilityCollection<BlockData> getBlockDataCollection() {
+        if (blockDataCollection == null) {
+            blockDataCollection = new ProbabilityCollection<>();
+            Iterator<ProbabilityCollection.ProbabilitySetElement<XMaterial>> iterator = materialCollection.iterator();
+            while (iterator.hasNext()) {
+                ProbabilityCollection.ProbabilitySetElement<XMaterial> element = iterator.next();
+                BlockData blockData = BlockHandlerUtil.getBlockData(element.getObject());
+                if (blockData != null) {
+                    blockDataCollection.add(blockData, element.getProbability());
+                }
+            }
+        }
+        return blockDataCollection;
     }
 }
