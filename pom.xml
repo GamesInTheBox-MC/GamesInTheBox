@@ -16,7 +16,7 @@
         <core.version>4.3.30</core.version>
         <minigamecore.version>3.4.2</minigamecore.version>
         <unihologram.version>3.0.2</unihologram.version>
-        <blockutil.version>4.0.1</blockutil.version>
+        <blockutil.version>4.1.0</blockutil.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
