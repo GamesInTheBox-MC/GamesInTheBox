@@ -344,7 +344,7 @@
         <dependency>
             <groupId>com.lewdev</groupId>
             <artifactId>probability-lib</artifactId>
-            <version>0.10</version>
+            <version>0.13</version>
         </dependency>
         <dependency>
             <groupId>org.bstats</groupId>
