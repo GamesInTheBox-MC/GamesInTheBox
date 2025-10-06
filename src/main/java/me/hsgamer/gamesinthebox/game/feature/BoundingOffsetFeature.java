@@ -98,7 +98,7 @@ public abstract class BoundingOffsetFeature implements Feature {
         double z = ThreadLocalRandom.current().nextDouble(minZ, maxZ + 1);
         Location location = new Location(world, x, y, z);
 
-        return normalize ? location.getBlock().getLocation() : location;
+        return normalize ? new Location(location.getWorld(), location.getBlockX(), location.getBlockY(), location.getBlockZ()) : location;
     }
 
     /**
