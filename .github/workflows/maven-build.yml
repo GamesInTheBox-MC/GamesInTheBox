@@ -24,6 +24,6 @@ jobs:
       - name: Unshallow
         run: git fetch --unshallow --quiet
       - name: Build with Maven
-        run: mvn -B deploy
+        run: mvn -B package
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
