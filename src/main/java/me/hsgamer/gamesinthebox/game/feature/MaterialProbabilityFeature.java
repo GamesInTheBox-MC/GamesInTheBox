@@ -23,7 +23,7 @@ import me.hsgamer.minigamecore.base.Feature;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Iterator;
+import java.util.AbstractMap;
 
 /**
  * The {@link Feature} that contains {@link ProbabilityCollection} of {@link XMaterial}
@@ -91,15 +91,9 @@ public abstract class MaterialProbabilityFeature implements Feature {
      */
     public ProbabilityCollection<BlockData> getBlockDataCollection() {
         if (blockDataCollection == null) {
-            blockDataCollection = new ProbabilityCollection<>();
-            Iterator<ProbabilityCollection.ProbabilitySetElement<XMaterial>> iterator = materialCollection.iterator();
-            while (iterator.hasNext()) {
-                ProbabilityCollection.ProbabilitySetElement<XMaterial> element = iterator.next();
-                BlockData blockData = BlockHandlerUtil.getBlockData(element.getObject());
-                if (blockData != null) {
-                    blockDataCollection.add(blockData, element.getProbability());
-                }
-            }
+            blockDataCollection = materialCollection.stream()
+                    .map(entry -> new AbstractMap.SimpleImmutableEntry<>(BlockHandlerUtil.getBlockData(entry.getKey()), entry.getValue()))
+                    .collect(ProbabilityCollection.collector());
         }
         return blockDataCollection;
     }

@@ -50,7 +50,7 @@ public final class SoundUtil {
             return;
         }
 
-        XSound.Record clonedSoundRecord = soundRecord.clone();
+        XSound.Record clonedSoundRecord = soundRecord.copy();
         soundRecordConsumer.accept(clonedSoundRecord);
     }
 

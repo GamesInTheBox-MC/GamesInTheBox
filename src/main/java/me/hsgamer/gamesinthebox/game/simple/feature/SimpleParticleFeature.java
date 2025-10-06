@@ -280,7 +280,7 @@ public class SimpleParticleFeature extends ParticleFeature {
          * @param particleFeature the feature
          */
         public void migrate(ParticleFeature particleFeature) {
-            display = particleFeature.getParticleDisplay().clone();
+            display = particleFeature.getParticleDisplay().copy();
         }
     }
 }

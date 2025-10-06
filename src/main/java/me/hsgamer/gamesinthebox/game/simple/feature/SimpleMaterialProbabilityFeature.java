@@ -243,11 +243,7 @@ public class SimpleMaterialProbabilityFeature extends MaterialProbabilityFeature
         public void migrate(MaterialProbabilityFeature feature) {
             materialMap.clear();
             if (!feature.isInitialEmpty()) {
-                Iterator<ProbabilityCollection.ProbabilitySetElement<XMaterial>> iterator = feature.getMaterialCollection().iterator();
-                while (iterator.hasNext()) {
-                    ProbabilityCollection.ProbabilitySetElement<XMaterial> element = iterator.next();
-                    materialMap.put(element.getObject(), element.getProbability());
-                }
+                feature.getMaterialCollection().stream().forEach(entry -> materialMap.put(entry.getKey(), entry.getValue()));
             }
         }
     }
