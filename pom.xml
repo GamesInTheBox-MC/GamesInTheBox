@@ -235,7 +235,7 @@
         <dependency>
             <groupId>me.hsgamer</groupId>
             <artifactId>hscore-bukkit-block</artifactId>
-            <version>4.5.7</version> <!-- TODO: Update to ${core.version} -->
+            <version>4.6.0</version> <!-- TODO: Update to ${core.version} -->
         </dependency>
         <dependency>
             <groupId>me.hsgamer</groupId>
